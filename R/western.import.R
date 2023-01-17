@@ -3,7 +3,8 @@
 ## Author: Kristian Lian
 
 ## Purpose: The purpose of this script is to import the quantified western data, and normalize total protein by subtracting
-## background. This script creates and saves the data frame "total.protein".
+## background. The script also mean summarises signal data. This script creates and saves the data frames "total.protein"
+## and "mean.signal".
 
 # Packages
 library(readxl);library(tidyverse)
@@ -51,12 +52,53 @@ saveRDS(total.protein, "./data/data-gen/protein/total.protein.RDS")
 
 ## Mean signal
 
-western.dat %>%
-  select(gel, well, cmyc.sig, cmyc2.sig, ubf.sig, ubf2.sig, rps6.sig, rps62.sig) %>%
+cmyc.sum <- western.dat %>%
+  select(gel, well, cmyc.sig, cmyc2.sig) %>%
   #print()
   pivot_longer(names_to = "target",
                values_to = "signal",
-               cols = (cmyc.sig:rps62.sig)) %>%
+               cols = (cmyc.sig:cmyc2.sig)) %>%
+  group_by(gel, well) %>%
+  summarise(cmyc.mean = mean(signal, na.rm = TRUE),
+            cmyc.sd = sd(signal, na.rm = TRUE)) %>%
+  
+  print()
+
+saveRDS(cmyc.sum, "./data/data-gen/protein/cmyc.sum.RDS")  
+
+
+ubf.sum <- western.dat %>%
+  select(gel, well, ubf.sig, ubf2.sig) %>%
+  pivot_longer(names_to = "target",
+               values_to = "signal",
+               cols = (ubf.sig:ubf2.sig)) %>%
+  group_by(gel, well) %>%
+  summarise(ubf.mean = mean(signal, na.rm = TRUE),
+            ubf.sd = sd(signal, na.rm = TRUE)) %>%
   print()
   
-  
+saveRDS(ubf.sum, "./data/data-gen/protein/ubf.sum.RDS")
+
+
+rps6.sum <- western.dat %>%
+  select(gel, well, rps6.sig, rps62.sig) %>%
+  pivot_longer(names_to = "target",
+               values_to = "signal",
+               cols = (rps6.sig:rps62.sig)) %>%
+  group_by(gel, well) %>%
+  summarise(rps6.mean = mean(signal, na.rm = TRUE),
+            rps6.sd = sd(signal, na.rm = TRUE)) %>%
+  print()
+
+saveRDS(rps6.sum, "./data/data-gen/protein/rps6.sum.RDS")
+
+mean.signal <- cmyc.sum %>%
+  full_join(ubf.sum) %>%
+  full_join(rps6.sum) %>%
+  full_join(western.dat) %>%
+  select(gel, well, subject, time, leg, cmyc.mean, ubf.mean, rps6.mean) %>%
+  print()
+
+
+
+
