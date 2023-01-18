@@ -3,8 +3,8 @@
 ## Author: Kristian Lian
 
 ## Purpose: The purpose of this script is to import the quantified western data, and normalize total protein by subtracting
-## background. The script also mean summarises signal data. This script creates and saves the data frames "total.protein"
-## and "mean.signal".
+## background. The script also mean summarises signal data, and gathers and saves normalized total protein and mean signal
+##in the data fram "west.dat"
 
 # Packages
 library(readxl);library(tidyverse)
@@ -12,8 +12,11 @@ library(readxl);library(tidyverse)
 # Data import
 western.dat <- read_excel("data/protein/western.quant.xlsx")
 
+sample.info <- western.dat %>%
+  select(gel, well, sample.id, subject, sample.name, leg) %>%
+  print()
 
-# Summarising mean total protein and backgroun per gel
+# Summarising mean total protein and background per gel
 
 # The "mean.tp" and "mean.bg" codes calculates the mean and SD of total protein and background in each well, on each gel.
 # This is needed to normalize total protein with the "total.protein" code.
@@ -61,6 +64,7 @@ cmyc.sum <- western.dat %>%
   group_by(gel, well) %>%
   summarise(cmyc.mean = mean(signal, na.rm = TRUE),
             cmyc.sd = sd(signal, na.rm = TRUE)) %>%
+  select(gel, well, cmyc.mean) %>%
   
   print()
 
@@ -75,6 +79,7 @@ ubf.sum <- western.dat %>%
   group_by(gel, well) %>%
   summarise(ubf.mean = mean(signal, na.rm = TRUE),
             ubf.sd = sd(signal, na.rm = TRUE)) %>%
+  select(gel, well, ubf.mean) %>%
   print()
   
 saveRDS(ubf.sum, "./data/data-gen/protein/ubf.sum.RDS")
@@ -88,17 +93,20 @@ rps6.sum <- western.dat %>%
   group_by(gel, well) %>%
   summarise(rps6.mean = mean(signal, na.rm = TRUE),
             rps6.sd = sd(signal, na.rm = TRUE)) %>%
+  select(gel, well, rps6.mean) %>%
   print()
 
 saveRDS(rps6.sum, "./data/data-gen/protein/rps6.sum.RDS")
 
-mean.signal <- cmyc.sum %>%
+west.dat <- cmyc.sum %>%
   full_join(ubf.sum) %>%
   full_join(rps6.sum) %>%
-  full_join(western.dat) %>%
-  select(gel, well, subject, time, leg, cmyc.mean, ubf.mean, rps6.mean) %>%
+  full_join(total.protein) %>%
+  full_join(sample.info) %>%
+  select(gel, well, sample.id, subject, sample.name, leg, cmyc.mean, ubf.mean, rps6.mean, total.protein)%>%
   print()
 
+saveRDS(west.dat, "./data/data-gen/protein/west.dat.RDS")
 
 
 
