@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. -->
 
-# contratrain-muscle-paper
+# Ribose-paper
 
 ## Authors
 
