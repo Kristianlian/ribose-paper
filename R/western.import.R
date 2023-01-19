@@ -22,91 +22,65 @@ sample.info <- western.dat %>%
 # This is needed to normalize total protein with the "total.protein" code.
 
 mean.tp <- western.dat %>%
-  select(gel, well, tp1, tp2) %>%
-  #group_by(gel, well) %>%
-  pivot_longer(names_to = "measure",
-               values_to = "mean.grey",
-               cols = (tp1:tp2)) %>%
-  group_by(gel, well) %>%
-  summarise(tp.mean = mean(mean.grey, na.rm = TRUE),
-            tp.sd = sd(mean.grey, na.rm = TRUE))
-
-
-mean.bg <- western.dat %>%
-  select(gel, well, bg1, bg2, bg3, bg4) %>%
-  pivot_longer(names_to = "measure",
-               values_to = "mean.grey",
-               cols = (bg1:bg4)) %>%
-  group_by(gel, well) %>%
-  summarise(bg.mean = mean(mean.grey, na.rm = TRUE),
-            bg.sd = sd(mean.grey, na.rm = TRUE))
-
-
-# This code joins together the mean.tp and mean.bg data frames, then groups by gel and well, so that total protein 
-# can be normalized for each well on each separate gel
-
-total.protein <- mean.tp %>%
-  full_join(mean.bg) %>%
-  group_by(gel, well) %>%
-  summarise(total.protein = tp.mean-bg.mean) %>%
+  select(gel, sample.id, tp1:bg4) %>%
+  pivot_longer(names_to = "var", 
+               values_to = "mean_gray", 
+               cols = tp1:bg4) %>%
+  mutate(var = gsub('[0-9]+', '', var)) %>%
+  group_by(gel, sample.id, var) %>%
+  summarise(mean_gray = mean(mean_gray)) %>%
+  pivot_wider(names_from = var, 
+              values_from = mean_gray) %>%
+  mutate(tp = tp - bg) %>%
+  dplyr::select(gel, sample.id, tp) %>%
   print()
+  
+  
 
-saveRDS(total.protein, "./data/data-gen/protein/total.protein.RDS")  
 
 ## Mean signal
+#
 
-cmyc.sum <- western.dat %>%
-  select(gel, well, cmyc.sig, cmyc2.sig) %>%
-  #print()
-  pivot_longer(names_to = "target",
-               values_to = "signal",
-               cols = (cmyc.sig:cmyc2.sig)) %>%
-  group_by(gel, well) %>%
-  summarise(cmyc.mean = mean(signal, na.rm = TRUE),
-            cmyc.sd = sd(signal, na.rm = TRUE)) %>%
-  select(gel, well, cmyc.mean) %>%
+
+dat <- western.dat %>%
+  dplyr::select(gel, sample.id, subject, time, sample.name, leg, 
+                cmyc.sig, cmyc2.sig, ubf.sig, ubf2.sig, rps6.sig, rps62.sig) %>%
+
+  pivot_longer(names_to = "target", 
+               values_to = "signal", 
+               cols = cmyc.sig:rps62.sig) %>%
+  mutate(target = gsub(".sig", "", target), 
+         target = gsub("2", "", target)) %>%
+  
+  group_by(gel, sample.id, subject, leg, time, target) %>%
+  summarise(signal = mean(signal, na.rm = TRUE)) %>%
+
+  inner_join(mean.tp) %>%
+  
+  ### Normalization 
+  
+  group_by(gel, target) %>%
+  
+  mutate(signal = signal / max(signal, na.rm = TRUE), 
+         tp = tp / max(tp), 
+         norm.sign = signal) %>%
+  # Adds pool on all samples per gel
+  group_by(gel) %>%
+         mutate(pool = if_else(subject == "pool", norm.sign, NA_real_), 
+                pool = mean(pool, na.rm = TRUE)) %>%
+  ungroup() %>%
+ 
+  # Samples normalized per pool
+  mutate(norm.sign = norm.sign / pool) %>% 
+
+  filter(subject != "pool") %>%
+  
+  group_by(subject) %>%
+  mutate(gel.sorted = if_else(gel == max(gel), "B", "A"), 
+         time = factor(time, levels = c("pre", "post"))) %>%
   
   print()
-
-saveRDS(cmyc.sum, "./data/data-gen/protein/cmyc.sum.RDS")  
-
-
-ubf.sum <- western.dat %>%
-  select(gel, well, ubf.sig, ubf2.sig) %>%
-  pivot_longer(names_to = "target",
-               values_to = "signal",
-               cols = (ubf.sig:ubf2.sig)) %>%
-  group_by(gel, well) %>%
-  summarise(ubf.mean = mean(signal, na.rm = TRUE),
-            ubf.sd = sd(signal, na.rm = TRUE)) %>%
-  select(gel, well, ubf.mean) %>%
-  print()
   
-saveRDS(ubf.sum, "./data/data-gen/protein/ubf.sum.RDS")
+  
 
-
-rps6.sum <- western.dat %>%
-  select(gel, well, rps6.sig, rps62.sig) %>%
-  pivot_longer(names_to = "target",
-               values_to = "signal",
-               cols = (rps6.sig:rps62.sig)) %>%
-  group_by(gel, well) %>%
-  summarise(rps6.mean = mean(signal, na.rm = TRUE),
-            rps6.sd = sd(signal, na.rm = TRUE)) %>%
-  select(gel, well, rps6.mean) %>%
-  print()
-
-saveRDS(rps6.sum, "./data/data-gen/protein/rps6.sum.RDS")
-
-west.dat <- cmyc.sum %>%
-  full_join(ubf.sum) %>%
-  full_join(rps6.sum) %>%
-  full_join(total.protein) %>%
-  full_join(sample.info) %>%
-  select(gel, well, sample.id, subject, sample.name, leg, cmyc.mean, ubf.mean, rps6.mean, total.protein)%>%
-  print()
-
-saveRDS(west.dat, "./data/data-gen/protein/west.dat.RDS")
-
-
-
+#### 
