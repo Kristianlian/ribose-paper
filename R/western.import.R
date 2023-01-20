@@ -83,4 +83,74 @@ dat <- western.dat %>%
   
   
 
-#### 
+########################## Working code above ###################################
+
+##### Normalization work: Total protein
+
+mean.tp <- western.dat %>%
+  select(gel, sample.id, tp1:bg4) %>%
+  pivot_longer(names_to = "var", 
+               values_to = "mean_gray", 
+               cols = tp1:bg4) %>%
+  mutate(var = gsub('[0-9]+', '', var)) %>%
+  group_by(gel, sample.id, var) %>%
+  summarise(mean_gray = mean(mean_gray)) %>%
+  pivot_wider(names_from = var, 
+              values_from = mean_gray) %>%
+  ## Lane normalization factor: TPS for each lane (tpl) divided by TPS Signal from lane with highest TPS signal
+  mutate(tpl = tp - bg) %>%
+  mutate(tp = tp/mean(tpl)) %>%
+  #print()
+  #mutate(tp = tpl/max(tp)) %>%
+  dplyr::select(gel, sample.id, tp) %>%
+  print()
+
+
+## Mean signal
+#
+
+
+dat2 <- western.dat %>%
+  dplyr::select(gel, sample.id, subject, time, sample.name, leg, 
+                cmyc.sig, cmyc2.sig, ubf.sig, ubf2.sig, rps6.sig, rps62.sig) %>%
+  
+  pivot_longer(names_to = "target", 
+               values_to = "signal", 
+               cols = cmyc.sig:rps62.sig) %>%
+  mutate(target = gsub(".sig", "", target), 
+         target = gsub("2", "", target)) %>%
+  
+  group_by(gel, sample.id, subject, leg, time, target) %>%
+  summarise(signal = mean(signal, na.rm = TRUE)) %>%
+  
+  inner_join(mean.tp) %>%
+  
+  ### Normalization 
+  
+  group_by(gel, target) %>%
+  
+  #mutate(tp = tp / max(tp), 
+        # norm.sign = signal / tp) %>%
+  mutate(norm.sign = signal / tp) %>%
+  
+  # Adds pool on all samples per gel
+  group_by(gel) %>%
+  mutate(pool = if_else(subject == "pool", norm.sign, NA_real_), 
+         pool = mean(pool, na.rm = TRUE)) %>%
+  ungroup() %>%
+  #print()
+  
+  # Samples normalized per pool
+  mutate(norm.sign = norm.sign / pool) %>% 
+  
+  filter(subject != "pool") %>%
+  
+  group_by(subject) %>%
+  mutate(gel.sorted = if_else(gel == max(gel), "B", "A"), 
+         time = factor(time, levels = c("pre", "post"))) %>%
+ 
+  print()
+
+
+
+
