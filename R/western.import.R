@@ -152,14 +152,6 @@ dat2 <- western.dat %>%
  
   print()
 
-dat2 %>%
-  select(gel, target, norm.sign, gel.sorted) %>%
-  group_by(gel.sorted, subject, target) %>%
-  summarise(mean.ns = mean(norm.sign)) %>%
-  pivot_wider(names_from = gel.sorted,
-              values_from = mean.ns) %>%
-  ggplot(aes(A, B)) + geom_point() + geom_smooth(method = "lm") + facet_wrap(target)
-  
 
 
 
