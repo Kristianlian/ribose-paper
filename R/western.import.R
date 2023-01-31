@@ -101,6 +101,8 @@ dat2 <- western.dat %>%
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
 
+saveRDS(dat2, "./data/data-gen/protein/prot.dat.RDS")
+
 
 ### Plotting target signal on duplicate A and B
 
@@ -117,6 +119,7 @@ dat2 %>%
   
 library(nlme); library(emmeans)
 
+
 # c-Myc model
 
 m0 <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
@@ -130,12 +133,22 @@ m0 <- lme(log(norm.sign) ~ time + supplement + time:supplement,
     #     method = "ML",
      #    data = dat2)
 
+m0.2 <- lme(log(norm.sign) ~ tpl + time + supplement + time:supplement, 
+        random = list(subject = ~ 1, 
+                     gel.sample = ~ 1),
+        weights = varExp(form = ~ tpl|target),
+        method = "ML",
+        data = filter(dat2, target == "cmyc"))
+
 
 #anova(m0, m1)
 
 summary(m0)
+summary(m0.2)
 
 plot(m0, resid(., type = "p") ~ fitted(.))
+plot(m0.2, resid(., type = "p") ~ fitted(.))
+
 
 # UBF model
 
@@ -143,9 +156,18 @@ m1 <- lme(log(norm.sign) ~ time + supplement + time:supplement,
           random = list(subject = ~ 1),
           data = filter(dat2, target == "ubf"))
 
+#m1.2 <- lme(log(norm.sign) ~ tpl + time + supplement + time:supplement, 
+ #           random = list(subject = ~ 1, 
+  #                        gel.sample = ~ 1),
+   #         weights = varExp(form = ~ tpl|target),
+    #        method = "ML",
+     #       data = filter(dat2, target == "UBF"))
+
 summary(m1)
+#summary(m1.2)
 
 plot(m1, resid(., type = "p") ~ fitted(.))
+
 
 # RPS6 model
 
@@ -162,28 +184,41 @@ plot(m2, resid(., type = "p") ~ fitted(.))
 
 # c-Myc emmeans
 
-emmeans(m0, specs = ~ time|supplement) %>%
-  data.frame() %>%
+cmyc.emm <- emmeans(m0, specs = ~ time|supplement) %>%
+  data.frame()
+
+cmyc.emm %>%  
   mutate(time = factor(time, levels = c("pre", "post"))) %>%
   ggplot(aes(time, emmean, fill = supplement, group = supplement)) + 
   geom_line() + 
   geom_point(shape= 21) 
+
+saveRDS(cmyc.emm, "./data/data-gen/protein/cmyc.emm.RDS")
+
 
 # UBF emmeans
 
-emmeans(m1, specs = ~ time|supplement) %>%
-  data.frame() %>%
+ubf.emm <- emmeans(m1, specs = ~ time|supplement) %>%
+  data.frame()
+  
+ubf.emm %>%
   mutate(time = factor(time, levels = c("pre", "post"))) %>%
   ggplot(aes(time, emmean, fill = supplement, group = supplement)) + 
   geom_line() + 
   geom_point(shape= 21) 
+
+saveRDS(ubf.emm, "./data/data-gen/protein/ubf.emm.RDS")
+
 
 # RPS6
 
-emmeans(m2, specs = ~ time|supplement) %>%
-  data.frame() %>%
+rps6.emm <- emmeans(m2, specs = ~ time|supplement) %>%
+  data.frame()
+
+rps6.emm %>%
   mutate(time = factor(time, levels = c("pre", "post"))) %>%
   ggplot(aes(time, emmean, fill = supplement, group = supplement)) + 
   geom_line() + 
   geom_point(shape= 21) 
 
+saveRDS(rps6.emm, "./data/data-gen/protein/rps6.emm.RDS")
