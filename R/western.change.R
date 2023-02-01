@@ -36,7 +36,6 @@ pchange <- prot.dat %>%
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
 
-
 # By target
 
 cmyc <- pchange %>%
@@ -53,23 +52,24 @@ rps6 <- pchange %>%
 
 # c-Myc change
 
-
-m1 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = cmyc)
+m1 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = cmyc) # same model as in "western import", but with change scores of norm.sign
 
 plot(m1)
 
 summary(m1)
 
 cmyc.emm <- emmeans(m1, specs = ~"supplement") %>%
-  data.frame()
+  data.frame
 
 saveRDS(cmyc.emm, "./data/data-gen/protein/cmyc.change.RDS")
 
 # UBF change
 
-m2 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = ubf)
+m2 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = ubf) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
 
 plot(m2)
 
@@ -82,8 +82,9 @@ saveRDS(ubf.emm, "./data/data-gen/protein/ubf.change.RDS")
 
 # rps6 change
 
-m3 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = rps6)
+m3 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = rps6) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
 
 plot(m3)
 

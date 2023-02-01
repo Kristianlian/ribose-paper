@@ -20,7 +20,7 @@ rps6 <- readRDS("./data/data-gen/protein/rps6.change.RDS")
 
 ## cmyc fig
 
-cmyc %>%
+cmyc.plot <- cmyc %>%
   mutate(time = "post") %>%
   add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
@@ -35,7 +35,7 @@ cmyc %>%
   theme_classic()
 
 
-ubf %>%
+ubf.plot <- ubf %>%
   mutate(time = "post") %>%
   add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
@@ -49,7 +49,7 @@ ubf %>%
   labs(x = "", y = "UBF signal \n(fold change)\n", fill = "") +
   theme_classic()
 
-rps6 %>%
+rps6.plot <- rps6 %>%
   mutate(time = "post") %>%
   add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
@@ -64,3 +64,15 @@ rps6 %>%
   theme_classic()
 
 
+# Cowplot for gathering figures
+
+legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
+
+
+prot.joined <- plot_grid(cmyc.plot + theme(legend.position = "none"),
+                         ubf.plot + theme(legend.position = "none"), 
+                         rps6.plot + theme(legend.position = "none"),
+                         legend,
+                         ncol = 2, nrow = 3)
+
+saveRDS(prot.joined, "./data/data-gen/rna/prot.joined.RDS")
