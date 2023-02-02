@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
 ```{r packages}
-library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr)
+library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr);library(nlme)
 ```
 
 
@@ -31,13 +31,17 @@ To investigate this further, we recruited 16 young, moderately trained, male and
 
 ## Methods
 
+
 ### Materials and methods
+
 All participants were informed about the potential discomforts and risks associated with the study and gave their informed consent before study enrollment. The study was approved by the regional ethical committee (REK, ID nr. 153628), pre-registered at clinicaltrials.gov (Identifier: NCT04545190), and conducted according to the Helsinki declaration.
 
 ### Participants
+
 Sixteen healthy male and female participants (20-33yrs, Tab 1) were recruited to the study through social media advertisement and word of mouth, and through completing the selection process (Fig 1). The eligibility criteria were non-smokers and moderately trained (i.e. 2-8 RT sessions per 14 days for the last six months). Exclusion criteria were previous injury leading to impaired strength, inability to perform resistance training, symptoms and a medical record of metabolic disorders including hyperglycemia, i.e. fasting venous plasma glucose ≥6.1 mmol/L and/or 2-hour glucose tolerance ≥7.8 mmol/L, and/or HbA1c >42 mmol/mol. Of the sixteen participants that commenced the intervention, three participants dropped out. One due to sickness and inability to resume, two participants experienced muscular discomfort connected to heavy resistance training (Fig 1). Baseline characteristics (Tab 1) were measured using DXA (Prodigy Advance PA+302047, Lunar, San Francisco, CA, USA) on Day -1, the last day preceding the RT intervention.
 
 ### Experimental design
+
 The study was designed as a 12-day double-blinded randomized controlled trial, with a unilateral RT protocol (Fig 2). Participants were randomized to commence with either glucose (GLU, 30g per bolus) or placebo (PLAC, 0g per bolus), and either dominant or non-dominant leg (Fig 1), alternating RT and supplement from one day to the other (Fig 2). Participants were linked to a unique ID number corresponding to supplement administration, disclosed only to personnel not involved in any other aspect of the study than the randomization.
 
 ###### **Table 1:** Baseline characteristics of the participants. BMI: body mass index, A = charactaristics per sex, B = characteristics per leg. Values are mean ± standard deviation.
@@ -151,49 +155,40 @@ Six RT sessions were conducted with glucose and six with placebo, allowing a wit
 ###### **Figure 2.** Overview of the intervention, with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days of testing. T0 = timepoint 0 (testing days prior to intervention), T1/T2 = biopsy prior to resistance training for leg #1 and #2, respectively, T3/T4 post intervention testing of leg #1 and #2, respectively, including post sixth RT session. Test = physical performance test (unilateral 1RM leg press, knee extension, isometric knee extension force, isokinetic knee extension torque) testing on days 4, 5, 8, 9, T3, T4 will not include 1RM leg press and knee extension, Biopsy = microbiopsy, RT#1 = resistance training leg #1, RT#2 = resistance training leg#2. Other tests (D2O, DXA, spit) will be conducted as part of the study as a whole. These are not relevant to this data set, thus will not be described here.
 
 ### Dietary intervention
+
 The dietary intervention spanned the whole day, divided into three periods: I) From awakening until two hours after RT, II) from 2.5 hours after RT until 2200hrs, and III) from 2200hrs until awakening. During period I, participants ingested protein and glucose/placebo only. Glucose/placebo was ingested at three time points in period I: 30 minutes before RT (0830hrs, 30g vs 0g glucose), immediately before RT (0900hrs, 30g vs. 0g glucose), and immediately after RT (~0930hrs, 30g vs. 0g glucose). Protein was ingested 2hrs before RT (0700hrs, 25g) and immediately after RT (~0930hrs, 25g). In the afternoon (1800hrs-1900hrs), during period II, participants ingested glucose or placebo (3x30g vs. 3x0g glucose) opposite to the supplement they received during RT, to ensure a balanced intake of glucose during the entirety of the intervention days. Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications. The self-chosen diet was repeated on pairwise consecutive days (i.e. on days 1-2, 3-4, etc.), to ensure similar premises for resistance training responses between the two legs. During period III (2200-0700hrs), participants remained in an overnight fasted state. The daily onset of the dietary intervention (i.e., first ingestion of PRO supplement) varied for individual participants, between 0600hrs and 0900hrs to allow multiple participants to complete the protocol simultaneously. Individual participants commenced the intervention at the same time of day on every test day (pre and post) and intervention day +/- 1hr.
 
 Blinding of the participants was ensured by diluting boluses of glucose (30g glucose) (Glucosum monohydricum, Merck KGaA, Darmstadt, Germany) and placebo (~0.3g Stevia rebaudiana extract) (Steviosa, Soma Nordic AS, Oslo, Norway) in 300ml Fun Light juice/saft (Orkla, Oslo, Norway). A blinded taste test revealed that the participants were not able to disclose the contents of the provided boluses (30g GLU vs. 0g GLU). The protein supplement was ingested as 25g Whey Protein Isolate boluses (Proteinfabrikken, Stokke, Norway), diluted in 150ml water. During sessions, participants were free to ingest water ad libitum.
 
 ### Assessment of muscular strength
+
 Performance tests (Test) were performed prior to (Days -7 and -5, and T0, both legs) and during the intervention (Days 4, 5, 8, and 9), after session 5 and after finalization of the intervention (T3/T4, RT#1 leg; T4/Day 13, RT#2 leg), a total of 10 days (Fig 2). Maximal isometric and isokinetic knee extension torque were measured with a Humac Norm Dynamometer (CSMi, Stoughton, Massechusetts, USA). Individual positions were recorded and standardized from pre-intervention tests (days -7 and -5). Maximal isokinetic torque was measured at speeds of 60- and 240 d/s, 2x3 repetitions each, with the first set of each exercise as a sub-maximal warm-up. The maximal isometric torque was measured at knee-angle 60, for a maximum of 10 seconds and one repetition per test. The highest peak torque values were carried forwards to the final analyses. During days 4, 5, 8 and 9, humac tests were conducted one hour prior to RT with the leg performing RT the previous day. During days 11 and 12 (T3 and T4), humac tests were performed at four time points: I) 45min before RT, II) 30min after the last RT session, III) 2hrs after the last RT session, and IV) 23hrs after the last RT session. Test I at T4 included testing of both legs, representing 23hrs post RT session test of one leg and pre-session 6 test of the other leg.
 
 Assessment of unilateral one repetition maximum (1RM) leg press and knee extension was conducted at pre-intervention testing (days -7 and -5, Fig 2). The participants warmed up with 10min cycling on an indoor exercise bicycle and a specific warm-up (1x10, 1x6 and 1x3 repetitions, 2min breaks) before each of the tests. Between specific warm-up sets as well as between each subsequent 1RM attempt, the participants were given 3min pauses. All positions were controlled and recorded at pre-intervention testing and repeated for each subsequent test and RT. Maximal leg press strength was defined as the maximal load lifted in a controlled fashion, with a knee angle of 45 degrees (start), within a 2.5kg range. Attempts, where participants did not reach 45 degrees during the eccentric phase, were not approved. Maximal knee extension testing followed the same specific warm-up and pause protocol and was defined as maximal load lifted in a controlled fashion, reaching full extension of the knee joint, within a 1.25kg range. Attempts with exaggerated hip movement or beneath full extension were not approved.
 
 
 ### Resistance training protocol
+
 Resistance training consisted of three sets of each unilateral leg presses and knee extensions, with an intensity of 10 repetition maximum (10RM). All positions were controlled and recorded during pre-intervention testing and repeated each RT session. As a general warm-up, the participants cycled on an indoor exercise bicycle for 5-10min. In addition, before the respective exercises, two 10-repetition warm-up sets were completed at ~50% and ~70% of 10RM. Rest time between working sets was 2min, and we used progressive loading to ensure adequate exercise stimulation throughout the intervention. For safety and standardization purposes, all sessions were monitored by trained personnel. To further ensure equal exercise premises for the two legs, each participant was accompanied by the same trainer in each session. If this was not possible throughout the intervention, each participant had the same trainer on pairwise consecutive days as a minimum. The rate of perceived exertion (RPE, 0–10-point scale) was logged before every session, and the session score was logged 15min after each session. Lastly, training volume (i.e., load and repetitions) was logged for every session.
 
 ### Sampling of muscle tissue and blood
+
 Muscle biopsies were sampled from m. vastus lateralis using well-established procedures (HAMMARSTRØM20). Muscle biopsy sampling was performed under local anaesthesia (Xylocaine, 10mg ml-1 with adrenaline 5μg ml−1, AstraZeneca AS, Oslo, Norway) using a 12-14-gauge needle (Universal Plus, Mermaid Medical AS, Stenløse, Denmark), operated with a spring-loaded biopsy gun. After the biopsy sampling, muscle tissue was divided into two aliquots for determination of total RNA/expression of rRNA and two aliquots for protein analyses, snap frozen in isopentane (-80°C) and stored at -80°C until further analyses. Muscle biopsies were sampled at four time points (Fig 2): I/II) Pre-intervention (2hrs before training, time point T1 = pre RT#1 leg, T2 = pre RT#2 leg), and III/IV) before the sixth RT session from RT#1 leg (2hrs before training, T3) and before the sixth RT session from RT#2 leg (2hrs before training, T4). At each time point, two samples were taken from the same incision. To standardize this procedure, all individual participants had biopsies taken at the same time of day +/- 1hr, in an overnight fasted state.
+
 To measure blood glucose levels with and without glucose ingestion/training, blood was collected by means of finger draws on days with biopsy sampling. One finger draw was taken at T1 (pre-test, Fig 2) to serve as a baseline. At T3 and T4 (post-test, Fig 2), finger draws were collected at 7 time points: I) prior to protein ingestion (0700hrs) II) 45 minutes after protein ingestion (0745hrs) III) 1.5hrs after protein ingestion (0800hrs, i.e., immediately before GLU/PLAC intake), IIII) 2hrs after protein ingestion (0900hrs, i.e., immediately before training), IV) in the middle of RT (~0915hrs), V) immediately after training (~0930hrs), and VI) 2hrs after completion of training (~1130hrs). Finger draws were analysed with in-house equipment (BIOSEN C-Line, EKF diagnostic GmbH, Barleben). Blood samples were also collected coinciding with these finger draws, except in the middle of the RT session, to analyse endocrine variables.
 
-### Total RNA and protein extraction
-Two muscle biopsy samples were taken for total RNA extraction per leg per time point, and total RNA was extracted in two duplicates per muscle biopsy. Thus, we had two duplicates per leg per time point, giving a total of eight RNA samples per participant. Total RNA was extracted using TRIzol according to the manufacturer’s protocol. Briefly, muscle tissue was homogenized in 300µl TRIzol using 0.5mm RNase-free Zirconium beads (~50 ul) (Next Advanced, Averill Park, NY, USA) and a bullet blender (bb). Samples ran 1min at speed 10, put on ice for 1min and bb another round at speed 12 for 1 min. If not fully dissolved, samples ran additional rounds until fully homogenized. Thereafter, an additional 700 µl TRIzol was added, and samples ran 1 min at speed 3 in the bb for mixing, before 5 min incubation at room temperature. 200 µl chloroform (Sigma-Aldrich, Missouri, USA) was added, and samples were shaken for 15sec, followed by 2-3min incubation at room temperature. After incubation, samples were inverted by hand and centrifuged in Heraeus™ Fresco™ 21 Microcentrifuge (Thermo Fisher Scientific, Waltham, Massachusetts, USA) at 12000g, 15min, 4°C. The upper aqueous phase (450 µl) was transferred to a fresh tube, containing 500 µl isopropanol (VWR International, Pennsylvania, USA), mixed, and incubated for 10min at room temperature. Samples were centrifuged at 12000g for 10min at 4°C, precipitating an RNA pellet. The pellet was washed twice with 1000 µl 75% cold ethanol; centrifuged for 5 min at 7500g, 4°C. Thereafter, ethanol was removed, and the pellet was air dried for 10min (or until dried). The pellet was suspended in 30 µl DEPC-treated water and incubated for 10 min at 55°C. For assessment of RNA content and -purity 5µl RNA, from the RNA stock, was diluted with 5µl TE-buffer (1:2), for assessment via spectrophotometry. All samples had a 260nm to 280nm ratio > 1.9. The RNA stock was stored at -80°C until further analyses.
+### Total RNA extraction and quantitative real-time reverse transcription polymerase chain reaction
 
-Total protein was extracted using the Minute Total Protein Extraction Kit for Muscles (Invent Biotechnology), according to the manufacturer’s protocol. Five to twenty mg (CHECK) of wet muscle was freeze-dried for 24hrs and dissected before extraction. The tissue was homogenized in approximately 80mg (CHECK) protein extraction powder and 100ul icy cold denaturing buffer (Invent Biotechnology) with a plastic rod, and centrifuged at top speed for 1 min. The supernatant was transferred to a fresh tube, and then aliquoted into 2x25ul tubes for analysis. Four microliter total protein was diluted in 36ul DEPC-treated water (or nuclease-free??) (1:10), for total protein measurement via spectrophotometry with the Bradford reagent (…).
-
-### Complimentary DNA synthesis and Quantitative polymerase chain reaction
-
-RNA was reverse transcribed using Super Script IV Reverse Transcriptase (Invitrogen), according to the manufacturer’s instructions. Briefly, 1µl 10 mM dNTP mix, 0.5µl anchored oligo-dT, 0.5µl random hexamer primers (Thermo Scientific), a maximum of 9µl template RNA and 2 µl nuclease-free water were mixed, vortexed and briefly spun down. Samples were then heated at 65°C for 5 minutes, followed by at least 1-minute incubation on ice. For the next step, 4µl 5x SSIV Buffer, 1µl 100 mM DTT, 1 µl RNase OUT, and Super Script IV Reverse Transcriptase (Invitrogen) were mixed, vortexed and briefly spun down and added to the samples. Samples were incubated for 10 minutes at 23°C, 10 minutes at 50-55°C and 10 minutes at 80°C. All samples were reverse transcribed and diluted to 1:50 before quantitative real-time polymerase chain reaction (qPCR). Lambda was used as an external reference gene, added in the RNA extraction (2µl per extraction). qPCR reactions were run on a fast-cycling real-time detection system (Applied Biosystems 7500 fast Real-Time PCR Systems, Life Technologies AS), with a total volume of 10 µl, containing 2 µl of cDNA, gene-specific primers (0.5 µM final concentration) and a commercial master mix (2X SYBR Select Master Mix, Applied Biosystems, Life Technologies AS) (Hammarström et al. 2020). qPCR reactions consisted of 40 cycles (3 s 95°C denaturing and 30 s 60°C annealing) (Hammarström et al. 2020). Raw fluorescence data were exported from the platform-specific software and amplification curves were modelled with a best-fit sigmoidal model using the qPCR package (Ritz & Spiess, 2008) written for R (Hammarström et al. 2020; Team 2018). For an overview of primers, see Table 2.
+Two muscle biopsy samples were taken for total RNA extraction per leg per time point, and total RNA was extracted in two duplicates per muscle biopsy. Thus, we had two duplicates per leg per time point, giving a total of eight RNA samples per participant. Total RNA was extracted using TRIzol according to the manufacturer’s protocol. An exogenous RNA control (λ polyA External Standard Kit, Takara Bio Inc., Shiga, Japan) was added at a fixed amount (0.04 ng ml-1 of Trizol reagent) to enable analysis of target gene expression per unit tissue weight (ELLEFSEN2008,2014). Briefly, muscle tissue was homogenized in TRIzol using 0.5mm RNase-free Zirconium beads (~50 ul) (Next Advanced, Averill Park, NY, USA) and a bullet blender (bb). Chloroform (Sigma-Aldrich, Missouri, USA) was used for phase-separation, and an RNA pellet was precipitated with isopropanol (VWR International, Pennsylvania, USA). For assessment of RNA content and -purity 5µl RNA, from the RNA stock, was eluted in TE-buffer (1:2), for assessment via spectrophotometry. All samples had a 260nm to 280nm ratio > 1.9. The RNA stock was stored at -80°C until further analyses. RNA was reverse transcribed using Super Script IV Reverse Transcriptase (Invitrogen), according to the manufacturer’s instructions. Briefly, 1µl 10 mM dNTP mix, 0.5µl anchored oligo-dT, 0.5µl random hexamer primers (Thermo Scientific), a maximum of 9µl template RNA and 2 µl nuclease-free water were mixed, vortexed and briefly spun down. Samples were then heated at 65°C for 5 minutes, followed by at least 1-minute incubation on ice. For the next step, 4µl 5x SSIV Buffer, 1µl 100 mM DTT, 1 µl RNase OUT, and Super Script IV Reverse Transcriptase (Invitrogen) were mixed, vortexed and briefly spun down and added to the samples. Samples were incubated for 10 minutes at 23°C, 10 minutes at 50-55°C and 10 minutes at 80°C. All samples were reverse transcribed and diluted to 1:50 before quantitative real-time polymerase chain reaction (qPCR). Lambda was used as an external reference gene, added in the RNA extraction (2µl per extraction). qPCR reactions were run on a fast-cycling real-time detection system (Applied Biosystems 7500 fast Real-Time PCR Systems, Life Technologies AS), with a total volume of 10 µl, containing 2 µl of cDNA, gene-specific primers (0.5 µM final concentration) and a commercial master mix (2X SYBR Select Master Mix, Applied Biosystems, Life Technologies AS) (Hammarström et al. 2020). qPCR reactions consisted of 40 cycles (3 s 95°C denaturing and 30 s 60°C annealing) (Hammarström et al. 2020). Raw fluorescence data were exported from the platform-specific software and amplification curves were modelled with a best-fit sigmoidal model using the qPCR package (Ritz & Spiess, 2008) written for R (Hammarström et al. 2020; Team 2018). For an overview of primers, see Table 2.
 
 ###### **Table 2:** Primer sequence and performance. Average cycle thresholds (Ct) and priming efficiencies were calculated from all qPCR reactions. 
 
 ![](figures/Primer.sequences.PNG)
 
-### Gel electrophoresis and Western Blot
+### Protein extraction and immunoblotting
 
-#### Gel electrophoresis
-Samples were standardized to a protein concentration of 3ug/ul via dilution with denaturing buffer (Invent Biotechnology), and laemmli/2-mercaptoethanol loading buffer (PRODUCER?) equating to ¼ of the sample’s total volume was then added to reach a final protein concentration of 2.25 ug/ul. A total of 20ul from each sample was pooled in several fresh tubes, serving as a normalisation factor in later quantitative analyses. All samples were incubated at 95°C for 5 minutes, briefly cooled and stored at -20°C until loading. In total, 9ul from each sample were loaded on six gels in duplicates, with 9ul of 3-4 pools per gel, on ice. Loading order from gel 1-3 was inverted for gel 4-6. Gels ran the electrophoresis simultaneously, at 250V constant for 50min on ice, ice-cold running buffer (250 mM Tris, 1.92 M Glycin, 1% SDS. Final concentrations in 1X: 25 mM Tris, 192 mM Glycin, 0.1% SDS).
+Total protein was extracted using the Minute Total Protein Extraction Kit for Muscles (Invent Biotechnology), according to the manufacturer’s protocol, optimised for our lab. Wet muscle was freeze-dried for 24hrs and dissected before extraction. The tissue was homogenized with a plastic rod in 80mg protein extraction powder (Invent Biotechnology) and 100ul iced cell lysis buffer (Denaturing Buffer, Invent Biotechnology), and centrifuged at top speed for 1 min. The supernatant was aliquoted into 2x25ul tubes to run samples in duplicates, and total protein concentrations were determined in a 1:10 dilution (Pierce Detergent Compatible Bradford Assay Reagent, Thermo Fisher Scientific). The protein samples were diluted to 20.25 µg µl−1 total protein with lysis buffer and 4X Laemmli sample buffer (Bio-Rad Laboratories AB, Oslo, Norway) containing 2-mercaptoethanol. Twenty microlitres from each protein sample were pooled as a normalisation factor for gel separation. All protein samples were incubated at 95°C and stored at -20°C until further analysis. The protein samples (20.25µg total protein) were separated at 250V for 50min using …. gels (……..), then transferred to PVDF membranes with wet transfer at 300mA for 3hrs. Both gel electrophoresis and protein transfer were performed at 4°C. Following the wet transfer, membranes were stained with a MemCode reversible total protein stain (MANUFACTURER) and then blocked for 1hr at room temp with a blocking buffer of Tris-buffered saline (TBS; 20 mM Tris, 150 mM NaCl) with 5% non-fat dry milk and 0.1% Tween-20. Primary antibodies were purchased from ……, secondary antibodies were purchased from ……, and were diluted in a 5% non-fat dry milk blocking buffer (TBS, 5% non-fat dry milk, 0.1% Tween-20). Membranes were incubated overnight with primary antibodies, and for 1hr with secondary antibodies. Between blocking and primary antibody staining, membranes were washed 1x5min, between primary and secondary staining, and after secondary staining, membranes were washed 3x5 with TBS-Tween (TBS; 20mM Tris, 150mM NaCl, 0.1% Tween). Following the last TBS-T wash, membranes were incubated 1x5min with enhanced chemiluminescent substrate (ECL, SuperSignal West Femto Maximum Sensitivity Substrate, Thermo Fisher Scientific). Membrane blocking, secondary antibody incubation, washing and ECL incubation were performed at room temp, on a tipping board. Primary antibody incubation was performed at 4°C on a tipping board. Chemiluminescence signals were quantified using Image Studio Lite (LI-COR Biotechnology, Lincoln, NE, USA), and total protein content was quantified using ImageJ (RUEDENETAL2017), whereas total protein content was defined as mean grey value of the whole well with between-well values subtracted as background. 
 
-#### Wet transfer
-Transfer buffer (25 mM Tris, 192 mM Glycin, 10% MeOH) was made in due time of the transfer (2-5 days), to allow for “de-gas”. The PVDF-membrane was incubated for 5min in MeOH, then 10min in cold transfer buffer before transfer. Before sandwich assembly, foam pads and filter paper were soaked in transfer buffer, and the gel was flushed with ddH2O. The wet transfer was run at 300mA constant for 3hrs, in a Criterion Blotter (PRODUCER) on ice and stirring pad to maintain even buffer temperature and ion concentration during the transfer.  
-
-#### Staining
-MemCode was used for protein staining, according to manufacturer’s protocol. The membranes were soaked and carefully shaken in MemCode Stain for 1min, washed with Destain/MeOH (1:1) on a shaker for 5min, with ddH2O washing before and between these steps. One manual capture (G:Box) per gel was taken, to procure total protein stain images. Following manual captures, all membranes were sliced into strips containing the bands of the specific protein targets (c-Myc, UBF, rps6), rinsed with ddH2O, washed with Eraser/MeOH solution (1:1) for 10min and rinsed with ddH2O once more. A 5% non-fat dry milk solution was used as blocking buffer and diluent for antibodies. Each membrane was blocked for 1hr at room temp, and washed once with TBS-T for 5min on a tipping board, then incubated overnight on a tipping board at 4°C in primary antibody (see table .. for primary antibody dilutions). Secondary antibody staining was done on a tipping board for 1hr at room temp (see table .. for secondary antibody dilutions), with three subsequent 5min TBS-T washes. Lastly, before imaging, the membranes were incubated for 5min in ECL (TYPE). Quantification was done using the G: Box and Genesys software with an ECL protocol.
-
-### Data handling and statistical analyses
-A priori power calculations showed that 20 participants would be sufficient to grant a statistical power of 80% (=0.05), with an expected dropout of 20%. As no studies existed to guide our power calculations, we made the assumption that the effects of glucose ingestion on ribosome biogenesis may equate to the effects of increased resistance training volume from low to moderate (HAMMARSTRÖM20). All raw data were imported and analysed in R (TEAM18). Individual participants’ leg results were categorized as either glucose or placebo according to the randomization. Total RNA and rRNA were analyzed by post to pre log-fold change score difference comparisons, using a linear mixed effects model with mean-centred baseline values as a covariate and subsequent calculations of estimated marginal means. Total RNA was normalised by muscle biopsy weight, and qPCR values were normlised by muscle biopsy weight and external reference gene (Lambda). Total RNA and rRNA changes were calculated as log-fold change scores per mg wet muscle weight. Blood glucose levels, dietary data, training volume and -intensity, RPE, and muscular strength and -recovery were analysed by multiple time point log-fold change score comparisons, using the same linear mixed effects model, adding time as an explaining factor in addition to supplement. The linear mixed effects model was design with the lmer function of the lme4 package (BATES14) in R, using the lmerTest function in addition to procure p-values. A paired samples t-test was used to check for differences in leg characteristics at baseline. All data was log-transformed for analysis to control for heteroscedasticity. For figure illustration, values were either reverse transformed or calculated as absolute changes. Mean-centred baseline values were used to correct for regression to the mean, which potentially occurs when the same participants are repeatedly tested. As such, varying baseline values should not affect change outcomes. Estimated marginal means were calculated from the linear model, enabling acquisition of least-square means, showing the means for all involved groups adjusted to means of other potential factors in the model. Values are presented as mean ± SEM unless otherwise stated. Alpha-level was set to α = 0.05
 
 ## Results
 
@@ -269,13 +264,13 @@ p.150 <- sprintf("%.5f", 1.445712e-11)
 p.270 <- round(bcoef[11,5], 2)
 ```
 
-At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in any macronutrient (calories, carbohydrate, fat or protein) ingestion (Tab 4). Resistance training with glucose led to significant increases in plasma glucose levels compared to RT with placebo, before, during and after the session (Fig 3B, 120min: 43 ± 4% [p = 0.00000], 135min: 32 ± 4% [p = 0.00000], 150min: 32 ± 4% [p = 0.00000]), measured during the final RT session. At 2hrs post-exercise, exercise training with glucose led to significantly lower plasma glucose levels compared to exercise training with placebo (8 ± 4%, p = 0.03).
+At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in any macronutrient (calories, carbohydrate, fat or protein) ingestion (Tab 4). Resistance training with glucose led to significant increases in blood glucose levels compared to RT with placebo, before, during and after the session (fig 3B, 120min: 43 ± 4% [*p* = `r p.120`], 135min: 32 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`]), measured during the final RT session. At 2hrs post-exercise, RT with glucose led to significantly lower blood glucose levels compared to RT with placebo (8 ± 4% [*p* = `r p.270`).
 
-###### **Table 3**: Baseline characteristics of the intervention legs, organized per supplement. Variables: Iso 60 = isokinetic 60 d/s, Iso 240 = isokinetic 240 d/s, training intensity = load/rm*100. Nm = newton meters, kg = kilograms, %1RM = percentage of 1 repetition maximum, ng/mg = nanogram per milligram wet muscle tissue, nf.expr = expression normalized by weight and external reference gene. rRNA data are presented as log transformed. Glucose n = 13, placebo n = 13.
+###### **Table 3**: Baseline characteristics of the intervention legs, organized per supplement. Variables: Iso 60 = isokinetic 60 d/s, Iso 240 = isokinetic 240 d/s, training intensity = load/rm*100. Nm = newton meters, kg = kilograms, %1RM = percentage of 1 repetition maximum, ng/mg = nanogram per milligram wet muscle tissue, nf.expr = expression normalized by weight and external reference gene (Lambda). Ribosomal RNA data are presented as log transformed. Glucose n = 13, placebo n = 13.
 
 ![](figures/table3.png)
 
-###### **Table 4:** Daily mean dietary intake of macro nutrients during each training day per supplement leg. Glu = glucose, Plac = placebo. Training day 1-training day 12 are combined pairwise to day 1-6: Day 1 = training day 1/2, Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12. Values are mean ± standard deviation. P = difference between Glu and Plac. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac = 11.
+###### **Table 4:** Daily mean dietary intake of macro nutrients during each training day per supplement leg. G = glucose, P = placebo. Training day 1-training day 12 are combined pairwise to day 1-6: Day 1 = training day 1/2, Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12. Values are mean ± standard deviation. P = difference between glucose and placebo. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac = 11.
 
 ```{r nutrition table}
 
@@ -454,7 +449,7 @@ gluc.fig
 
 ```
 
-###### **Figure 4:** A) Time line for training day 6 (combination of pairwise consecutive training day 11 and 12). Biopsy = muscle biopsy taken pre supplementation, PRO = protein supplementation, Humac = strength test (isometric knee extension, isokinetic knee extension 60 and 240 d/s), GLU/PLAC = glucose/placebo supplementation, RT = resistance training. Minutes: -120 = 2hrs prior to RT, -90 = 90min prior to RT, -30 = 30min prior to RT, 0 = onset of RT, 15 = 15min following onset of RT, between leg press and knee extension, 30 = 30min post onset of RT, 120 = 2hrs following onset of RT. B) Mean mmol/L change in plasma glucose levels per supplement group during training day 6. Time-points: 0, 45, 90, 120, 135, 150 and 270min post protein ingestion, respectively. Finger stings were taken at all time-points, blood samples were taken at all time-points except from 135. Values are presented as estimated marginal means of mmol/L change ± 95% CI. *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
+###### **Figure 3:** A) Time line for training day 6 (combination of pairwise training day 11 and 12). Biopsy = muscle biopsy taken pre supplementation, PRO = protein supplementation, Humac = strength test (isometric knee extension, isokinetic knee extension 60 and 240 d/s), GLU/PLAC = glucose/placebo supplementation, RT = resistance training. Minutes: -120 = 2hrs prior to RT, -90 = 90min prior to RT, -30 = 30min prior to RT, 0 = onset of RT, 15 = 15min following onset of RT, between leg press and knee extension, 30 = 30min post onset of RT, 120 = 2hrs following onset of RT. B) Mean mmol/L change in blood glucose levels per supplement group during training day 6. Time-points: 0, 45, 90, 120, 135, 150 and 270min post protein ingestion, respectively. Finger draws were taken at all time-points, blood samples were taken at all time-points except from 135. Values are presented as estimated marginal means of mmol/L change ± 95% CI. *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
 
 ### Total RNA and ribosomal RNA
 
@@ -674,7 +669,7 @@ change.47 <- rrna47 %>%
                supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
 ```
 
-```{r rRNA data modelling + fig}
+```{r rRNA data modelling}
 # Scripts
 # - qpcr-import
 # - qpcr-analysis
@@ -764,11 +759,12 @@ rr5diffse <- round(rr5coef[3,2], 3)
 # 47S
 rr47coef <- coef(summary(m5))
 rr47diffp <- round(rr47coef[3,5], 3)
+rr47tdiffp <- round(rr47coef[1,5], 3)
 rr47diffse <- round(rr47coef[3,2], 3)
 
 ```
 
-Resistance training with glucose did not induce a higher accumulation of total RNA (Fig 4A, p = 0.499), or rRNA (Fig 4B, 18S: p = 0.584, 28S: p = 0.740, 5.8S: p = 0.935, 5S: p = 0.790, 47S: p = 0.502), compared to RT with placebo, measured as mean change from baseline to post. From baseline to post-intervention, there was an average increase in levels of total RNA, 26 and 22% after RT with glucose and placebo, respectively. A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) in the four rRNA’s, and 37 and 59% in 47S pre-rRNA, respectively.
+Resistance training with glucose did not induce a higher accumulation of total RNA (fig 4A, *p* = `r trdiffp`), or rRNA  (fig 4B, *p* > 0.05), compared to RT with placebo, measured as mean change from baseline to post. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, with only placebo reaching significantly higher levels at post compared to baseline (fig 4B, *p* = `r rr47tdiffp`).
 
 ```{r RNA figures}
 # Get figures
@@ -797,7 +793,191 @@ plot_grid(plot.18 + theme(legend.position = "none"),
 
 ```
 
-###### **Figure 5:** A) Changes in Total RNA, B) Changes in ribosomal RNA. Baseline = Training day 1/2, Post = Training day 11/12. Both total RNA and rRNA were analyzed with duplicates, with two duplicates per biopsy (two biopsies per time point). Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
+###### **Figure 4:** A) Changes in Total RNA, B) Changes in ribosomal RNA. Baseline = Training day 1/2, Post = Training day 11/12. Both total RNA and rRNA were analyzed with duplicates, with two duplicates per biopsy (two biopsies per time point). Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg/supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
+
+## Protein signals
+
+```{r western modelling}
+# Script: western.change
+
+# Data
+
+prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS")
+
+# Change analysis
+
+#prot.dat %>%
+ # group_by(time, supplement, target) %>%
+  #mutate(norm.sign = log(tpl/norm.sign)) %>% # Log transforms and normalises
+  # norm.sign by tpl
+  #summarise(m = mean(norm.sign, na.rm = TRUE)) %>%
+  #ggplot(aes(time, m, color = supplement, group = supplement)) +
+  #geom_line() +
+  #geom_point() +
+  #facet_wrap( ~ target, scales = "free")
+
+# Change score
+
+pchange <- prot.dat %>%
+  dplyr::select(subject, time, sample.id, target, norm.sign, supplement) %>%
+  group_by(subject, time, target, supplement) %>%
+  summarise(mns = mean(norm.sign, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = mns) %>%
+  ungroup() %>%
+  mutate(change = log(post)-log(pre),
+         pre = pre - mean(pre, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
+
+# By target
+
+cmyc <- pchange %>%
+  filter(target == "cmyc") 
+
+ubf <- pchange %>%
+  filter(target == "ubf") 
+
+rps6 <- pchange %>%
+  filter(target == "rps6") 
+
+# c-Myc change
+
+m1 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = cmyc) # same model as in "western import", but with change scores of norm.sign
+
+#plot(m1)
+
+sum.m1 <- summary(m1)
+
+cmyc.emm <- emmeans(m1, specs = ~"supplement") %>%
+  data.frame
+
+saveRDS(cmyc.emm, "./data/data-gen/protein/cmyc.change.RDS")
+
+# UBF change
+
+m2 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = ubf) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
+
+#plot(m2)
+
+sum.m2 <- summary(m2)
+
+ubf.emm <- emmeans(m2, specs = ~"supplement") %>%
+  data.frame()
+
+saveRDS(ubf.emm, "./data/data-gen/protein/ubf.change.RDS")
+
+# rps6 change
+
+m3 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = rps6) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
+
+#plot(m3)
+
+sum.m3 <- summary(m3)
+
+rps6.emm <- emmeans(m3, specs = ~"supplement") %>%
+  data.frame()
+
+saveRDS(rps6.emm, "./data/data-gen/protein/rps6.change.RDS")
+
+
+### For inline reporting
+## Diff cmyc
+ccoef <- coef(summary(m1))
+cdiff <- round(ccoef[3,5], 3)
+cdiffse <- round(ccoef[3,2], 3)
+
+## Diff UBF
+ucoef <- coef(summary(m2))
+udiff <- round(ucoef[3,5], 3)
+udiffse <- round(ucoef[3,2], 3)
+
+## Diff rps6
+rpcoef <- coef(summary(m3))
+rpdiff <- round(rpcoef[3,5], 3)
+rpdiffse <- round(rpcoef[3,2], 3)
+
+```
+
+```{r western fig}
+# Data
+
+cmyc <- readRDS("./data/data-gen/protein/cmyc.change.RDS")
+
+ubf <- readRDS("./data/data-gen/protein/ubf.change.RDS")
+
+rps6 <- readRDS("./data/data-gen/protein/rps6.change.RDS")
+
+
+## cmyc fig
+
+cmyc.plot <- cmyc %>%
+  mutate(time = "post") %>%
+  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
+  mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
+  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
+  #annotate("text", x = "Post", y = 2.1, label = "p = 0.585", size = 3) +
+  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
+                width = 0.1,
+                position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
+  labs(x = "", y = "c-Myc signal \n(fold change)\n", fill = "") +
+  theme_classic()
+
+
+ubf.plot <- ubf %>%
+  mutate(time = "post") %>%
+  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
+  mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
+  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
+  #annotate("text", x = "Post", y = 2.1, label = "p = 0.585", size = 3) +
+  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
+                width = 0.1,
+                position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
+  labs(x = "", y = "UBF signal \n(fold change)\n", fill = "") +
+  theme_classic()
+
+rps6.plot <- rps6 %>%
+  mutate(time = "post") %>%
+  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
+  mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
+  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
+  annotate("text", x = "Post", y = 1.9, label = "p = ", size = 3) +
+  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
+                width = 0.1,
+                position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
+  labs(x = "", y = "rps6 signal \n(fold change)\n", fill = "") +
+  theme_classic()
+
+
+# Cowplot for gathering figures
+
+legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
+
+
+prot.joined <- plot_grid(cmyc.plot + theme(legend.position = "none"),
+                         ubf.plot + theme(legend.position = "none"), 
+                         rps6.plot + theme(legend.position = "none"),
+                         legend,
+                         ncol = 2, nrow = 2)
+
+prot.joined
+
+saveRDS(prot.joined, "./data/data-gen/rna/prot.joined.RDS")
+
+```
+
+###### **Figure 5:** A) Changes in c-Myc levels, B) changes in UBF levels, C) changes in rps6 levels. Baseline = Training day 1/2, post = Training day 11/12. Four samples were analysed per participant (GLU pre-post, PLAC pre-post), in duplicates, a total of 104 protein samples. Duplicate samples were loaded on separate gels. In addition, 3-4 pools were added to each well. c-Myc, UBF and rps6 signals were then calculated as log-fold change score, normalised by gel pools. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg/supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
 
 ### Resistance training and strength testing
 
@@ -1343,7 +1523,7 @@ isok240diffse <- round(isok240coef[7, 2], 3)
 
 ```
 
-There were no significant differences in mean change of total session volume, training intensity or RPE between exercise training with glucose and placebo at any of the time points (Fig 5, p = 0.740, p = 0.917, p = 0.645, post change compared to baseline, respectively). We did observe interactions between time and changes, where total session training volume increased from 13-18% compared to baseline. These increases in training volume were accompanied by changes ranging from 5-18% in training intensity and 2-13% in RPE (Tab 5). The maximal isometric knee extension force (OR TORQUE?) and isokinetic knee extension peak torque at 240 d/s showed no differences between exercise training with glucose and placebo after five RT sessions (Fig 6A, Isometric: p = 0.336, 240 d/s: p = 0.527, post change compared to baseline, respectively). There was a significant difference in mean change from pre to post-fifth RT session, where exercise training with glucose led to a 9% less decrease in peak torque at 60 d/s compared to placebo (Fig 6A, p = 0.037). There was no difference between glucose and placebo in mean change from baseline to after the sixth RT session (Fig 6B, Isometric: p = 0.442, 60 d/s: p = 0.377, 240 d/s: p = 0.154, compared to baseline, respectively).
+There were no significant differences in mean change of total session volume, training intensity or RPE between exercise training with glucose and placebo at any of the time points (fig 6, *p* > 0.05). We did observe interactions between time and changes, where total session training volume increased from 13-18% compared to baseline. These increases in training volume were accompanied by changes ranging from 5-18% in training intensity and 2-13% in RPE (Tab 5). The maximal isometric knee extension force (OR TORQUE?) and isokinetic knee extension peak torque at 240 d/s showed no differences between exercise training with glucose and placebo after five RT sessions (Fig 7A, *p* > 0.05). There was a significant difference in mean change from pre to post-fifth RT session, where exercise training with glucose led to a 9% less decrease in peak torque at 60 d/s compared to placebo (Fig 7A, *p* = `r isok605diffp`). There was no difference between glucose and placebo in mean change from baseline to after the sixth RT session (Fig 7B, *p* > 0.05).
 
 ![](figures/legend.PNG)
 

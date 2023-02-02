@@ -133,21 +133,19 @@ m0 <- lme(log(norm.sign) ~ time + supplement + time:supplement,
     #     method = "ML",
      #    data = dat2)
 
-m0.2 <- lme(log(norm.sign) ~ tpl + time + supplement + time:supplement, 
-        random = list(subject = ~ 1, 
-                     gel.sample = ~ 1),
-        weights = varExp(form = ~ tpl|target),
-        method = "ML",
-        data = filter(dat2, target == "cmyc"))
+#m0.2 <- lme(log(norm.sign) ~ tpl + time + supplement + time:supplement, 
+ #       random = list(subject = ~ 1, 
+  #                   gel.sample = ~ 1),
+   #     weights = varExp(form = ~ tpl|target),
+    #    method = "ML",
+     #   data = filter(dat2, target == "cmyc"))
 
-
-#anova(m0, m1)
 
 summary(m0)
-summary(m0.2)
+#summary(m0.2)
 
 plot(m0, resid(., type = "p") ~ fitted(.))
-plot(m0.2, resid(., type = "p") ~ fitted(.))
+#plot(m0.2, resid(., type = "p") ~ fitted(.))
 
 
 # UBF model
