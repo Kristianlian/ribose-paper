@@ -36,6 +36,8 @@ pchange <- prot.dat %>%
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
 
+saveRDS(pchange, "./data/data-gen/protein/prot.change.RDS")
+
 # By target
 
 cmyc <- pchange %>%

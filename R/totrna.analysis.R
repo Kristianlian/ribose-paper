@@ -49,6 +49,7 @@ rna_dat2 %>%
   summarise(weight = mean(weight), 
             RNA = mean(RNA)) %>%
   mutate(RNA = RNA/weight) %>%
+  
   ggplot(aes(time, RNA, group=paste(subject, supplement), 
              color = supplement)) + 
   scale_y_continuous(limits = c(400, 1600)) +
@@ -93,6 +94,8 @@ change_dat <- rna_dat2 %>%
   mutate(change = log(post) - log(pre), 
          pre = pre - mean(pre, na.rm = TRUE), 
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
+
+saveRDS(change_dat, "./data/data-gen/rna/totrna.change.RDS")
 
 ## Linear mixed effects model 
 # The data set is fitted in an ANCOVA model, explaining change based on the condition (supplement), accounting for differential baseline values and
