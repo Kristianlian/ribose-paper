@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. -->
 
-# contratrain-muscle-paper
+# Ribose-paper
 
 ## Authors
 
@@ -19,21 +19,21 @@ Chidimma Phoebe Echebiri, Sara Christine Moen,
 
 `/resources`
 
--   bibliography.bib
--   csl-files
+- bibliography.bib
+- csl-files
 
 `/data`
 
--   contains raw data not included in the data package
+- contains raw data not included in the data package
 
 `/data-gen/`
 
--   contains generated data stored for further analyses
+- contains generated data stored for further analyses
 
 `ribose-manuscript.qmd`
 
--   The manuscript source file
+- The manuscript source file
 
 `/figures`
 
--   Figures source files and output
+- Figures source files and output
