@@ -80,6 +80,8 @@ ins.change <- ins.dat2 %>%
                cols = (change.45:change.270)) %>%
   print()
 
+saveRDS(ins.change, "./data/data-gen/glucose/cpep.change.RDS")
+
 ins.lchange <- ins.dat2 %>%
   #filter(subject != "102") %>%
   dplyr::select(subject, time, c.pep, supplement) %>%
@@ -99,6 +101,8 @@ ins.lchange <- ins.dat2 %>%
                values_to = "change",
                cols = (change.45:change.270)) %>%
   print()
+
+saveRDS(ins.lchange, "./data/data-gen/glucose/cpep.logchange.RDS")
 
 ## Linear mixed effects model
 

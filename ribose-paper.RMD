@@ -30,7 +30,6 @@ Thus, though it seems apparent that sufficient daily intake of glucose/carbohydr
 
 ## Methods
 
-
 ### Materials and methods
 
 All participants were informed about the potential discomforts and risks associated with the study and gave their informed consent before study enrollment. The study was approved by the regional ethical committee (REK, ID nr. 153628), pre-registered at clinicaltrials.gov (Identifier: NCT04545190), and conducted according to the Helsinki declaration.
