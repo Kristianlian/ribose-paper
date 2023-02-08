@@ -9,6 +9,7 @@ library(tidyverse);library(ggpubr)
 # Data 
 
 west.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS")
+west.clean <- readRDS("./data/data-gen/protein/protein_complete.RDS")
 
 rna.dat <- readRDS("./data/data-gen/rna/rna_complete.RDS")
 
@@ -58,7 +59,13 @@ rna.red <- rna.dat2 %>%
 
 ## Ready western dat
 
-ubf.red <- west.dat %>%  # One data frame with pools only (norm.sign)
+ubf.red <- west.dat %>%  # One data frame without removing outliers
+  select(subject, time, supplement, target, norm.sign) %>%
+  filter(target == "ubf") %>%
+  select(-target) %>%
+  print()
+
+ubf.clean <- west.clean %>%  # One data frame removing outliers
   select(subject, time, supplement, target, norm.sign) %>%
   filter(target == "ubf") %>%
   select(-target) %>%
@@ -71,22 +78,24 @@ joined.dat <- ubf.red %>%
   #filter(supplement != "PLACEBO") %>%
   print()
 
+joined.clean <- ubf.clean %>%
+  right_join(rna.red) %>%
+  print()
+
 ## pre-post values correlation
-ggscatter(joined.dat, x = "RNA", y = "norm.sign", 
+ggscatter(joined.clean, x = "RNA", y = "norm.sign", 
           add = "reg.line", conf.int = TRUE, 
           cor.coef = TRUE, cor.method = "pearson",
           xlab = "Total RNA", ylab = "UBF signal")
 
 
-shapiro.test(joined.dat$norm.sign) # Does not appear normally distributed?
-shapiro.test(joined.dat$RNA) # Does not appear normally distributed?
+shapiro.test(joined.clean$norm.sign) 
+shapiro.test(joined.clean$RNA) # Does not appear normally distributed?
 
-ggqqplot(joined.dat$norm.sign, ylab = "norm.sign")
-ggqqplot(joined.dat$norm.sign, ylab = "RNA")
+ggqqplot(joined.clean$norm.sign, ylab = "norm.sign")
+ggqqplot(joined.clean$norm.sign, ylab = "RNA")
 
-ggqqplot(my_data$mpg, ylab = "MPG")
-
-res <- cor.test(joined.dat$norm.sign, joined.dat$RNA, 
+res <- cor.test(joined.clean$norm.sign, joined.clean$RNA, 
                 method = "pearson")
 res
 

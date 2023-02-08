@@ -185,11 +185,20 @@ plot(m2, resid(., type = "p") ~ fitted(.))
 cmyc.emm <- emmeans(m0, specs = ~ time|supplement) %>%
   data.frame()
 
+#cmyc.emm2 <- emmeans(m0.2, specs = ~ time|supplement) %>%
+  #data.frame()
+
 cmyc.emm %>%  
   mutate(time = factor(time, levels = c("pre", "post"))) %>%
   ggplot(aes(time, emmean, fill = supplement, group = supplement)) + 
   geom_line() + 
   geom_point(shape= 21) 
+
+#cmyc.emm2 %>%  
+ # mutate(time = factor(time, levels = c("pre", "post"))) %>%
+  #ggplot(aes(time, emmean, fill = supplement, group = supplement)) + 
+  #geom_line() + 
+  #geom_point(shape= 21) 
 
 saveRDS(cmyc.emm, "./data/data-gen/protein/cmyc.emm.RDS")
 
