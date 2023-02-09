@@ -34,14 +34,14 @@ ins.dat2 <- ins.dat %>%
                         if_else(sample.time == "0.1",
                                 "baseline",
                                 if_else(sample.time == "45",
-                                "min45",
+                                "min90",
                                 if_else(sample.time == "90",
-                                        "min90",
+                                        "min120",
                                         if_else(sample.time == "120",
-                                                "min120",
+                                                "min150",
                                                 if_else(sample.time == "270",
                                                         "min270", sample.time))))))) %>%
-  mutate(time = factor(time, levels = c("pre", "baseline", "min45", "min90", "min120", "min270")),
+  mutate(time = factor(time, levels = c("pre", "baseline", "min90", "min120", "min150", "min270")),
          c.pep = as.numeric(c.pep)) %>%
   print()
 
@@ -68,16 +68,16 @@ ins.change <- ins.dat2 %>%
   pivot_wider(names_from = time, 
               values_from = mean.pep) %>%
   ungroup() %>%
-  mutate(change.45 = min45-baseline,
-         change.90 = min90-baseline,
+  mutate(change.90 = min90-baseline,
          change.120 = min120-baseline,
+         change.150 = min150-baseline,
          change.270 = min270-baseline,
          baseline = baseline - mean(baseline, na.rm = TRUE),
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
-  select(subject, supplement, baseline, change.45, change.90, change.120, change.270) %>%
+  select(subject, supplement, baseline, change.90, change.120, change.150, change.270) %>%
   pivot_longer(names_to = "time",
                values_to = "change",
-               cols = (change.45:change.270)) %>%
+               cols = (change.90:change.270)) %>%
   print()
 
 saveRDS(ins.change, "./data/data-gen/glucose/cpep.change.RDS")
@@ -90,16 +90,16 @@ ins.lchange <- ins.dat2 %>%
   pivot_wider(names_from = time, 
               values_from = mean.pep) %>%
   ungroup() %>%
-  mutate(change.45 = log(min45)-log(baseline),
-         change.90 = log(min90)-log(baseline),
+  mutate(change.90 = log(min90)-log(baseline),
          change.120 = log(min120)-log(baseline),
+         change.150 = log(min150)-log(baseline),
          change.270 = log(min270)-log(baseline),
          baseline = baseline - mean(baseline, na.rm = TRUE),
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
-  select(subject, supplement, baseline, change.45, change.90, change.120, change.270) %>%
+  select(subject, supplement, baseline, change.90, change.120, change.150, change.270) %>%
   pivot_longer(names_to = "time",
                values_to = "change",
-               cols = (change.45:change.270)) %>%
+               cols = (change.90:change.270)) %>%
   print()
 
 saveRDS(ins.lchange, "./data/data-gen/glucose/cpep.logchange.RDS")

@@ -267,7 +267,8 @@ ins.dat <- read_excel("./data/glucose/ribose.insulin.xlsx", na = "NA")
 
 
 code <- read_excel("data/code_key.xlsx", na = "NA") %>%
-  select(-leg) 
+  select(-leg) %>%
+  print()
 
 ## Data handling
 
@@ -282,15 +283,16 @@ ins.dat2 <- ins.dat %>%
                         if_else(sample.time == "0.1",
                                 "baseline",
                                 if_else(sample.time == "45",
-                                "min45",
+                                "min90",
                                 if_else(sample.time == "90",
-                                        "min90",
+                                        "min120",
                                         if_else(sample.time == "120",
-                                                "min120",
+                                                "min150",
                                                 if_else(sample.time == "270",
                                                         "min270", sample.time))))))) %>%
-  mutate(time = factor(time, levels = c("pre", "baseline", "min45", "min90", "min120", "min270")),
-         c.pep = as.numeric(c.pep)) 
+  mutate(time = factor(time, levels = c("pre", "baseline", "min90", "min120", "min150", "min270")),
+         c.pep = as.numeric(c.pep)) %>%
+  print()
 
 ## Baseline analysis
 # Comparing pre measurements to post day baseline
@@ -300,7 +302,8 @@ base.ins <- ins.dat2 %>%
   select(subject, time, supplement, c.pep) %>%
   group_by(supplement) %>%
   pivot_wider(names_from = time, 
-              values_from = c.pep) 
+              values_from = c.pep) %>%
+  print()
 
 ins.ttest <- t.test(base.ins$pre, base.ins$baseline, paired = TRUE)
   
@@ -314,16 +317,19 @@ ins.change <- ins.dat2 %>%
   pivot_wider(names_from = time, 
               values_from = mean.pep) %>%
   ungroup() %>%
-  mutate(change.45 = min45-baseline,
-         change.90 = min90-baseline,
+  mutate(change.90 = min90-baseline,
          change.120 = min120-baseline,
+         change.150 = min150-baseline,
          change.270 = min270-baseline,
          baseline = baseline - mean(baseline, na.rm = TRUE),
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
-  select(subject, supplement, baseline, change.45, change.90, change.120, change.270) %>%
+  select(subject, supplement, baseline, change.90, change.120, change.150, change.270) %>%
   pivot_longer(names_to = "time",
                values_to = "change",
-               cols = (change.45:change.270)) 
+               cols = (change.90:change.270)) %>%
+  print()
+
+saveRDS(ins.change, "./data/data-gen/glucose/cpep.change.RDS")
 
 ins.lchange <- ins.dat2 %>%
   #filter(subject != "102") %>%
@@ -333,36 +339,39 @@ ins.lchange <- ins.dat2 %>%
   pivot_wider(names_from = time, 
               values_from = mean.pep) %>%
   ungroup() %>%
-  mutate(change.45 = log(min45)-log(baseline),
-         change.90 = log(min90)-log(baseline),
+  mutate(change.90 = log(min90)-log(baseline),
          change.120 = log(min120)-log(baseline),
+         change.150 = log(min150)-log(baseline),
          change.270 = log(min270)-log(baseline),
          baseline = baseline - mean(baseline, na.rm = TRUE),
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
-  select(subject, supplement, baseline, change.45, change.90, change.120, change.270) %>%
+  select(subject, supplement, baseline, change.90, change.120, change.150, change.270) %>%
   pivot_longer(names_to = "time",
                values_to = "change",
-               cols = (change.45:change.270)) 
+               cols = (change.90:change.270)) %>%
+  print()
+
+saveRDS(ins.lchange, "./data/data-gen/glucose/cpep.logchange.RDS")
 
 ## Linear mixed effects model
 
-m1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+m1.1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
                      data = ins.lchange) # Main analysis, using log-transformed data due to heteroscedasticity
 
 m2 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
                      data = ins.change) # For emmeans and figure illustration
 
-m1.plot <- plot(m1)
-m2.plot <- plot(m2)
+plot(m1)
+plot(m2)
 
-m1.sum <- summary(m1)
+summary(m1.1)
 
 ## Emmeans
 
 library(pbkrtest)
 
 # For analysis
-insulin.change <- confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
+insulin.change <- confint.m1.1 <- confint(emmeans(m1.1, specs = ~"supplement|time")) %>%
   data.frame()
   
 saveRDS(insulin.change, "./data/data-gen/glucose/insulin.change.RDS")
@@ -372,10 +381,19 @@ insulin.figchange <- confint.m2 <- confint(emmeans(m2, specs = ~"supplement|time
   data.frame()
 
 saveRDS(insulin.figchange, "./data/data-gen/glucose/insulin.figchange.RDS")
+
+# For inline plotting
+cpcoef <- coef(summary(m1.1))
+pscient.120 <- round(cpcoef[6,5], 30)
+cpp.120 <- sprintf("%.5f", 3.229267e-15)
+cpscient.150 <- round(cpcoef[7,5], 30)
+cpp.150 <- sprintf("%.5f", 1.414491e-15)
+cpp.270 <- round(cpcoef[8,5], 2)
+
 ```
 
 
-At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in any macronutrient (calories, carbohydrate, fat or protein) ingestion (Tab 4). Resistance training with glucose led to significant increases in blood glucose levels compared to RT with placebo, before, during and after the session (fig 3B, 120min: 43 ± 4% [*p* = `r p.120`], 135min: 32 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`]), measured during the final RT session. At 2hrs post-exercise, RT with glucose led to significantly lower blood glucose levels compared to RT with placebo (8 ± 4% [*p* = `r p.270`).
+At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in mean macro nutrient (calories, carbohydrate, fat or protein) ingestion (Tab 4), or mean change in macro nutrient ingestion (Fig 3). Resistance training with glucose led to significant increases in blood levels glucose and c-peptide compared to RT with placebo, before, during and after the session (Fig 4B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`], Fig 4C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]), measured during the final RT session. At 2hrs post-exercise, RT with glucose led to significantly lower blood glucose levels compared to RT with placebo, with a tendancy of the same in c-peptide levels (4B, 270min: -8 ± 4% [*p* = `r p.270`] and 4C, 270min: -7 ± 10 [*p* `r cpp.270`]).
 
 ###### **Table 3**: Baseline characteristics of the intervention legs, organized per supplement. Variables: Iso 60 = isokinetic 60 d/s, Iso 240 = isokinetic 240 d/s, training intensity = load/rm*100. Nm = newton meters, kg = kilograms, %1RM = percentage of 1 repetition maximum, ng/mg = nanogram per milligram wet muscle tissue, nf.expr = expression normalized by weight and external reference gene (Lambda). Ribosomal RNA data are presented as log transformed. Glucose n = 13, placebo n = 13.
 
@@ -550,6 +568,17 @@ prokglm.sum <- summary(prokglm)
 
 ```
 
+```{r nutrition change fig}
+# Associated scripts:
+# - nut.change
+# - nut.change.figs
+
+nut.fig <- readRDS("./data/data-gen/nutrition/nut.fig.RDS")
+nut.fig
+
+```
+###### **Figure 3:** Mean changes in macro nutrient intake from day to day. Day 1 = training day 1/2(T1/T2), Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12(T3/T4). Values are mean change in grams/calories ± 95% CL. 
+
 ![](figures/day.timeline.png)
 
 ```{r glucose + c-peptide fig}
@@ -566,9 +595,9 @@ plot_grid(gluc.fig,
 
 ```
 
-###### **Figure 3:** A) Time line for training day 6 (combination of pairwise training day 11 and 12). Biopsy = muscle biopsy taken pre supplementation, PRO = protein supplementation, Humac = strength test (isometric knee extension, isokinetic knee extension 60 and 240 d/s), GLU/PLAC = glucose/placebo supplementation, RT = resistance training. Minutes: -120 = 2hrs prior to RT, -90 = 90min prior to RT, -30 = 30min prior to RT, 0 = onset of RT, 15 = 15min following onset of RT, between leg press and knee extension, 30 = 30min post onset of RT, 120 = 2hrs following onset of RT. B) Mean mmol/L change in blood glucose levels per supplement group during training day 6. Time-points: 0, 45, 90, 120, 135, 150 and 270min post protein ingestion, respectively. Finger draws were taken at all time-points, blood samples were taken at all time-points except from 135. Values are presented as estimated marginal means of mmol/L change ± 95% CI. *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
+###### **Figure 4:** A) Time line for training day 6 (combination of pairwise training day 11 and 12). Biopsy = muscle biopsy taken pre supplementation, PRO = protein supplementation, Humac = strength test (isometric knee extension, isokinetic knee extension 60 and 240 d/s), GLU/PLAC = glucose/placebo supplementation, RT = resistance training. Minutes: -120 = 2hrs prior to RT, -90 = 90min prior to RT, -30 = 30min prior to RT, 0 = onset of RT, 15 = 15min following onset of RT, between leg press and knee extension, 30 = 30min post onset of RT, 120 = 2hrs following onset of RT. B) Mean mmol/L change in blood glucose levels per supplement group during training day 6. Time-points: 0, 45, 90, 120, 135, 150 and 270min post protein ingestion, respectively. C) Mean change in pmol/L of c-peptide in blood per supplement group during training day 6. Values are presented as estimated marginal means of mmol/L and pmol/L change ± 95% CI. *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
 
-### Total RNA and ribosomal RNA
+### Markers of ribosome biogenesis
 
 ```{r total RNA data}
 
@@ -881,7 +910,7 @@ rr47diffse <- round(rr47coef[3,2], 3)
 
 ```
 
-Resistance training with glucose did not induce a higher accumulation of total RNA (fig 4A, *p* = `r trdiffp`), or rRNA  (fig 4B, *p* > 0.05), compared to RT with placebo, measured as mean change from baseline to post. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, with only placebo reaching significantly higher levels at post compared to baseline (fig 4B, *p* = `r rr47tdiffp`).
+Resistance training with glucose did not induce a higher accumulation of total RNA (fig 5A, *p* = `r trdiffp`), or rRNA  (fig 5B, *p* > 0.05), compared to RT with placebo, measured as mean change from baseline to post. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, with only placebo reaching significantly higher levels at post compared to baseline (fig 45, *p* = `r rr47tdiffp`).
 
 ```{r RNA figures}
 # Get figures
@@ -910,9 +939,7 @@ plot_grid(plot.18 + theme(legend.position = "none"),
 
 ```
 
-###### **Figure 4:** A) Changes in Total RNA, B) Changes in ribosomal RNA. Baseline = Training day 1/2, Post = Training day 11/12. Both total RNA and rRNA were analyzed with duplicates, with two duplicates per biopsy (two biopsies per time point). Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg/supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
-
-### Protein signals
+###### **Figure 5:** A) Changes in Total RNA, B) Changes in ribosomal RNA. Baseline = Training day 1/2, Post = Training day 11/12. Both total RNA and rRNA were analyzed with duplicates, with two duplicates per biopsy (two biopsies per time point). Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg/supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
 
 ```{r western modelling}
 # Script: western.change
