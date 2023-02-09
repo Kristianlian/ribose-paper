@@ -17,8 +17,14 @@ ss.exp <- ss.dat %>%
   select(subject, supplement, time, session.score) %>%
   group_by(supplement, time) %>%
   summarise(mean.ss = mean(session.score),
-            sd.ss = sd(session.score)) #%>%
-  #print()
+            sd.ss = sd(session.score)) %>%
+  mutate(stat = paste0(round(mean.ss, 1), " (", round(sd.ss, 1), ")")) %>%
+  select(supplement, time, stat) %>%
+  pivot_wider(names_from = time,
+              values_from = stat) %>%
+  print()
+
+saveRDS(ss.exp, "./data/data-gen/training/ss.abs.RDS")
 
 ss.barplot <- ggplot(ss.exp, aes(fill = supplement, y = mean.ss, x = time)) +
   geom_bar(position = "dodge", stat = "identity") +

@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
 ```{r packages}
-library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr);library(nlme)
+library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr);library(nlme); library(pbkrtest)
 ```
 
 
@@ -189,68 +189,38 @@ Total protein was extracted using the Minute Total Protein Extraction Kit for Mu
 ## Results
 
 ```{r glucose data + model}
-# Scripts: gluc.responsechange.R, gluc.fig
+## Scripts:
+# - gluc.responsechange.R
+
 
 # Data
-gluc.dat <- read_excel("./data/glucose/fingerstick.xlsx", na = "NA")
-gluc.dat$sample_time <- as.character(gluc.dat$sample_time)
+glu.change <- readRDS("./data/data-gen/glucose/glu.change.RDS") # Untransformed data, used in figures
+glu.logchange <- readRDS("./data/data-gen/glucose/glu.logchange.RDS") # Log-transformed data, used in the analysis
 
-# Data handling
-glu.dat <- gluc.dat %>%
-        mutate(time = if_else(sample_time == "0",
-                              "baseline",
-                              if_else(sample_time == "45",
-                                      "min45",
-                                      if_else(sample_time == "90",
-                                              "min90",
-                                              if_else(sample_time == "120",
-                                                      "min120",
-                                                      if_else(sample_time == "135",
-                                                              "min135",
-                                                              if_else(sample_time == "150",
-                                                                      "min150",
-                                                                      if_else(sample_time == "270",
-                                                                              "min270", sample_time))))))),
-               time = factor(time, levels = c("baseline", "min45", "min90", "min120", "min135", "min150", "min270"))) %>%
-        mutate(glu = as.numeric(glu),
-               lak = as.numeric(lak))
+## Model
+# Untransformed
+glu.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = glu.change)
+glu.res <- plot(glu.mod)
+glu.sum <- summary(glu.mod)
 
-# Change data
-change_dat.glu <- glu.dat %>%
-        dplyr::select(subject, time, glu, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(glu = mean(glu, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time, 
-                    values_from = glu) %>%
-        #print()
-        
-        ungroup() %>%
-        mutate(change.45 = log(min45)-log(baseline),
-               change.90 = log(min90)-log(baseline),
-               change.120 = log(min120)-log(baseline),
-               change.135 = log(min135)-log(baseline),
-               change.150 = log(min150)-log(baseline),
-               change.270 = log(min270)-log(baseline),
-               baseline = baseline - mean(baseline, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.45, change.90, change.120, change.135, 
-               change.150, change.270) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.45:change.270))
+# Log-transformed
+glu.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = glu.logchange)
+glu.lres <- plot(glu.lmod)
+glu.lsum <- summary(glu.lmod)
 
-# Model
-m1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat.glu)
-resplot.glu <- plot(m1)
-sum.glu <- summary(m1)
+## Emmeans
+# Untransformed
+glu.emm <- confint(emmeans(glu.mod, specs = ~"supplement|time")) %>%
+        data.frame()
 
-# Emmeans
-confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
+# Log-transformed
+glu.lemm <- confint(emmeans(glu.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
 # For inline plotting
-bcoef <- coef(summary(m1))
+bcoef <- coef(summary(glu.lmod))
 pscient.120 <- round(bcoef[8,5], 30)
 p.120 <- sprintf("%.5f", 1.700971e-16)
 pscient.135 <- round(bcoef[9,5], 30)
@@ -261,129 +231,38 @@ p.270 <- round(bcoef[11,5], 2)
 ```
 
 ```{r c-peptide data + model}
+## Scripts
+# - insulin.change.R
+
 ## Data
+cpep.change <- readRDS("./data/data-gen/glucose/cpep.change.RDS") # Untransformed data, for figures
+cpep.lchange <- readRDS("./data/data-gen/glucose/cpep.logchange.RDS") # Log-transformed data, for analysis
 
-ins.dat <- read_excel("./data/glucose/ribose.insulin.xlsx", na = "NA")
-
-
-code <- read_excel("data/code_key.xlsx", na = "NA") %>%
-  select(-leg) %>%
-  print()
-
-## Data handling
-
-
-ins.dat$sample.time <- as.character(ins.dat$sample.time)
-
-ins.dat2 <- ins.dat %>%
-  inner_join(code) %>%
-  mutate(sample.time = as.character(sample.time)) %>%
-  mutate(time = if_else(sample.time == "0",
-                        "pre",
-                        if_else(sample.time == "0.1",
-                                "baseline",
-                                if_else(sample.time == "45",
-                                "min90",
-                                if_else(sample.time == "90",
-                                        "min120",
-                                        if_else(sample.time == "120",
-                                                "min150",
-                                                if_else(sample.time == "270",
-                                                        "min270", sample.time))))))) %>%
-  mutate(time = factor(time, levels = c("pre", "baseline", "min90", "min120", "min150", "min270")),
-         c.pep = as.numeric(c.pep)) %>%
-  print()
-
-## Baseline analysis
-# Comparing pre measurements to post day baseline
-
-base.ins <- ins.dat2 %>%
-  filter(time %in% c("pre", "baseline")) %>%
-  select(subject, time, supplement, c.pep) %>%
-  group_by(supplement) %>%
-  pivot_wider(names_from = time, 
-              values_from = c.pep) %>%
-  print()
-
-ins.ttest <- t.test(base.ins$pre, base.ins$baseline, paired = TRUE)
-  
-## Change data
-
-ins.change <- ins.dat2 %>%
-  #filter(subject != "102") %>%
-  dplyr::select(subject, time, c.pep, supplement) %>%
-  group_by(subject, time, supplement) %>%
-  summarise(mean.pep = mean(c.pep, na.rm = TRUE)) %>%
-  pivot_wider(names_from = time, 
-              values_from = mean.pep) %>%
-  ungroup() %>%
-  mutate(change.90 = min90-baseline,
-         change.120 = min120-baseline,
-         change.150 = min150-baseline,
-         change.270 = min270-baseline,
-         baseline = baseline - mean(baseline, na.rm = TRUE),
-         supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
-  select(subject, supplement, baseline, change.90, change.120, change.150, change.270) %>%
-  pivot_longer(names_to = "time",
-               values_to = "change",
-               cols = (change.90:change.270)) %>%
-  print()
-
-saveRDS(ins.change, "./data/data-gen/glucose/cpep.change.RDS")
-
-ins.lchange <- ins.dat2 %>%
-  #filter(subject != "102") %>%
-  dplyr::select(subject, time, c.pep, supplement) %>%
-  group_by(subject, time, supplement) %>%
-  summarise(mean.pep = mean(c.pep, na.rm = TRUE)) %>%
-  pivot_wider(names_from = time, 
-              values_from = mean.pep) %>%
-  ungroup() %>%
-  mutate(change.90 = log(min90)-log(baseline),
-         change.120 = log(min120)-log(baseline),
-         change.150 = log(min150)-log(baseline),
-         change.270 = log(min270)-log(baseline),
-         baseline = baseline - mean(baseline, na.rm = TRUE),
-         supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
-  select(subject, supplement, baseline, change.90, change.120, change.150, change.270) %>%
-  pivot_longer(names_to = "time",
-               values_to = "change",
-               cols = (change.90:change.270)) %>%
-  print()
-
-saveRDS(ins.lchange, "./data/data-gen/glucose/cpep.logchange.RDS")
 
 ## Linear mixed effects model
+# Untransformed
+cpep.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = cpep.change) 
+cpep.res <- plot(cpep.mod)
+cpep.sum <- summary(cpep.mod)
 
-m1.1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = ins.lchange) # Main analysis, using log-transformed data due to heteroscedasticity
-
-m2 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = ins.change) # For emmeans and figure illustration
-
-plot(m1)
-plot(m2)
-
-summary(m1.1)
+# Log-transformed
+cpep.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = cpep.lchange) 
+cpep.lres <- plot(cpep.lmod)
+cpep.lsum <- summary(cpep.lmod)
 
 ## Emmeans
-
-library(pbkrtest)
-
-# For analysis
-insulin.change <- confint.m1.1 <- confint(emmeans(m1.1, specs = ~"supplement|time")) %>%
-  data.frame()
-  
-saveRDS(insulin.change, "./data/data-gen/glucose/insulin.change.RDS")
-
-# For figure
-insulin.figchange <- confint.m2 <- confint(emmeans(m2, specs = ~"supplement|time")) %>%
+# Untransformed
+cpep.emm <- confint(emmeans(cpep.mod, specs = ~"supplement|time")) %>%
   data.frame()
 
-saveRDS(insulin.figchange, "./data/data-gen/glucose/insulin.figchange.RDS")
+# Log-transformed
+cpep.lemm <- confint(emmeans(cpep.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
 
 # For inline plotting
-cpcoef <- coef(summary(m1.1))
+cpcoef <- coef(summary(cpep.lmod))
 pscient.120 <- round(cpcoef[6,5], 30)
 cpp.120 <- sprintf("%.5f", 3.229267e-15)
 cpscient.150 <- round(cpcoef[7,5], 30)
@@ -402,6 +281,10 @@ At baseline, there were no significant differences between training with glucose
 ###### **Table 4:** Daily mean dietary intake of macro nutrients during each training day per supplement leg. G = glucose, P = placebo. Training day 1-training day 12 are combined pairwise to day 1-6: Day 1 = training day 1/2, Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12. Values are mean ± standard deviation. P = difference between glucose and placebo. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac = 11.
 
 ```{r nutrition table}
+## Scripts
+# - nut.table.R
+# - nut.analysis.R
+# - dxa.R
 
 # Data
 nuttable <- readRDS("./data/data-gen/dxa/nuttable.RDS") 
@@ -413,6 +296,10 @@ nuttable %>%
 ```
 
 ```{r nutrition analysis}
+## Scripts
+# - nut.analysis.R
+# - dxa.R
+
 #summarise macro
 #nutritiontable with pro.pr kg bodyweight pr. group
 #laod dxa data and take out weight and subject to join with nutrition data
@@ -568,7 +455,7 @@ prokglm.sum <- summary(prokglm)
 
 ```
 
-```{r nutrition change fig}
+```{r nutrition change analysis and fig}
 # Associated scripts:
 # - nut.change
 # - nut.change.figs
@@ -582,12 +469,18 @@ nut.fig
 ![](figures/day.timeline.png)
 
 ```{r glucose + c-peptide fig}
-# Figure
+## Scripts
+# - gluc.fig.R
+# - cpep.figs.R
+
+# Separate figures
 pos <- position_dodge(width = 0.2)
+
 gluc.fig <- readRDS("./data/data-gen/glucose/gluc.fig.RDS")
 
 cpep.fig <- readRDS("./data/data-gen/glucose/cpep.fig.RDS")
 
+# Joined figure
 plot_grid(gluc.fig,
           cpep.fig,
           ncol = 1, nrow = 2)
@@ -599,311 +492,130 @@ plot_grid(gluc.fig,
 
 ### Markers of ribosome biogenesis
 
-```{r total RNA data}
-
-code <- read_excel("./data/code.key.xlsx")
-rna_dat <- readRDS("./data/data-gen/rna/rna_complete.RDS")
-
-```
-
-```{r total RNA data handling}
-
-# Scripts
-# totrna_analysis
-rna_dat2 <- rna_dat %>%
-        inner_join(code) %>%
-        mutate(time = if_else(time %in% c("T1", "T2"), "pre", "post"), 
-               time = factor(time, levels = c("pre", "post"))) %>%
-        # filter(outlier == "in") %>%
-        group_by(subject, time, rep, outlier, technical, biopsy, supplement) %>%
-        summarise(weight = mean(weight), 
-                  RNA = mean(RNA_tot)) %>%
-        ungroup() %>%
-        mutate(weight.mc = weight/mean(weight)) %>%
-        mutate(RNA.weight = RNA / weight)
-
-#### Basic model 
-change_dat <- rna_dat2 %>%
-   #  filter(technical == "in", 
-   #        outlier == "in") %>%
-    dplyr::select(subject:rep, supplement, RNA.weight) %>%
-    
-    group_by(subject, time, supplement) %>%
-    summarise(RNA.weight = mean(RNA.weight, na.rm = TRUE)) %>%
-    
-    pivot_wider(names_from = time, 
-                values_from = RNA.weight) %>%
-    ungroup() %>%
-    mutate(change = log(post) - log(pre), 
-           pre = pre - mean(pre, na.rm = TRUE), 
-           supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
-
-
-```
-
 ```{r total RNA model}
-# Scripts
-# totrna_analysis
+## Scripts
+# - totrna.cleanup.R
+# - totrna.analysis.R
+
+
+# Data
+trna.lchange <- readRDS("./data/data-gen/rna/totrna.change.RDS")
+
 # Create model: 
-m1 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-           data = change_dat)
+trna.lmod <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+           data = trna.lchange)
     
-resplot.rna <- plot(m1)
-sum.rna <- summary(m1)
+trna.lres <- plot(trna.lmod)
+trna.lsum <- summary(trna.lmod)
 
 ### Get estimated means from the model
-confint.totrna <- confint(emmeans(m1, specs = ~"supplement")) %>%
-    data.frame() 
+trna.emm <- confint(emmeans(trna.lmod, specs = ~"supplement")) %>%
+    data.frame()
+
 # For inline reporting
-trcoef <- coef(summary(m1))
+trcoef <- coef(summary(trna.lmod))
 trdiff <- round(trcoef[3,1], 2)
 trdiffp <- round(trcoef[3,5], 2)
 trdiffse <- round(trcoef[3,2], 2)
 
 ```
 
-```{r rRNA data}
-code_key <- read_excel("./data/code.key.xlsx") %>%
-        dplyr::select(subject, supplement, time)
-qpcr_data  <- readRDS("./data/data-gen/rna/qpcr-data.RDS")
-samples <- read_excel("./data/rna/RNA.raw.xlsx") %>%
-        dplyr::select(subject, time_rep, sample, weight)
-
-```
-
-```{r rRNA data handling}
-# Scripts
+```{r rRNA data model}
+## Scripts
 # - qpcr-import
 # - qpcr-analysis
 # - rrna.change
 # - rrnachange.figs
 
-nf <- qpcr_data %>%
-        mutate(sample = as.numeric(sample)) %>% 
-        inner_join(samples) %>%
-        separate(time_rep, into = c("time","rep"), sep = "rna") %>%
-        mutate(rep = paste0("cdna", rep)) %>%
-        inner_join(code_key) %>% 
-        mutate(time = if_else(time %in% c("T1", "T2"), "Pre", "Post"), 
-               time = factor(time, levels = c("Pre", "Post")), 
-               expr = eff ^ -cq) %>%
-        
-        filter(target %in% c("Lambda F2R2", "Lambda F3R3"), 
-               cq < 35) %>%
-        separate(target, into = c("target", "nf_primer")) %>%
-        
-        mutate(nf.w = expr * weight, 
-               nf.w = nf.w / max(nf.w)) %>%
-        
-        
-        dplyr::select(sample, subject, time, rep, supplement, nf.w, nf_primer)
-
-qpcr_data2 <- qpcr_data %>%
-        mutate(sample = as.numeric(sample)) %>% 
-        inner_join(samples) %>%
-        inner_join(nf) %>%
-        separate(time_rep, into = c("time","rep"), sep = "rna") %>%
-        mutate(rep = paste0("cdna", rep)) %>%
-        inner_join(code_key) %>% 
-        mutate(time = if_else(time %in% c("T1", "T2"), "Pre", "Post"), 
-               time = factor(time, levels = c("Pre", "Post")), 
-               expr = eff ^ -cq) %>%
-        
-        filter(!(target %in% c("Lambda F2R2", "Lambda F3R3"))) %>%   
-        inner_join(nf)
-
-saveRDS(qpcr_data2, "./data/data-gen/rna/qpcr_data2.RDS")
-
-# Plotting mean expression per treatment for rRNA
-initmod <- qpcr_data2 %>%
-        mutate(norm.expr = log(expr / nf.w)) %>%
-        group_by(time, supplement, target) %>%
-        summarise(m = mean(norm.expr, na.rm = TRUE))  %>%
-        #print()
-        
-        
-        ggplot(aes(time, m, color = supplement, group = supplement)) + 
-        geom_line() +
-        geom_point() +
-        facet_wrap( ~ target, scales = "free")
-qdat <- qpcr_data2 %>%
-        mutate(target = gsub("rRNA", "", target),
-               target = gsub("  ", " ", target),
-               target = paste0("trg_", target)) %>%
-        separate(target, into = c("target", "primer"), sep = " ") %>%
-        
-        # Create a weight-normalized variable
-        mutate(nf.expr = log(expr / nf.w), 
-               nf.w = scale(nf.w),
-               # Technical random effect
-               technical = paste(subject, time, supplement, rep, sep = "_"),
-               biological = paste0("S", sample)) %>%
-        filter(!(target %in% c("trg_MHC1", "trg_MHC2A", "trg_MHC2X")))
-
-## Change data
-rrna18 <- qdat %>%
-        filter(target == "trg_18s")
-rrna28 <- qdat %>%
-        filter(target == "trg_28s")
-rrna5.8 <- qdat %>%
-        filter(target == "trg_5.8s")
-rrna5 <- qdat %>%
-        filter(target == "trg_5s")
-rrna47 <- qdat %>%
-        filter(target == "trg_47s")
-
-# Change scores
-# 18S
-change.18 <- rrna18 %>%
-        dplyr::select(subject, time, rep, nf.expr, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time,
-                    values_from = nf.expr) %>%
-        ungroup() %>%
-        # print()
-        mutate(change = Post-Pre,
-               pre = Pre - mean(Pre, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) 
-# 28S
-change.28 <- rrna28 %>%
-        dplyr::select(subject, time, rep, nf.expr, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time,
-                    values_from = nf.expr) %>%
-        ungroup() %>%
-        # print()
-        mutate(change = Post-Pre,
-               pre = Pre - mean(Pre, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) 
-# 5.8S
-change.5.8 <- rrna5.8 %>%
-        dplyr::select(subject, time, rep, nf.expr, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time,
-                    values_from = nf.expr) %>%
-        ungroup() %>%
-        # print()
-        mutate(change = Post-Pre,
-               pre = Pre - mean(Pre, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
-# 5S
-change.5 <- rrna5 %>%
-        dplyr::select(subject, time, rep, nf.expr, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time,
-                    values_from = nf.expr) %>%
-        ungroup() %>%
-        # print()
-        mutate(change = Post-Pre,
-               pre = Pre - mean(Pre, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
-# 47S
-change.47 <- rrna47 %>%
-        dplyr::select(subject, time, rep, nf.expr, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time,
-                    values_from = nf.expr) %>%
-        ungroup() %>%
-        # print()
-        mutate(change = Post-Pre,
-               pre = Pre - mean(Pre, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
-```
-
-```{r rRNA data modelling}
-# Scripts
-# - qpcr-import
-# - qpcr-analysis
-# - rrna.change
-# - rrnachange.figs
+# Log-transformed data
+lchange.18 <- readRDS("./data/data-gen/rna/lchange.18.RDS")
+lchange.28 <- readRDS("./data/data-gen/rna/lchange.28.RDS")
+lchange.58 <- readRDS("./data/data-gen/rna/lchange.58.RDS")
+lchange.5 <- readRDS("./data/data-gen/rna/lchange.5.RDS")
+lchange.47 <- readRDS("./data/data-gen/rna/lchange.47.RDS")
 
 # Create model: 
 # Needs to have an intercept per participant (mixed model)
 # Control for pre values.
 
 # 18S
-m1 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = change.18)
-resplot.18 <- plot(m1)
-sum.18 <- summary(m1)
+lmod.18 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.18)
+lres.18 <- plot(lmod.18)
+lsum.18 <- summary(lmod.18)
 
 # 28S
-m2 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = change.28)
-resplot.28 <- plot(m2)
-sum.28 <- summary(m2)
+lmod.28 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.28)
+lres.28 <- plot(lmod.28)
+lsum.28 <- summary(lmod.28)
 
 # 5.8S
-m3 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = change.5.8)
-resplot.58 <- plot(m3)
-sum.58 <- summary(m3)
+lmod.58 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.58)
+lres.58 <- plot(lmod.58)
+lsum.58 <- summary(lmod.58)
 
 # 5S
-m4 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = change.5)
-resplot.5 <- plot(m4)
-sum.5 <- summary(m4)
+lmod.5 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.5)
+lres.5 <- plot(lmod.5)
+lsum.5 <- summary(lmod.5)
 
 # 47S
-m5 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = change.47)
-resplot.47 <- plot(m5)
-sum.47 <- summary(m5)
+lmod.47 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.47)
+lres.47 <- plot(lmod.47)
+lsum.47 <- summary(lmod.47)
 
 ### Get estimated means from the model, these are average increase at 
 # pre = 0 (the average pre value)
 # remember that these are originally log-fold change values, transformed back using exp(emmean) etc
 
 # 18S
-confint.18 <- confint(emmeans(m1, specs = ~"supplement")) %>%
+lemm.18 <- confint(emmeans(lmod.18, specs = ~"supplement")) %>%
         data.frame()
 
 # 28S
-confint.28 <- confint(emmeans(m2, specs = ~"supplement")) %>%
+lemm.28 <- confint(emmeans(lmod.28, specs = ~"supplement")) %>%
         data.frame()
 
 # 5.8S
-confint.5.8 <- confint(emmeans(m3, specs = ~"supplement")) %>%
+lemm.58 <- confint(emmeans(lmod.58, specs = ~"supplement")) %>%
         data.frame()
 
 # 5S
-confint.5 <- confint(emmeans(m4, specs = ~"supplement")) %>%
+lemm.5 <- confint(emmeans(lmod.5, specs = ~"supplement")) %>%
         data.frame()
 
 # 47S
-confint.47 <- confint(emmeans(m5, specs = ~"supplement")) %>%
+lemm.47 <- confint(emmeans(lmod.47, specs = ~"supplement")) %>%
         data.frame()
 
 ## For inline reporting
 
 # 18S
-rr18coef <- coef(summary(m1))
+rr18coef <- coef(summary(lmod.18))
 rr18diffp <- round(rr18coef[3,5], 3)
 rr18diffse <- round(rr18coef[3,2], 3)
 
 # 28S
-rr28coef <- coef(summary(m2))
+rr28coef <- coef(summary(lmod.28))
 rr28diffp <- round(rr28coef[3,5], 3)
 rr28diffse <- round(rr28coef[3,2], 3)
 
 # 5.8S
-rr58coef <- coef(summary(m3))
+rr58coef <- coef(summary(lmod.58))
 rr58diffp <- round(rr58coef[3,5], 3)
 rr58diffse <- round(rr58coef[3,2], 3)
 
 # 5S
-rr5coef <- coef(summary(m4))
+rr5coef <- coef(summary(lmod.5))
 rr5diffp <- round(rr5coef[3,5], 3)
 rr5diffse <- round(rr5coef[3,2], 3)
 
 # 47S
-rr47coef <- coef(summary(m5))
+rr47coef <- coef(summary(lmod.47))
 rr47diffp <- round(rr47coef[3,5], 3)
 rr47tdiffp <- round(rr47coef[1,5], 3)
 rr47diffse <- round(rr47coef[3,2], 3)
@@ -942,46 +654,26 @@ plot_grid(plot.18 + theme(legend.position = "none"),
 ###### **Figure 5:** A) Changes in Total RNA, B) Changes in ribosomal RNA. Baseline = Training day 1/2, Post = Training day 11/12. Both total RNA and rRNA were analyzed with duplicates, with two duplicates per biopsy (two biopsies per time point). Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg/supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
 
 ```{r western modelling}
-# Script: western.change
+## Script: 
+# - western.import.R
+# - western.change.R
 
 # Data
 
-prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS")
+prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS") # cleaned up and quantified western data
+prot.out <- readRDS("./data/data-gen/protein/protein_complete.RDS") # Cleaned up and quantified western data, checked for outliers
+prot.change <- readRDS("./data/data-gen/protein/prot.change.RDS") # change-score data
 
-# Change analysis
-
-#prot.dat %>%
- # group_by(time, supplement, target) %>%
-  #mutate(norm.sign = log(tpl/norm.sign)) %>% # Log transforms and normalises
-  # norm.sign by tpl
-  #summarise(m = mean(norm.sign, na.rm = TRUE)) %>%
-  #ggplot(aes(time, m, color = supplement, group = supplement)) +
-  #geom_line() +
-  #geom_point() +
-  #facet_wrap( ~ target, scales = "free")
-
-# Change score
-
-pchange <- prot.dat %>%
-  dplyr::select(subject, time, sample.id, target, norm.sign, supplement) %>%
-  group_by(subject, time, target, supplement) %>%
-  summarise(mns = mean(norm.sign, na.rm = TRUE)) %>%
-  pivot_wider(names_from = time,
-              values_from = mns) %>%
-  ungroup() %>%
-  mutate(change = log(post)-log(pre),
-         pre = pre - mean(pre, na.rm = TRUE),
-         supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE")))
 
 # By target
 
-cmyc <- pchange %>%
+cmyc <- prot.change %>%
   filter(target == "cmyc") 
 
-ubf <- pchange %>%
+ubf <- prot.change %>%
   filter(target == "ubf") 
 
-rps6 <- pchange %>%
+rps6 <- prot.change %>%
   filter(target == "rps6") 
 
 # c-Myc change
@@ -1125,220 +817,57 @@ saveRDS(prot.joined, "./data/data-gen/rna/prot.joined.RDS")
 
 ### Resistance training and strength testing
 
-```{r training data}
-lp.load <- read_excel("./data/training/ribose_training.xlsx", na = "NA") %>%
-        select(subject, timepoint, supplement, exercise, load) %>%
-        filter(exercise != "KE") 
+```{r training data model}
+## Scripts
+# - volume.change.R
+# - ss.analysis.R
+# - ss.cleanup.R
+# - trainint.analysis.R
+# - trainint.cleanup.R
 
-lp.rm <- read_excel("./data/tests/ribose.1rm.xlsx", na = "NA") %>%
-        select(subject, supplement, exercise, rm) %>%
-        filter(exercise != "KE") 
+# Log-transformed data
+vol.lchange <- readRDS("./data/data-gen/training/vol.lchange.RDS")
+ss.lchange <- readRDS("./data/data-gen/training/ss.lchange.RDS")
+int.lchange <- readRDS("./data/data-gen/training/int.lchange.RDS")
 
-tot.load <- read_excel("./data/training/ribose_training.xlsx", na = "NA") %>%
-        select(subject, timepoint, supplement, exercise, load)
-
-tot.rm <- read_excel("./data/tests/ribose.1rm.xlsx", na = "NA") %>%
-        select(subject, supplement, exercise, rm) 
-
-tot.vol <- read_excel("./data/training/ribose_volume.xlsx", na = "NA") %>%
-        select(subject, timepoint, tot.volume, supplement) 
-
-```
-
-```{r training data handling}
-# Scripts
-# tot.vol.change
-# Trainingint.linear
-# rpe-analysis
-
-### Training volume
-# Data handling
-tot.volh <- tot.vol %>%
-        mutate(time = if_else(timepoint %in% c("T1", "T2"),
-                              "baseline",
-                              if_else(timepoint %in% c("D3", "D4"),
-                                      "session2",
-                                      if_else(timepoint %in% c("D5", "D6"),
-                                              "session3",
-                                              if_else(timepoint %in% c("D7", "D8"),
-                                                      "session4",
-                                                      if_else(timepoint %in% c("D9", "D10"),
-                                                              "session5",
-                                                              if_else(timepoint %in% c("T3", "T4"),
-                                                                      "session6", timepoint))))))) %>%
-        mutate(time = factor(time, levels = c("baseline", "session1", "session2", "session3", "session4", "session5", "session6")),
-               supplement = factor(supplement, levels = c("placebo", "glucose")))
-
-## Absolute data
-vol.exp <- tot.volh %>%
-        select(subject, supplement, time, tot.volume) %>%
-        group_by(supplement, time) %>%
-        summarise(mean.vol = mean(tot.volume),
-                  sd.vol = sd(tot.volume))
-
-# Fold-change
-change_dat <- tot.volh %>%
-        dplyr::select(subject, time, tot.volume, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(tot.volume = mean(tot.volume, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time, 
-                    values_from = tot.volume) %>%
-        # print()
-        
-        ungroup() %>%
-        mutate(change.2 = log(session2)-log(baseline),
-               change.3 = log(session3)-log(baseline),
-               change.4 = log(session4)-log(baseline),
-               change.5 = log(session5)-log(baseline),
-               change.6 = log(session6)-log(baseline),
-               baseline = baseline - mean(baseline, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4, change.5, change.6) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.6))
-
-### RPE
-## Data handling
-ss.dat <- read_excel("./data/training/ribose_rpe.xlsx", na = "NA") %>%
-        select(subject, timepoint, session.score, supplement) %>%
-        mutate(time = if_else(timepoint %in% c("T1", "T2"),
-                              "baseline",
-                              if_else(timepoint %in% c("D3", "D4"),
-                                      "session2",
-                                      if_else(timepoint %in% c("D5", "D6"),
-                                              "session3",
-                                              if_else(timepoint %in% c("D7", "D8"),
-                                                      "session4",
-                                                      if_else(timepoint %in% c("D9", "D10"),
-                                                              "session5",
-                                                              if_else(timepoint %in% c("T3", "T4"),
-                                                                      "post", timepoint))))))) %>%
-        mutate(time = factor(time, levels = c("baseline", "session1", "session2", "session3", "session4", "session5", "post")),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) 
-
-## Absolute data
-ss.exp <- ss.dat %>%
-        select(subject, supplement, time, session.score) %>%
-        group_by(supplement, time) %>%
-        summarise(mean.ss = mean(session.score),
-                  sd.ss = sd(session.score))
-
-# Change data
-change_dat.ss <- ss.dat %>%
-        dplyr::select(subject, time, session.score, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(session.score = mean(session.score, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time, 
-                    values_from = session.score) %>%
-        #print()
-        
-        ungroup() %>%
-        mutate(change.2 = log(session2)-log(baseline),
-               change.3 = log(session3)-log(baseline),
-               change.4 = log(session4)-log(baseline),
-               change.5 = log(session5)-log(baseline),
-               change.post = log(post)-log(baseline),
-               baseline = baseline - mean(baseline, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4, change.5, change.post) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.post))
-
-### Training intensity
-# Data handling
-tot.loadh <- tot.load %>%
-        mutate(time = if_else(timepoint %in% c("T1", "T2"),
-                              "baseline",
-                              if_else(timepoint %in% c("D3", "D4"),
-                                      "session2",
-                                      if_else(timepoint %in% c("D5", "D6"),
-                                              "session3",
-                                              if_else(timepoint %in% c("D7", "D8"),
-                                                      "session4",
-                                                      if_else(timepoint %in% c("D9", "D10"),
-                                                              "session5",
-                                                              if_else(timepoint %in% c("T3", "T4"),
-                                                                      "session6", timepoint))))))) %>%
-        mutate(time = factor(time, levels = c("baseline", "session1", "session2", "session3", "session4", "session5", "session6")),
-               supplement = factor(supplement, levels = c("placebo", "glucose")))
-
-# Join data and calulate %1RM
-tot.joined <- tot.loadh %>%
-        full_join(tot.rm) %>%
-        mutate(p.rm = (load/rm)*100)
-
-mean.joined <- tot.joined %>%
-        select(subject, supplement, time, p.rm) %>%
-        group_by(supplement, time) %>%
-        summarise(mean.prm = mean(p.rm),
-                  sd.prm = sd(p.rm))
-
-## Change data
-tot.change <- tot.joined %>%
-        dplyr::select(subject, time, p.rm, supplement) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(mean.prm = mean(p.rm)) %>%
-        pivot_wider(names_from = time,
-                    values_from = mean.prm) %>%
-        ungroup() %>%
-        mutate(change.2 = log(session2)-log(baseline),
-               change.3 = log(session3)-log(baseline),
-               change.4 = log(session4)-log(baseline),
-               change.5 = log(session5)-log(baseline),
-               change.6 = log(session6)-log(baseline),
-               baseline = baseline - mean(baseline, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4, change.5, change.6) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.6))
-```
-
-```{r training data modelling}
-# Scripts
-# tot.vol.change
-# Trainingint.linear
-# rpe-analysis
 
 ### Training volume
 # Fold-change model
-m1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat)
-resplot.vol <- plot(m1)
-sum.vol <- summary(m1)
+vol.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = vol.lchange)
+vol.lres <- plot(vol.lmod)
+vol.lsum <- summary(vol.lmod)
 
 # Fold-change estimated means
-confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
+vol.lemm <- confint(emmeans(vol.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
-### RPE
+### Session score (RPE)
 # Model
-m2 <- lmerTest::lmer(change ~ baseline + time + supplement:time + (1|subject),
-                     data = change_dat.ss)
-resplot.ss <- plot(m2)
-sum.ss <- summary(m2)
+ss.lmod <- lmerTest::lmer(change ~ baseline + time + supplement:time + (1|subject),
+                     data = ss.lchange)
+ss.lres <- plot(ss.lmod)
+ss.lsum <- summary(ss.lmod)
 
 # Session score emmeans
-confint.m2 <- confint(emmeans(m2, specs = ~"supplement|time")) %>%
+ss.lemm <- confint(emmeans(ss.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
 ### Training intensity
-m3 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = tot.change)
-resplot.ti <- plot(m3)
-sum.ti <- summary(m3)
+int.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = int.lchange)
+int.lres <- plot(int.lmod)
+int.lsum <- summary(int.lmod)
 
 # Emmeans
-confint.m3 <- confint(emmeans(m3, specs = ~"supplement|time")) %>%
+int.lemm <- confint(emmeans(int.lmod, specs = ~"supplement|time")) %>%
         data.frame() 
 
 ### For inline reporting
 
 ## Training volume
 # Diff 4
-vcoef <- coef(summary(m1))
+vcoef <- coef(summary(vol.lmod))
 vdiff.4 <- round(vcoef[9,1], 3)
 vdiffp.4 <- round(vcoef[9,5], 3)
 vdiffse.4 <- round(vcoef[9,2], 3)
@@ -1351,14 +880,14 @@ vdiff.6 <- round(vcoef[11,1], 3)
 vdiffp.6 <- round(vcoef[11,5], 3)
 vdiffse.6 <- round(vcoef[11,2], 3)
 ## RPE
-scoef <- coef(summary(m2))
+scoef <- coef(summary(ss.lmod))
 sdiffp <- round(scoef[11, 5], 3)
 sdiffse <- round(scoef[11, 2], 3)
 
 ## Training intensity
 
 # Diff time 2
-icoef <- coef(summary(m3))
+icoef <- coef(summary(int.lmod))
 idiff2 <- round(icoef[7,1], 3)
 idiffp2 <- round(icoef[7,5], 3)
 idiffse2 <- round(icoef[7,2], 3)
@@ -1378,290 +907,122 @@ idiffse5 <- round(icoef[10,2], 3)
 idiff6 <- round(icoef[11,1], 3)
 idiffp6 <- round(icoef[11,5], 3)
 idiffse6 <- round(icoef[11,2], 3)
-
-
 ```
 
-```{r post 5th data handling}
-# Scripts
-# - Post5th.change
-# - Post5th.figs
-humac <- read_excel("./data/tests/ribose.humac.xlsx", na = "NA") %>%
-        
-        
-        mutate(time = if_else(timepoint == "D-1", 
-                              "baseline", 
-                              if_else(timepoint %in% c("D4", "D5"), 
-                                      "test1", 
-                                      if_else(timepoint %in% c("D8", "D9"), 
-                                              "test2", 
-                                              if_else(timepoint %in% c("T3", "T4") & acute %in% c("rest", "post30min", "post2h"),
-                                                      "test3",
-                                                      if_else(acute == "post23h", "test4", timepoint)))))) %>%
-        mutate(time = factor(time, levels = c("baseline", "test1", "test2", "test3", "test4")), 
-               acute = factor(acute, levels = c("rest", "post30min", "post2h", "post23h")), 
-               supplement = factor(supplement, levels = c("placebo", "glucose")))
-rest.dat <- humac %>%
-        filter(acute == "rest" )
+```{r humac post 5th model}
+## Scripts
+# - humac.cleanup.R
+# - humac.main.analysis.R - this is data gathered at baseline, during the intervention, and after session 5
 
-# Change data
-isom.dat <- rest.dat %>%
-        filter(test == "isom")
-change_dat <- isom.dat %>%
-        dplyr::select(subject, time, supplement, peak.torque) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time, 
-                    values_from = peak.torque) %>%
-        
-        ungroup() %>%
-        mutate(change.2 = log(test1)-log(baseline),
-               change.3 = log(test2)-log(baseline),
-               change.4 = log(test3)-log(baseline),
-               baseline = baseline - mean(baseline, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.4))
+# Log-transformed data
 
-# Isok.60
-isok60.dat <- rest.dat %>%
-        filter(test == "isok.60")
-change_dat2 <- isok60.dat %>%
-        dplyr::select(subject, time, supplement, peak.torque) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time, 
-                    values_from = peak.torque) %>%
-        
-        ungroup() %>%
-        mutate(change.2 = log(test1)-log(baseline),
-               change.3 = log(test2)-log(baseline),
-               change.4 = log(test3)-log(baseline),
-               baseline = baseline - mean(baseline, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.4)) 
-
-## Isok.240
-isok240.dat <- rest.dat %>%
-        filter(test == "isok.240") 
-change_dat3 <- isok240.dat %>%
-        dplyr::select(subject, time, supplement, peak.torque) %>%
-        group_by(subject, time, supplement) %>%
-        summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
-        pivot_wider(names_from = time, 
-                    values_from = peak.torque) %>%
-        
-        ungroup() %>%
-        mutate(change.2 = log(test1)-log(baseline),
-               change.3 = log(test2)-log(baseline),
-               change.4 = log(test3)-log(baseline),
-               baseline = baseline - mean(baseline, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.4))
-
-```
-
-```{r post 5th modelling}
-# Scripts
-# - Post5th.change
-# - Post5th.figs
+isom.lchange <- readRDS("./data/data-gen/humac/isom.lchange.RDS")
+iso60.lchange <- readRDS("./data/data-gen/humac/isok60.lchange.RDS")
+iso240.lchange <- readRDS("./data/data-gen/humac/isok240.lchange.RDS")
 
 # Isometric
-m1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat)
-resplot.iso5 <- plot(m1)
-sum.iso5 <- summary(m1)
+isom.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = isom.lchange)
+isom.lres <- plot(isom.lmod)
+isom.lsum <- summary(isom.lmod)
 
 # Isok.60
-m2 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat2)
-resplot.isok605 <- plot(m2)
-sum.isok605 <- summary(m2)
+iso60.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = iso60.lchange)
+iso60.lres <- plot(iso60.lmod)
+iso60.lsum <- summary(iso60.lmod)
 
 # Isok.240
-m3 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat3)
-resplot.isok2405 <- plot(m3)
-resplot.isok2405 <- summary(m3)
+iso240.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = iso240.lchange)
+iso240.lres <- plot(iso240.lmod)
+iso240.lsum <- summary(iso240.lmod)
 
 ## Emmeans
 # Isometric
-confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
+isom.lemm <- confint(emmeans(isom.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
 # Isok.60
-confint.m2 <- confint(emmeans(m2, specs = ~"supplement|time")) %>%
+iso60.lemm <- confint(emmeans(iso60.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
 # Isok.240
-confint.m3 <- confint(emmeans(m3, specs = ~"supplement|time")) %>%
+iso240.lemm <- confint(emmeans(iso240.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
 # For reporting
 # Isom diff
-isom5coef <- coef(summary(m1))
+isom5coef <- coef(summary(isom.lmod))
 isom5diffp <- round(isom5coef[7, 5], 3)
 isom5diffse <- round(isom5coef[7, 2], 3)
 
 # Isok 60 diff
-isok605coef <- coef(summary(m2))
+isok605coef <- coef(summary(iso60.lmod))
 isok605diffp <- round(isok605coef[7, 5], 3)
 isok605diffse <- round(isok605coef[7, 2], 3)
 
 # Isok 260
-isok2405coef <- coef(summary(m3))
+isok2405coef <- coef(summary(iso240.lmod))
 isok2405diffp <- round(isok2405coef[7, 5], 3)
 isok2405diffse <- round(isok2405coef[7, 2], 3)
 
 ```
 
-```{r post 6th data handling}
-# Scripts
-# - Post6th.change
-# - Post6th.figs
-humac <- read_excel("./data/tests/ribose.humac.xlsx", na = "NA") %>%
-        
-        
-        mutate(time = if_else(timepoint == "D-1", 
-                              "baseline", 
-                              if_else(timepoint %in% c("D4", "D5"), 
-                                      "test1", 
-                                      if_else(timepoint %in% c("D8", "D9"), 
-                                              "test2", 
-                                              if_else(timepoint %in% c("T3", "T4") & acute %in% c("rest", "post30min", "post2h"),
-                                                      "test3",
-                                                      if_else(acute == "post23h", "test4", timepoint)))))) %>%
-        mutate(time = factor(time, levels = c("baseline", "test1", "test2", "test3", "test4")), 
-               acute = factor(acute, levels = c("rest", "post30min", "post2h", "post23h")), 
-               supplement = factor(supplement, levels = c("placebo", "glucose")))
+```{r post 6th model}
+## Scripts
+# - humac.acute.analysis.R - this is data gatherede before and after one RT session (sixth session)
+# - humac.cleanup.R
+
+# Data
+isom.lchange.ac <- readRDS("./data/data-gen/humac/isom.lchange.ac.RDS")
+iso60.lchange.ac <- readRDS("./data/data-gen/humac/iso60.lchange.ac.RDS")
+iso240.lchange.ac <- readRDS("./data/data-gen/humac/iso240.lchange.ac.RDS")
 
 # Isometric
-isom.dat <- humac %>%
-        filter(test == "isom",
-               time %in% c("test3", "test4")) 
-change_dat <- isom.dat %>%
-        dplyr::select(subject, acute, supplement, peak.torque) %>%
-        group_by(subject, acute, supplement) %>%
-        summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
-        pivot_wider(names_from = acute, 
-                    values_from = peak.torque) %>%
-        #print()
-        
-        ungroup() %>%
-        mutate(change.2 = log(post30min)-log(rest),
-               change.3 = log(post2h)-log(rest),
-               change.4 = log(post23h)-log(rest),
-               baseline = rest - mean(rest, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.4)) 
+isomac.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = isom.lchange.ac)
+isomac.lres <- plot(isomac.lmod)
+isomac.lsum <- summary(isomac.lmod)
 
 # Isok.60
-isok60.dat <- humac %>%
-        filter(test == "isok.60",
-               time %in% c("test3", "test4")) 
-change_dat2 <- isok60.dat %>%
-        dplyr::select(subject, acute, supplement, peak.torque) %>%
-        group_by(subject, acute, supplement) %>%
-        summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
-        pivot_wider(names_from = acute, 
-                    values_from = peak.torque) %>%
-        #print()
-        
-        ungroup() %>%
-        mutate(change.2 = log(post30min)-log(rest),
-               change.3 = log(post2h)-log(rest),
-               change.4 = log(post23h)-log(rest),
-               baseline = rest - mean(rest, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.4)) 
-## Isok.240
-isok240.dat <- humac %>%
-        filter(test == "isok.240",
-               time %in% c("test3", "test4")) 
-change_dat3 <- isok240.dat %>%
-        dplyr::select(subject, acute, supplement, peak.torque) %>%
-        group_by(subject, acute, supplement) %>%
-        summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
-        pivot_wider(names_from = acute, 
-                    values_from = peak.torque) %>%
-        #print()
-        
-        ungroup() %>%
-        mutate(change.2 = log(post30min)-log(rest),
-               change.3 = log(post2h)-log(rest),
-               change.4 = log(post23h)-log(rest),
-               baseline = rest - mean(rest, na.rm = TRUE),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
-        select(subject, supplement, baseline, change.2, change.3, change.4) %>%
-        pivot_longer(names_to = "time",
-                     values_to = "change",
-                     cols = (change.2:change.4))
-
-```
-
-```{r post 6th modelling}
-# Scripts
-# - Post6th.change
-# - Post6th.figs
-
-# Isometric
-m1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat)
-resplot.isom <- plot(m1)
-sum.isom <- summary(m1)
-
-# Isok.60
-m2 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat2)
-resplot.isok60 <- plot(m2)
-sum.isok60 <- summary(m2)
+iso60ac.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = iso60.lchange.ac)
+iso60ac.lres <- plot(iso60ac.lmod)
+iso60ac.lsum <- summary(iso60ac.lmod)
 
 # Isok.240
-m3 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat3)
-resplot.isok240 <- plot(m3)
-sum.isok240 <- summary(m3)
+iso240ac.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = iso240.lchange.ac)
+iso240ac.lres <- plot(iso240ac.lmod)
+iso240ac.lsum <- summary(iso240ac.lmod)
 
 # Emmeans
 # Isometric
-confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
+isomac.lemm <- confint(emmeans(isomac.lmod, specs = ~"supplement|time")) %>%
         data.frame() 
 
 # Isok.60
-confint.m2 <- confint(emmeans(m2, specs = ~"supplement|time")) %>%
+iso60ac.lemm <- confint(emmeans(iso60ac.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
 # Isok.240
-confint.m3 <- confint(emmeans(m3, specs = ~"supplement|time")) %>%
+iso240.lemm <- confint(emmeans(iso240ac.lmod, specs = ~"supplement|time")) %>%
         data.frame()
 
-# For inline reporting
+## For inline reporting
 # Isom diff
-isomcoef <- coef(summary(m1))
+isomcoef <- coef(summary(isomac.lmod))
 isomdiffp <- round(isomcoef[7, 5], 3)
 isomdiffse <- round(isomcoef[7, 2], 3)
 
 # Isok 60 diff
-isok60coef <- coef(summary(m2))
+isok60coef <- coef(summary(iso60ac.lmod))
 isok60diffp <- round(isok60coef[7, 5], 3)
 isok60diffse <- round(isok60coef[7, 2], 3)
 
 # Isok 240 diff
-isok240coef <- coef(summary(m3))
+isok240coef <- coef(summary(iso240ac.lmod))
 isok240diffp <- round(isok240coef[7, 5], 3)
 isok240diffse <- round(isok240coef[7, 2], 3)
 
@@ -1677,9 +1038,11 @@ There were no significant differences in mean change of total session volume, tr
 # Volume
 totvol.barplot <- readRDS("./data/data-gen/training/totvol.barplot.RDS")
 totvolfold.plot <- readRDS("./data/data-gen/training/totvolfold.plot.RDS")
+
 # Training intensity
 tot.barplot <- readRDS("./data/data-gen/training/tot.barplot.RDS")
 totalint.plot <- readRDS("./data/data-gen/training/trainint.plot.RDS")
+
 # Join figures
 plot_grid(totvol.barplot + theme(legend.position = "none"),
           totvolfold.plot + theme(legend.position = "none"),
@@ -1696,39 +1059,15 @@ plot_grid(totvol.barplot + theme(legend.position = "none"),
 ###### **Table 5:** RPE changes through training days. Training days are presented as combined pairwise consecutive, linked to their respective sessions. Session 1 = Training day 1/2, Session 2 = Training day 3/4, Session 3 = Training day 5/6, Session 4 = Training day 7/8, Session 5 = Training day 9/10, Session 6 = Training day 11/12. Values are presented as mean ± standard deviation. Glucose n = 13, placebo n = 13.
 
 ```{r RPE table}
-# Scripts
-# rpe-analysis
-# Session score
-ss.dat <- read_excel("./data/training/ribose_rpe.xlsx", na = "NA") %>%
-        select(subject, timepoint, session.score, supplement) %>%
-        mutate(time = if_else(timepoint %in% c("T1", "T2"),
-                              "baseline",
-                              if_else(timepoint %in% c("D3", "D4"),
-                                      "session2",
-                                      if_else(timepoint %in% c("D5", "D6"),
-                                              "session3",
-                                              if_else(timepoint %in% c("D7", "D8"),
-                                                      "session4",
-                                                      if_else(timepoint %in% c("D9", "D10"),
-                                                              "session5",
-                                                              if_else(timepoint %in% c("T3", "T4"),
-                                                                      "post", timepoint))))))) %>%
-        mutate(time = factor(time, levels = c("baseline", "session1", "session2", "session3", "session4", "session5", "post")),
-               supplement = factor(supplement, levels = c("placebo", "glucose"))) 
+## Scripts
+# - ss.cleanup.R
+# - ss.absolute.R
 
-## Mean and SD
-# Session score
-ss.exp <- ss.dat %>%
-        select(subject, supplement, time, session.score) %>%
-        group_by(supplement, time) %>%
-        summarise(mean.ss = mean(session.score),
-                  sd.ss = sd(session.score)) %>%
-        mutate(stat = paste0(round(mean.ss, 1), " (", round(sd.ss, 1), ")")) %>%
-        select(supplement, time, stat) %>%
-        pivot_wider(names_from = time,
-                    values_from = stat)
+# Data
+ss.abs <- readRDS("./data/data-gen/training/ss.abs.RDS")
 
-ss.exp %>%
+# Table
+ss.abs %>%
   kable(col.names = c("Supplement", "Baseline", "Session 2", "Session 3", "Session 4", "Session 5",
                             "Session 6"))
 

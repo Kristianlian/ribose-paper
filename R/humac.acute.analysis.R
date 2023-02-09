@@ -47,6 +47,8 @@ change.isom <- isom.dat %>%
                cols = (change.2:change.4)) #%>%
 #  print()
 
+saveRDS(change.isom, "./data/data-gen/humac/isom.lchange.ac.RDS")
+
 # Isok.60
 
 isok60.dat <- humac %>%
@@ -74,6 +76,8 @@ change.60 <- isok60.dat %>%
                cols = (change.2:change.4)) #%>%
 #  print()
 
+saveRDS(change.60, "./data/data-gen/humac/iso60.lchange.ac.RDS")
+
 ## Isok.240
 
 isok240.dat <- humac %>%
@@ -100,6 +104,8 @@ change.240 <- isok240.dat %>%
                values_to = "change",
                cols = (change.2:change.4)) #%>%
 #  print()
+
+saveRDS(change.240, "./data/data-gen/humac/iso240.lchange.ac.RDS")
 
 ## Linear mixed effects model
 # This model tries to explain the change by time and supplement, accounting for potential differences in baseline values and that the same participants

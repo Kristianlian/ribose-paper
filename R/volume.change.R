@@ -110,6 +110,7 @@ change_dat <- tot.volh %>%
                cols = (change.2:change.6)) %>%
   print()
 
+saveRDS(change_dat, "./data/data-gen/training/vol.lchange.RDS")
 
 ## Linear mixed effects model
 # This model tries to explain the change by time and supplement, accounting for potential differences in baseline values and that the same participants

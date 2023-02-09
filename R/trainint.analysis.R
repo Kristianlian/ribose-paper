@@ -37,6 +37,8 @@ tot.change <- tot.joined %>%
                cols = (change.2:change.6)) %>%
   print()
 
+saveRDS(tot.change, "./data/data-gen/training/int.lchange.RDS")
+
 ## Linear mixed effects model
 # This model tries to explain the change by time and supplement, accounting for potential differences in baseline values and that the same participants
 # are measured at multiple time points. 

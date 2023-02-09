@@ -37,8 +37,10 @@ change_dat.ss <- ss.dat %>%
   select(subject, supplement, baseline, change.2, change.3, change.4, change.5, change.post) %>%
   pivot_longer(names_to = "time",
                values_to = "change",
-               cols = (change.2:change.post)) #%>%
-  #print()
+               cols = (change.2:change.post)) %>%
+  print()
+
+saveRDS(change_dat.ss, "./data/data-gen/training/ss.lchange.RDS")
 
 ## Linear mixed effects model
 # This model tries to explain the change by time and supplement, accounting for potential differences in baseline values and that the same participants

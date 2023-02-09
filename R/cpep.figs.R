@@ -29,7 +29,7 @@ cpep.fig <- cpep.change %>%
   #mutate(time = factor(time, levels = c("change.45", "change.90", "change.120", "change.135", "change.150", "change.270"))) %>%
   #mutate(time = as.numeric(time)) %>%
   ggplot(aes(time.c, emmean, group = supplement, fill = supplement)) +
-  annotate("text", x = c(90, 120), y = c(1000, 1000), label = "*") +
+  annotate("text", x = c(120, 150), y = c(1000, 1000), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
@@ -38,8 +38,9 @@ cpep.fig <- cpep.change %>%
   labs(x = "Time-point", y = "C-peptide levels \n(pmol/L change)\n", fill = "") +
   theme_classic() +
   # theme(plot.background = element_rect(fill = "gray80")) +
-  scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 270),
-                     expand = expansion(0), labels = c("0" = "-120", "45" = "-90", "90" = "-30", "120" = "0", "270" = "120")) +
+  scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
+                     expand = expansion(0), labels = c("change.1" = "-120", "change.90" = "-30", "change.120" = "0", 
+                                                       "change.150" = "30", "change.270" = "120")) +
   #scale_y_continuous(limits = c(0,1000)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
