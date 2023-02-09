@@ -62,6 +62,8 @@ change.18 <- rrna18 %>%
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
 
+saveRDS(change.18, "./data/data-gen/rna/lchange.18.RDS")
+
 base.18 <- change.18 %>%
   select(subject, supplement, Pre) %>%
   pivot_wider(names_from = supplement,
@@ -84,6 +86,8 @@ change.28 <- rrna28 %>%
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
 
+saveRDS(change.28, "./data/data-gen/rna/lchange.28.RDS")
+
 base.28 <- change.28 %>%
   select(subject, supplement, Pre) %>%
   pivot_wider(names_from = supplement,
@@ -93,7 +97,7 @@ base.28 <- change.28 %>%
 ttest.28 <- t.test(base.28$GLUCOSE, base.28$PLACEBO, paired = TRUE)
 
 # 5.8S
-change.5.8 <- rrna5.8 %>%
+change.58 <- rrna5.8 %>%
   dplyr::select(subject, time, rep, nf.expr, supplement) %>%
   group_by(subject, time, supplement) %>%
   summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
@@ -105,6 +109,8 @@ change.5.8 <- rrna5.8 %>%
          pre = Pre - mean(Pre, na.rm = TRUE),
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
+
+saveRDS(change.58, "./data/data-gen/rna/lchange.58.RDS")
 
 base.5.8 <- change.5.8 %>%
   select(subject, supplement, Pre) %>%
@@ -128,6 +134,8 @@ change.5 <- rrna5 %>%
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
 
+saveRDS(change.5, "./data/data-gen/rna/lchange.5.RDS")
+
 base.5 <- change.5 %>%
   select(subject, supplement, Pre) %>%
   pivot_wider(names_from = supplement,
@@ -150,6 +158,8 @@ change.47 <- rrna47 %>%
          pre = Pre - mean(Pre, na.rm = TRUE),
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()
+
+saveRDS(change.47, "./data/data-gen/rna/lchange.47.RDS")
 
 base.47 <- change.47 %>%
   select(subject, supplement, Pre) %>%
