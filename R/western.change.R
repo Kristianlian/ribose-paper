@@ -8,7 +8,7 @@ library(emmeans);library(tidyverse);library(nlme)
 
 # Data
 
-prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS")
+prot.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS")
 
 # Change analysis
 
@@ -25,7 +25,8 @@ prot.dat %>%
 # Change score
 
 pchange <- prot.dat %>%
-  dplyr::select(subject, time, sample.id, target, norm.sign, supplement) %>%
+  dplyr::select(subject, time, outlier, sample.id, target, norm.sign, supplement) %>%
+  filter(outlier == "in") %>% # samples marked as out (outlier, with a higher residual than 2) are filtered out
   group_by(subject, time, target, supplement) %>%
   summarise(mns = mean(norm.sign, na.rm = TRUE)) %>%
   pivot_wider(names_from = time,
@@ -45,7 +46,8 @@ cmyc <- pchange %>%
   print()
 
 ubf <- pchange %>%
-  filter(target == "ubf") %>%
+  filter(target == "ubf",
+         subject != "103") %>% # Has missing values
   print()
 
 rps6 <- pchange %>%
