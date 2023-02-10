@@ -12,12 +12,13 @@ prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS")
 
 ## Visualising individual changes with ggplot
 prot.dat %>%
-  filter(gel.sorted == "A") %>%
+  #filter(gel.sorted == "A") %>%
   #filter(gel.sorted == "B") %>%
   ggplot(aes(time, log(norm.sign), group=paste(subject, supplement),
              color = supplement)) +
   geom_line() +
-  geom_point()
+  geom_point() +
+  facet_wrap(~target)
 
 
 ### Plotting target signal on duplicate A and B
@@ -57,8 +58,29 @@ clean.dat <- prot.dat %>%
   filter(outlier != "out") %>%
   print()
 
-saveRDS(clean.dat, "./data/data-gen/protein/protein_complete.RDS")
+saveRDS(clean.dat, "./data/data-gen/protein/prot.datc.RDS")
 
+## Visualising individual changes with ggplot
+clean.dat %>%
+  #filter(gel.sorted == "A") %>%
+  #filter(gel.sorted == "B") %>%
+  filter(target == "ubf") %>%
+  ggplot(aes(time, log(norm.sign), group=paste(gel.sorted, subject, supplement),
+             color = supplement)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~target)
+
+
+### Plotting target signal on duplicate A and B
+
+clean.dat %>%
+  
+  dplyr::select(gel.sorted, sample.id, target, norm.sign) %>%
+  pivot_wider(names_from = gel.sorted, values_from = norm.sign) %>%
+  ggplot(aes(log(A), log(B))) + geom_point() + facet_wrap(~target)
+
+################################
 ## Modelling
 # c-Myc model
 
