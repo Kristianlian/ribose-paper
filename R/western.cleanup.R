@@ -55,7 +55,7 @@ prot.dat %>%
 clean.dat <- prot.dat %>%
   mutate(resid = resid/sd(resid), 
          outlier = if_else(resid < -2, "out", "in")) %>%
-  filter(outlier != "out") %>%
+  #filter(outlier != "out") %>%
   print()
 
 saveRDS(clean.dat, "./data/data-gen/protein/prot.datc.RDS")
