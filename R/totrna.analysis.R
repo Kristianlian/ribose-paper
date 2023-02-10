@@ -56,6 +56,8 @@ rna_dat2 %>%
   geom_line() +
   geom_point()
 
+saveRDS(rna_dat2, "./data/data-gen/rna/rna.dat.RDS")
+
 ## Baseline analysis: calculation of mean and SD of baseline values, t-test on baseline values
 
 base.rna <- rna_dat2 %>%

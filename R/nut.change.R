@@ -14,7 +14,37 @@ library(tidyverse); library(lme4); library(lmerTest); library(emmeans)
 
 fp.weight <- readRDS("./data/data-gen/dxa/fp.weight.RDS")
 
-nut.res <- readRDS("./data/data-gen/dxa/nutha.RDS")
+dxa.res <- read_excel("data/dxa/Ribose_nutrition_result.xlsx")
+
+# Data handling
+
+# Data handling/cleaning
+
+nut.res <- dxa.res %>%
+  select(timepoint, subject, group, calories, fat, carbohydrates, protein, sup_pro, sup_gluc, kcal_glu) %>%
+  mutate(timepoint = if_else(timepoint %in% c("T1","T2"), 
+                             "D1",
+                             if_else(timepoint %in% c("3", "4"),
+                                     "D2",
+                                     if_else(timepoint %in% c("5", "6"),
+                                             "D3",
+                                             if_else(timepoint %in% c("7", "8"),
+                                                     "D4",
+                                                     if_else(timepoint %in% c("9", "10"),
+                                                             "D5",
+                                                             if_else(timepoint %in% c("T3", "T4"),
+                                                                     "D6",
+                                                                     "na"))))))) %>%
+  group_by(timepoint, subject, group) %>%
+  inner_join(fp.weight) %>%
+  summarise(protein = sum(protein + sup_pro),
+            fat = sum(fat),
+            calories = sum(calories + kcal_glu),
+            carbohydrates = sum(carbohydrates + sup_gluc),
+            weight = sum(weight)) %>%
+  mutate(proprkg = (protein/weight))
+
+saveRDS(nutha, "./data/data-gen/dxa/nutha.RDS")
 
 ### Macro nutrient change analysis
 # The code beneath tests whether there are differences in macro nutrient intake from pre to post, 
@@ -43,7 +73,9 @@ pro.lchange <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6)) 
 
-# Un-logged change for figures
+saveRDS(pro.lchange, "./data/data-gen/nutrition/pro.lchange.RDS")
+
+# Untransformed change for figures
 pro.change <- nut.res %>%
   select(time = timepoint, subject, supplement = group, protein) %>%
   group_by(subject, time, supplement) %>%
@@ -63,16 +95,19 @@ pro.change <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6))
 
+saveRDS(pro.change, "./data/data-gen/nutrition/pro.change.RDS")
 
-m1 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+
+pro.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = pro.lchange)
-m1.1 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+pro.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = pro.change)
 
-plot(m1)
-plot(m1.1)
-summary(m1)
-summary(m1.1)
+pro.lres <- plot(pro.lmod)
+pro.lsum <- summary(pro.lmod)
+
+pro.res <- plot(pro.mod)
+pro.sum <- summary(pro.mod)
 
 ## Fat
 # Log-transformed for analysis
@@ -95,7 +130,9 @@ fat.lchange <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6)) 
 
-# Un-logged for figures
+saveRDS(fat.lchange, "./data/data-gen/nutrition/fat.lchange.RDS")
+
+# Untransformed for figures
 fat.change <- nut.res %>%
   select(time = timepoint, subject, supplement = group, fat) %>%
   group_by(subject, time, supplement) %>%
@@ -115,15 +152,17 @@ fat.change <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6))
 
-m2 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+saveRDS(fat.change, "./data/data-gen/nutrition/fat.change.RDS")
+
+fat.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = fat.lchange)
-m2.1 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+fat.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = fat.change)
 
-plot(m2)
-plot(m2.1)
-summary(m2)
-summary(m2.1)
+fat.lres <- plot(fat.lmod)
+fat.lsum <- summary(fat.lmod)
+fat.res <- plot(fat.mod)
+fat.sum <- summary(fat.mod)
 
 ## Carbohydrates
 # Log-transformed for analysis
@@ -147,7 +186,9 @@ cho.lchange <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6)) 
 
-# Unlogged for figures
+saveRDS(cho.lchange, "./data/data-gen/nutrition/cho.lchange.RDS")
+
+# Untransformed for figures
 cho.change <- nut.res %>%
   select(time = timepoint, subject, supplement = group, cho = carbohydrates) %>%
   group_by(subject, time, supplement) %>%
@@ -167,16 +208,18 @@ cho.change <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6))
 
-m3 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+saveRDS(cho.change, "./data/data-gen/nutrition/cho.change.RDS")
+
+cho.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = cho.lchange)
-m3.1 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+cho.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = cho.change)
 
 
-plot(m3)
-plot(m3.1)
-summary(m3)
-summary(m3.1)
+cho.lres <- plot(cho.lmod)
+cho.lsum <- summary(cho.lmod)
+cho.res <- plot(cho.mod)
+cho.sum <- summary(cho.mod)
 
 ## Total calories a day
 # Log-transformed for analysis
@@ -199,7 +242,9 @@ cal.lchange <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6)) 
 
-# Unlogged for figures
+saveRDS(cal.lchange, "./data/data-gen/nutrition/cal.lchange.RDS")
+
+# Untransformed for figures
 cal.change <- nut.res %>%
   select(time = timepoint, subject, supplement = group, calories) %>%
   group_by(subject, time, supplement) %>%
@@ -219,15 +264,17 @@ cal.change <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6)) 
 
-m4 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+saveRDS(cal.change, "./data/data-gen/nutrition/cal.change.RDS")
+
+cal.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = cal.lchange)
-m4.1 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+cal.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = cal.change)
 
-plot(m4)
-plot(m4.1)
-summary(m4)
-summary(m4.1)
+cal.lres <- plot(cal.lmod)
+cal.lsum <- summary(cal.lmod)
+cal.res <- plot(cal.mod)
+cal.sum <- summary(cal.mod)
 
 ## Protein per body weight
 # Log-transformed for analysis
@@ -250,7 +297,9 @@ proprkg.lchange <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6)) 
 
-# Unlogged for figures
+saveRDS(proprkg.lchange, "./data/data-gen/nutrition/propr.lchange.RDS")
+
+# Untransformed for figures
 proprkg.change <- nut.res %>%
   select(time = timepoint, subject, supplement = group, proprkg) %>%
   group_by(subject, time, supplement) %>%
@@ -270,61 +319,67 @@ proprkg.change <- nut.res %>%
                values_to = "change",
                cols = (change.d2:change.d6)) 
 
-m5 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+saveRDS(properkg.change, "./data/data-gen/nutrition/propr.change.RDS")
+
+propr.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = proprkg.lchange)
-m5.1 <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+propr.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
                      data = proprkg.change)
 
-plot(m5)
-plot(m5.1)
-summary(m5)
-summary(m5.1)
+propr.lres <- plot(propr.lmod)
+propr.lsum <- summary(propr.lmod)
+propr.res <- plot(propr.mod)
+propr.sum <- summary(propr.mod)
 
 ## Getting emmeans
 # Protein
-protein.lemm <- confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
+protein.lemm <- confint(emmeans(pro.lmod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(protein.lemm, "./data/data-gen/nutrition/prot.lemm.RDS")
 
-protein.emm <- confint.m1.1 <- confint(emmeans(m1.1, specs = ~"supplement|time")) %>%
+protein.emm <- confint(emmeans(pro.mod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(protein.emm, "./data/data-gen/nutrition/prot.emm.RDS")
 
 # Fat
-fat.lemm <- confint.m2 <- confint(emmeans(m2, specs = ~"supplement|time")) %>%
+fat.lemm <- confint(emmeans(fat.lmod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(fat.lemm, "./data/data-gen/nutrition/fat.lemm.RDS")
 
-fat.emm <- confint.m2.1 <- confint(emmeans(m2.1, specs = ~"supplement|time")) %>%
+fat.emm <- confint(emmeans(fat.mod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(fat.emm, "./data/data-gen/nutrition/fat.emm.RDS")
 
-
 # Carbs
-cho.lemm <- confint.m3 <- confint(emmeans(m3, specs = ~"supplement|time")) %>%
+cho.lemm <- confint(emmeans(cho.lmod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(cho.lemm, "./data/data-gen/nutrition/cho.lemm.RDS")
 
-cho.emm <- confint.m3.1 <- confint(emmeans(m3.1, specs = ~"supplement|time")) %>%
+cho.emm <- confint(emmeans(cho.mod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(cho.emm, "./data/data-gen/nutrition/cho.emm.RDS")
 
 # Calories
-cal.lemm <- confint.m4 <- confint(emmeans(m4, specs = ~"supplement|time")) %>%
+cal.lemm <- confint(emmeans(cal.lmod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(cal.lemm, "./data/data-gen/nutrition/cal.lemm.RDS")
 
-cal.emm <- confint.m4.1 <- confint(emmeans(m4.1, specs = ~"supplement|time")) %>%
+cal.emm <- confint(emmeans(cal.mod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(cal.emm, "./data/data-gen/nutrition/cal.emm.RDS")
 
 # Protein per kg body weight
-propr.lemm <- confint.m5 <- confint(emmeans(m5, specs = ~"supplement|time")) %>%
+propr.lemm <- confint(emmeans(propr.lmod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(propr.lemm, "./data/data-gen/nutrition/propr.lemm.RDS")
 
-propr.emm <- confint.m5.1 <- confint(emmeans(m5.1, specs = ~"supplement|time")) %>%
+propr.emm <- confint(emmeans(propr.mod, specs = ~"supplement|time")) %>%
   data.frame()
 saveRDS(propr.emm, "./data/data-gen/nutrition/propr.emm.RDS")
+
+
+
+
+
 
 
