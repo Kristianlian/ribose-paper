@@ -38,7 +38,27 @@ rna.rdy <- rna.dat %>%
 joined.dat <- ubf.rdy %>%
   right_join(rna.rdy) %>%
   #filter(supplement != "GLUCOSE") %>%
+  
+  mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE )/sd(mean.sign, na.rm = TRUE))) %>%
   print()
+
+
+library(nlme)
+
+m <- lme(log(mean.rna) ~ mean.sign + time , 
+         random = list(subject = ~ 1), 
+          data = joined.dat, 
+         na.action = na.omit)
+
+summary(m)
+plot(m)
+
+
+
+joined.dat %>%
+  ggplot(aes(mean.sign, mean.rna, color = time)) + geom_point() +
+  geom_smooth(method = "lm")
+
 
 
 ## pre-post values correlation
