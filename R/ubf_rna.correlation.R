@@ -25,6 +25,8 @@ ubf.rdy <- west.dat %>%  # One data frame without outliers
   summarise(mean.sign = mean(norm.sign, na.rm = TRUE)) %>%
   print()
 
+saveRDS(ubf.rdy, "./data/data-gen/protein/ubf.rdy.RDS")
+
 rna.rdy <- rna.dat %>%
   select(subject, time, outlier, supplement, RNA.weight) %>%
   filter(outlier == "in") %>%
@@ -32,6 +34,8 @@ rna.rdy <- rna.dat %>%
   group_by(subject, time, supplement) %>%
   summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) %>%
   print()
+
+saveRDS(rna.rdy, "./data/data-gen/protein/rna.rdy.RDS")
 
 ## Correlation analysis
 
