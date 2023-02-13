@@ -21,8 +21,26 @@ joined.dat <- ubf.rdy %>%
   print()
 
 # Correlation plot
-joined.dat %>%
-  ggplot(aes(mean.sign, mean.rna, color = time)) + geom_point() +
-  geom_smooth(method = "lm")
+fig4 <- joined.dat %>%
+  ggplot(aes(log(mean.sign), log(mean.rna), color = supplement)) + 
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(x = "Log-UBF normalised by pool", y = "Log-Total RNA per mg muscle tissue", fill = "") +
+  theme_classic()
+  
+ggsave(
+  file = "fig4.pdf",
+  plot = last_plot(),
+  device = "pdf",
+  path = "./figures",
+  scale = 1,
+  width = 6,
+  height = 12,
+  units = c("in", "cm", "mm", "px"),
+  dpi = 600,
+  limitsize = TRUE,
+  bg = NULL
+)
+
 
 
