@@ -25,7 +25,9 @@ fig4 <- joined.dat %>%
   ggplot(aes(log(mean.sign), log(mean.rna), color = supplement)) + 
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(x = "Log-UBF normalised by pool", y = "Log-Total RNA per mg muscle tissue", fill = "") +
+  labs(x = "Log-UBF normalised by pool", y = "Log-total RNA per mg muscle tissue", 
+       fill = "Supplement") +
+  scale_color_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
   theme_classic()
   
 ggsave(
