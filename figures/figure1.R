@@ -5,7 +5,7 @@
 #
 #
 # Packages 
-library(tidyverse); library(emmeans); library(cowplot)
+library(tidyverse); library(emmeans); library(cowplot); library(grid); library(gridExtra)
 #
 ## Data
 
@@ -61,9 +61,10 @@ cpep.fig <- cpep.change %>%
   # theme(plot.background = element_rect(fill = "gray80")) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120", "change.90" = "-30", "change.120" = "0", 
-                                                       "change.150" = "30", "change.270" = "120")) #+
+                                                       "change.150" = "30", "change.270" = "120")) +
   #scale_y_continuous(limits = c(0,1000)) +
- # theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+
 
 ## Blood glucose
 glu.fig <- glu.change %>%
@@ -89,8 +90,8 @@ glu.fig <- glu.change %>%
   # theme(plot.background = element_rect(fill = "gray80")) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 135, 150, 270),
                      expand = expansion(0), labels = c("0" = "-120", "45" = "-90", "90" = "-30", "120" = "0", "135" = "15",
-                                                       "150" = "30", "270" = "120")) #+
- # theme(axis.text.x = element_text(angle = 45, hjust = 1))
+                                                       "150" = "30", "270" = "120")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
 
 ## Humac pre->post 5 sessions
 
@@ -106,11 +107,13 @@ isom.mfig <- lemm.isom %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 3) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 1", "change.3" = "Test 2",
-                            "change.4" = "Test 3")) +
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
+                            "change.4" = "Post")) +
   labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme_classic() +
   theme(axis.text.x = element_text(size=8))
+  #theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+   #     axis.ticks.x = element_blank())
 
 # Isokinetic 60 d/s
 
@@ -119,16 +122,19 @@ mfig.60 <- lemm.60 %>%
   add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
   add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) + # exp() reverse-transformes log-data, so we get fold change in nm
+  annotate("text", x = c("change.4"), y = c(1.02), label = "*") +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 position = pos,
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 3) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 1", "change.3" = "Test 2",
-                            "change.4" = "Test 3")) +
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
+                            "change.4" = "Post")) +
   labs(x = "", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme_classic() +
   theme(axis.text.x = element_text(size=8))
+#  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+ #       axis.ticks.x = element_blank())
 
 # Isokinetic 240
 
@@ -142,11 +148,13 @@ mfig.240 <- lemm.240 %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 3) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 1", "change.3" = "Test 2",
-                            "change.4" = "Test 3")) +
-  labs(x = "Time", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
+                            "change.4" = "Post")) +
+  labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme_classic() +
   theme(axis.text.x = element_text(size=8))
+  #theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+   #     axis.ticks.x = element_blank())
 
 ## Humac pre->post 6th session
 
@@ -162,8 +170,8 @@ isom.acfig <- lemm.isomac %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 3) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 1", "change.3" = "Test 2",
-                            "change.4" = "Test 3")) +
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
+                            "change.4" = "23hrs")) +
   labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme_classic() +
   theme(axis.text.x = element_text(size=8))
@@ -180,9 +188,9 @@ acfig.60 <- lemm.60ac %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 3) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 1", "change.3" = "Test 2",
-                            "change.4" = "Test 3")) +
-  labs(x = "", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
+                            "change.4" = "23hrs")) +
+  labs(x = "Time", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme_classic() +
   theme(axis.text.x = element_text(size=8))
 
@@ -198,10 +206,11 @@ acfig.240 <- lemm.240ac %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 3) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 1", "change.3" = "Test 2",
-                            "change.4" = "Test 3")) +
-  labs(x = "Time", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
+                            "change.4" = "23hrs")) +
+  labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme_classic() +
+  scale_fill_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
   theme(axis.text.x = element_text(size=8))
 
 
@@ -212,13 +221,17 @@ legend <- get_legend(acfig.240 + theme(legend.box.margin = margin(0, 0, 0,12)))
 
 fig1 <- plot_grid(cpep.fig + theme(legend.position = "none"),
                   glu.fig + theme(legend.position = "none"),
+                  legend,
                   isom.mfig + theme(legend.position = "none"),
-                  isom.acfig + theme(legend.position = "none"),
                   mfig.60 + theme(legend.position = "none"),
-                  acfig.60 + theme(legend.position = "none"),
                   mfig.240 + theme(legend.position = "none"),
+                  isom.acfig + theme(legend.position = "none"),
+                  acfig.60 + theme(legend.position = "none"),
                   acfig.240 + theme(legend.position = "none"),
-                  ncol = 2, nrow = 4)
+                  labels = c("A", "", "", "B", "", "", "C"), label_size = 12,
+                  ncol = 3, nrow = 3,
+                  align = "vh")
+
 
 ggsave(
   file = "fig1.pdf",
@@ -226,7 +239,7 @@ ggsave(
   device = "pdf",
   path = "./figures",
   scale = 1,
-  width = 6,
+  width = 8.9,
   height = 12,
   units = c("in", "cm", "mm", "px"),
   dpi = 600,
