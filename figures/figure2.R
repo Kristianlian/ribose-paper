@@ -40,7 +40,9 @@ totrna.plot <- emm.tot %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(position = position_dodge(width = 0.2), shape = 21, size = 3) +
   labs(x = "Time-point", y = "Total RNA per mg muscle tissue \n(fold change)\n", fill = "") +
-  theme_classic()  
+  theme_classic() +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+       axis.ticks.x = element_blank())
 #theme(legend.position = "none")
 
 ## Figures
@@ -59,7 +61,9 @@ plot.18 <- emm.18 %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   labs(x = "", y = "18S rRNA \n(fold change)\n", fill = "") +
-  theme_classic()
+  theme_classic() +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 # 28S
 plot.28 <- emm.28%>%
@@ -74,7 +78,9 @@ plot.28 <- emm.28%>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   labs(x = "", y = "28S rRNA \n(fold change)\n", fill = "") +
-  theme_classic()
+  theme_classic() +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 # 5.8S
 plot.5.8 <- emm.5.8 %>%
@@ -88,7 +94,7 @@ plot.5.8 <- emm.5.8 %>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
-  labs(x = "", y = "5.8S rRNA \n(fold change)\n", fill = "") +
+  labs(x = "Time", y = "5.8S rRNA \n(fold change)\n", fill = "") +
   theme_classic()
 
 # 5S
@@ -103,7 +109,7 @@ plot.5 <- emm.5 %>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
-  labs(x = "", y = "5S rRNA \n(fold change)\n", fill = "") +
+  labs(x = "Time", y = "5S rRNA \n(fold change)\n", fill = "") +
   theme_classic()
 
 # 47S
@@ -119,7 +125,9 @@ plot.47 <- emm.47 %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   labs(x = "Time-point", y = "47S pre-rRNA \n(fold change)\n", fill = "") +
-  theme_classic()
+  theme_classic() +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 # Cowplot for gathering figures
 
@@ -132,7 +140,10 @@ fig2 <- plot_grid(totrna.plot + theme(legend.position = "none"),
                   plot.28 + theme(legend.position = "none"),
                   plot.5.8 + theme(legend.position = "none"),
                   plot.5 + theme(legend.position = "none"),
-                  ncol = 2, nrow = 3)
+                  ncol = 2, nrow = 3,
+                  align = "v",
+                  labels = c("A)", "B)", "C)", "D)", "E)", "F)"), label_size = 10)
+
 
 ggsave(
   file = "fig2.pdf",
