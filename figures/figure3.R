@@ -31,7 +31,9 @@ cmyc.plot <- cmyc %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   labs(x = "", y = "c-Myc signal \n(fold change)\n", fill = "") +
-  theme_classic()
+  theme_classic() +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+        axis.ticks.x = element_blank())
 
 
 ubf.plot <- ubf %>%
@@ -46,7 +48,9 @@ ubf.plot <- ubf %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   labs(x = "", y = "UBF signal \n(fold change)\n", fill = "") +
-  theme_classic()
+  theme_classic() +
+  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
+        axis.ticks.x = element_blank()) 
 
 rps6.plot <- rps6 %>%
   mutate(time = "post") %>%
@@ -59,7 +63,7 @@ rps6.plot <- rps6 %>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
-  labs(x = "", y = "rps6 signal \n(fold change)\n", fill = "") +
+  labs(x = "Time", y = "rps6 signal \n(fold change)\n", fill = "") +
   theme_classic()
 
 
@@ -70,8 +74,9 @@ legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
 fig3 <- plot_grid(cmyc.plot + theme(legend.position = "none"),
                   ubf.plot + theme(legend.position = "none"),
                   rps6.plot + theme(legend.position = "none"),
-                  legend,
-                  ncol = 2, nrow = 2)
+                  labels = c("A", "B", "C"), label_size = 12,
+                  ncol = 1, nrow = 3,
+                  align = "v")
 
 ggsave(
   file = "fig3.pdf",
