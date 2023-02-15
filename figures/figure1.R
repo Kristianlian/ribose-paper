@@ -346,9 +346,7 @@ acfig.240 <- lemm.240ac %>%
 legend <- get_legend(acfig.240 + theme(legend.box.margin = margin(0, 0, 0,12)))
 
 
-fig1 <- plot_grid(d.fig,
-                  legend,
-                  cpep.fig + theme(legend.position = "none"),
+fig0.5 <- plot_grid(cpep.fig + theme(legend.position = "none"),
                   glu.fig + theme(legend.position = "none"),
                   isom.mfig + theme(legend.position = "none"),
                   isom.acfig + theme(legend.position = "none"),
@@ -356,9 +354,13 @@ fig1 <- plot_grid(d.fig,
                   acfig.60 + theme(legend.position = "none"),
                   mfig.240 + theme(legend.position = "none"),
                   acfig.240 + theme(legend.position = "none"),
-                  labels = c("A", "", "", "B", "", "", "C"), label_size = 12,
-                  ncol = 2, nrow = 5,
+                  ncol = 2, nrow = 4,
                   align = "vh")
+
+fig05 <- plot_grid(d.fig,
+                   legend,
+                   ncol = 2, nrow = 1,
+                   rel_widths = c(2,0))
 
 
 ggsave(
