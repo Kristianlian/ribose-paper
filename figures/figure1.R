@@ -49,7 +49,6 @@ biopsy_glyph <- "\U2193"
 blood_glyph <-  "\U2020"
 strength_glyph <- "\U2021"
 
-
 d.fig <- d.dat %>%
   ggplot(aes(time, tp)) +
   
@@ -65,12 +64,12 @@ d.fig <- d.dat %>%
   
   # Time periods (familiarisation/internvetion)
   annotate("rect", xmin = -3, xmax = 21, ymin = 0, ymax = 5.3, alpha = 2, color = "lightblue", fill = "lightblue") +
-  annotate("text", x = 2, y = 5.1, label = "Familiarization (7 days)") +
-  annotate("text", x = 11, y = 5.1, label = "Unilateral RT + Dietary intervention (12 days)") +
+  annotate("text", x = 2, y = 5.1, label = "Familiarization (7 days)", size = 3) +
+  annotate("text", x = 11, y = 5.1, label = "Unilateral RT + Dietary intervention (12 days)", size = 3) +
   
   ## Signs
   # Biopsy
-  annotate("text", x = -1.8, y = 4.5, label = "Muscle biopsies", size = 3) +
+  annotate("text", x = -1.8, y = 4.5, label = "Muscle biopsies", vjust = 0, size = 2) +
   annotate("text", x = -0.4, y = 4.45, label = rep(biopsy_glyph, 1), vjust = 0) +
   annotate("text", x = c(8, 18), y = rep(3.7),
            label = rep(biopsy_glyph, 2), color = "blue", vjust = 0) +
@@ -78,7 +77,7 @@ d.fig <- d.dat %>%
            label = rep(biopsy_glyph, 2), color = "red", vjust = 0) +
   
   # Strength
-  annotate("text", x = -2, y = 4, label = "Strength test", size = 3) +
+  annotate("text", x = -2, y = 4, label = "Strength test", vjust = 0, size = 2) +
   annotate("text", x = -0.8, y = 3.95, label = rep(strength_glyph, 1), vjust = 0) +
   annotate("text", x = c(1, 3, 7), y = rep(2.5),
            label = rep(strength_glyph, 3), vjust = 0) +
@@ -89,7 +88,7 @@ d.fig <- d.dat %>%
   
   
   # Blood
-  annotate("text", x = -2.45, y = 3.5, label = "Blood", size = 3) +
+  annotate("text", x = -2.3, y = 3.5, label = "Blood", vjust = 0, size = 2) +
   annotate("text", x = -1.65, y = 3.45, label = rep(blood_glyph, 1), vjust = 0) +
   annotate("text", x = 8, y = rep(2.5),
            label = rep(blood_glyph, 3), vjust = 0) +
@@ -101,64 +100,66 @@ d.fig <- d.dat %>%
   ## Randomization
   
   # Inclusion
-  annotate("segment", x = -0.8, xend = -0.3, y = 1.5, yend = 1.5) +
-  annotate("segment", x = -0.8, xend = -0.3, y = 3.5, yend = 3.5) +
-  annotate("segment", x = -0.8, xend = -0.8, y = 1.5, yend = 3.5) +
-  annotate("segment", x = -0.3, xend = -0.3, y = 1.5, yend = 3.5) +
-  annotate(geom = "text", x = -0.6, y = 2.5, label = c("Inclusion (n=16)"), angle = 90) +
+  
+  annotate("segment", x = -1.75, xend = 0.5, y = 2.3, yend = 2.3) +
+  annotate("segment", x = -1.75, xend = 0.5, y = 2.7, yend = 2.7) +
+  annotate("segment", x = -1.75, xend = -1.75, y = 2.3, yend = 2.7) +
+  annotate("segment", x = 0.5, xend = 0.5, y = 2.3, yend = 2.7) +
+  annotate(geom = "text", x = -0.6, y = 2.5, label = c("Inclusion (n=16)"), size = 2) +
   
   # Randomization
-  annotate("segment", x = 4.7, xend = 5.4, y = 1.5, yend = 1.5) +
-  annotate("segment", x = 4.7, xend = 5.4, y = 3.5, yend = 3.5) +
-  annotate("segment", x = 4.7, xend = 4.7, y = 1.5, yend = 3.5) +
-  annotate("segment", x = 5.4, xend = 5.4, y = 1.5, yend = 3.5) +
-  annotate(geom = "text", x = 5, y = 2.5, label = c("Randomization"), angle = 90) +
+
+  annotate("segment", x = 4.1, xend = 5.9, y = 2.3, yend = 2.3) +
+  annotate("segment", x = 4.1, xend = 5.9, y = 2.7, yend = 2.7) +
+  annotate("segment", x = 4.1, xend = 4.1, y = 2.3, yend = 2.7) +
+  annotate("segment", x = 5.9, xend = 5.9, y = 2.3, yend = 2.7) +
+  annotate(geom = "text", x = 5, y = 2.5, label = c("Randomization"), size = 2) +
   
   # Pointers
-  annotate("segment", x = 5.4, xend = 7.3, y = 2.5, yend = 4.3) +
-  annotate("segment", x = 5.4, xend = 8.3, y = 2.5, yend = 0.7) +
+  annotate("segment", x = 5.9, xend = 7.3, y = 2.5, yend = 4.3) +
+  annotate("segment", x = 5.9, xend = 8.3, y = 2.5, yend = 0.7) +
   
   # Glucose
   #annotate("segment", x = 7.3, xend = 9, y = 6.3, yend = 6.3) +
   #annotate("segment", x = 7.3, xend = 9, y = 6.9, yend = 6.9) +
   #annotate("segment", x = 7.3, xend = 7.3, y = 6.3, yend = 6.9) +
   #annotate("segment", x = 9, xend = 9, y = 6.3, yend = 6.9) +
-  annotate(geom = "text", x = 8.2, y = 4.5, label = c("Leg 1 RT +\nGLU (n=8)\n"), color = "blue", angle = 0, size = 3) +
+  annotate(geom = "text", x = 8.2, y = 4.5, label = c("Leg 1 RT +\nGLU (n=8)\n"), color = "blue", angle = 0, size = 2) +
   
   # Placebo
   #annotate("segment", x = 7.5, xend = 8.5, y = 0.7, yend = 0.7) +
   #annotate("segment", x = 7.5, xend = 8.5, y = 2.3, yend = 2.3) +
   #annotate("segment", x = 7.5, xend = 7.5, y = 0.7, yend = 2.3) +
   #annotate("segment", x = 8.5, xend = 8.5, y = 0.7, yend = 2.3) +
-  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "red", angle = 0, size = 3) +
+  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "red", angle = 0, size = 2) +
   
   
   
   
   # Training (start with GLU)
   # Day 3
-  annotate(geom = "text", x = 10, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 3) +
+  annotate(geom = "text", x = 10, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
   # Day 5
-  annotate(geom = "text", x = 12, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 3) +
+  annotate(geom = "text", x = 12, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
   # Day 7
-  annotate(geom = "text", x = 14, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 3) +
+  annotate(geom = "text", x = 14, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
   # Day 9
-  annotate(geom = "text", x = 16, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 3) +
+  annotate(geom = "text", x = 16, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
   # Day 11
-  annotate(geom = "text", x = 18, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 3) +
+  annotate(geom = "text", x = 18, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
   
   
   ## Training (start with PLA)
   # Day 4
-  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 3) +
+  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
   # Day 6
-  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 3) +
+  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
   # Day 8
-  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 3) +
+  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
   # Day 10
-  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 3) +
+  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
   # Day 12
-  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 3) +
+  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
   
   theme_classic() +
   labs(x = "Days", y = "") +
@@ -357,10 +358,16 @@ fig0.5 <- plot_grid(cpep.fig + theme(legend.position = "none"),
                   ncol = 2, nrow = 4,
                   align = "vh")
 
+
 fig05 <- plot_grid(d.fig,
                    legend,
                    ncol = 2, nrow = 1,
-                   rel_widths = c(2,0))
+                   rel_widths = c(7,1))
+
+fig1 <- plot_grid(fig05,
+          fig0.5,
+          ncol = 1,
+          nrow = 2)
 
 
 ggsave(
