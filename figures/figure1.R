@@ -67,17 +67,16 @@ cpep.fig <- cpep.change %>%
                 position = pos) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  labs(x = "", y = "C-peptide levels \n(pmol/L change)\n", fill = "") +
+  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
+  labs(x = "", y = "C-peptide levels \n(pmol/L change)\n", fill = "Supplement") +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120", "change.90" = "-30", "change.120" = "0", 
                                                        "change.150" = "30", "change.270" = "120")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
         axis.title.y = element_text(size = 7),
         legend.title = element_text(size = 7),
-        legend.text = element_text(size = 6),
+        legend.text = element_text(size = 4),
         axis.text.y = element_text(size = 6)) +
-  scale_fill_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
   plot_theme
   
 

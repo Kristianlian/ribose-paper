@@ -31,10 +31,8 @@ emm.47 <- readRDS("./data/data-gen/rna/emm.47.RDS")
 plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
                     panel.background = element_rect(fill = "lightblue", colour = NA),
-                    plot.background = element_rect(fill = "lightblue", colour = NA),
-                    axis.line = element_line(colour = "black"),
-                    legend.background = element_rect(fill = "lightblue"),
-                    legend.key = element_rect(fill = "lightblue"))
+                    axis.line = element_line(colour = "black"))
+
 
 # Plots
 totrna.plot <- emm.tot %>%
@@ -48,6 +46,7 @@ totrna.plot <- emm.tot %>%
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
+  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   geom_point(position = position_dodge(width = 0.2), shape = 21, size = 2) +
   labs(x = "Time-point", y = "Total RNA per mg muscle tissue \n(fold change)\n", fill = "") +
   theme_classic() +
@@ -73,6 +72,7 @@ plot.18 <- emm.18 %>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
+  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   labs(x = "", y = "18S rRNA \n(fold change)\n", fill = "") +
   theme_classic() +
   theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
@@ -91,6 +91,7 @@ plot.28 <- emm.28%>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
+  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   labs(x = "", y = "28S rRNA \n(fold change)\n", fill = "") +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
@@ -111,6 +112,7 @@ plot.5.8 <- emm.5.8 %>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
+  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   labs(x = "Time", y = "5.8S rRNA \n(fold change)\n", fill = "") +
   theme_classic()+
   theme(axis.title.y = element_text(size = 8)) + plot_theme
@@ -127,6 +129,7 @@ plot.5 <- emm.5 %>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
+  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   labs(x = "Time", y = "5S rRNA \n(fold change)\n", fill = "") +
   theme_classic() +
   theme(axis.title.y = element_text(size = 8)) +
@@ -144,21 +147,14 @@ plot.47 <- emm.47 %>%
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
+  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   labs(x = "Time-point", y = "47S pre-rRNA \n(fold change)\n", fill = "") +
   #theme_classic() +
   theme(axis.title.x = element_blank(), 
         axis.text.x = element_blank(), 
         axis.line.x = element_blank(),
         axis.ticks.x = element_blank(),
-        axis.title.y = element_text(size = 8),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "lightblue", colour = NA),
-        plot.background = element_rect(fill = "lightblue", colour = NA),
-        axis.line = element_line(colour = "black"),
-        legend.background = element_rect(fill = "lightblue"),
-        legend.key = element_rect(fill = "lightblue"))
-
+        axis.title.y = element_text(size = 8)) + plot_theme
 
 
 # Cowplot for gathering figures
@@ -173,7 +169,7 @@ fig2 <- plot_grid(totrna.plot + theme(legend.position = "none"),
                   plot.5.8 + theme(legend.position = "none"),
                   plot.5 + theme(legend.position = "none"),
                   ncol = 2, nrow = 3,
-                  align = "hv",
+                  align = "v",
                   labels = c("A)", "B)", "C)", "D)", "E)", "F)"), label_size = 10)
 
 
