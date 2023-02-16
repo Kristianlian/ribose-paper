@@ -67,13 +67,14 @@ cpep.fig <- cpep.change %>%
                 position = pos) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   labs(x = "", y = "C-peptide levels \n(pmol/L change)\n", fill = "") +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120", "change.90" = "-30", "change.120" = "0", 
                                                        "change.150" = "30", "change.270" = "120")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   scale_fill_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
@@ -94,13 +95,14 @@ glu.fig <- glu.change %>%
                 position = pos) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   labs(x = "", y = "Plasma glucose levels \n(mmol/L change)\n", fill = "Supplement") +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 135, 150, 270),
                      expand = expansion(0), labels = c("0" = "-120", "45" = "-90", "90" = "-30", "120" = "0", "135" = "15",
                                                        "150" = "30", "270" = "120")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
@@ -119,12 +121,13 @@ isom.mfig <- lemm.isom %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
                             "change.4" = "Post")) +
   labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
@@ -142,13 +145,14 @@ mfig.60 <- lemm.60 %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
                             "change.4" = "Post")) +
   labs(x = "", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        axis.title.x = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        axis.title.x = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
@@ -165,12 +169,13 @@ mfig.240 <- lemm.240 %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
                             "change.4" = "Post")) +
   labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
@@ -189,12 +194,13 @@ isom.acfig <- lemm.isomac %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
@@ -211,13 +217,14 @@ acfig.60 <- lemm.60ac %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "Time", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        axis.title.x = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        axis.title.x = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
@@ -234,13 +241,13 @@ acfig.240 <- lemm.240ac %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
+  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  scale_fill_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 8),
-        legend.title = element_text(size = 8),
+        axis.title.y = element_text(size = 7),
+        legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
@@ -269,7 +276,7 @@ d.fig <- d.dat %>%
                                 "18" = "11", "19" = "12", "20" = "13")) +
   
   # Time periods (familiarisation/internvetion)
-  annotate("rect", xmin = -3, xmax = 21, ymin = 0, ymax = 5.9, alpha = 2, color = "lightblue", fill = "lightblue") +
+  annotate("rect", xmin = -3, xmax = 21, ymin = 0, ymax = 7, alpha = 2, color = "lightblue", fill = "lightblue") +
   annotate("text", x = 2, y = 5.6, label = "Familiarization (7 days)", size = htextsize) +
   annotate("text", x = 11, y = 5.6, label = "Unilateral RT + Dietary intervention (12 days)", size = htextsize) +
   
@@ -280,7 +287,7 @@ d.fig <- d.dat %>%
   annotate("text", x = c(8, 18), y = rep(3.6),
            label = rep(biopsy_glyph, 2), color = "red", vjust = 0, size = textsize) +
   annotate("text", x = c(9, 19), y = rep(1.6),
-           label = rep(biopsy_glyph, 2), color = "blue", vjust = 0, size = textsize) +
+           label = rep(biopsy_glyph, 2), color = "royalblue", vjust = 0, size = textsize) +
   
   # Strength
   annotate("text", x = -2, y = 4, label = "Strength test", vjust = 0, size = textsize) +
@@ -290,7 +297,7 @@ d.fig <- d.dat %>%
   annotate("text", x = c(11, 15, 18, 18.2, 18.5, 19), y = rep(4),
            label = rep(strength_glyph, 6), color = "red", vjust = 0, size = textsize) +
   annotate("text", x = c(12, 16, 19, 19.2, 19.5, 20), y = rep(1.2),
-           label = rep(strength_glyph, 6), color = "blue", vjust = 0, size = textsize) +
+           label = rep(strength_glyph, 6), color = "royalblue", vjust = 0, size = textsize) +
   
   
   # Blood
@@ -301,7 +308,7 @@ d.fig <- d.dat %>%
   annotate("text", x = 18.2, y = rep(3.6),
            label = rep(blood_glyph, 1), color = "red", vjust = 0, size = textsize) +
   annotate("text", x = 19.2, y = rep(1.6),
-           label = rep(blood_glyph, 1), color = "blue", vjust = 0, size = textsize) +
+           label = rep(blood_glyph, 1), color = "royalblue", vjust = 0, size = textsize) +
   
   ## Randomization
   
@@ -332,60 +339,54 @@ d.fig <- d.dat %>%
   
   # Placebo
   # Day 2
-  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "blue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "royalblue", angle = 0, size = textsize) +
   # Day 4
-  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
   # Day 6
-  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
   # Day 8
-  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
   # Day 10
-  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
   # Day 12
-  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
   
-  theme_classic() +
-  
-  # Experimenting with elementalist for rounded corners
+  theme_classic()+
   
   labs(x = "Days", y = "") +
   theme(axis.line.y = element_blank(),
         axis.title.y = element_blank(),
         axis.ticks.y = element_blank(),
         axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 8),
+        axis.title.x = element_text(size = 7),
         axis.text.x = element_text(size = 6),
-        plot.background = element_rect_round(color = "black",
-                                             size = 0.25,
-                                             radius = unit(0.25, "cm"),
+        plot.background = element_rect_round(color = "lightblue",
+                                             size = 0.50,
+                                             radius = unit(0.50, "cm"),
                                              fill = "lightblue"))
+
 
 
 # Joined figure 1
 
-plot_grid(glu.fig,
-          cpep.fig) + plot_theme
 
 fig1 <- plot_grid(d.fig,
-                  plot_grid(glu.fig + theme(legend.position = "none"), 
-                            cpep.fig,
-                            ncol = 2, rel_widths = c(0.9,1.25)),
-                            
-                  plot_grid(isom.mfig + theme(legend.position = "none"),
-                            
-                            mfig.60 + theme(legend.position = "none"), 
-                            mfig.240 + theme(legend.position = "none"),
-                            isom.acfig + theme(legend.position = "none"),
-                            acfig.60 + theme(legend.position = "none"), 
-                             
-                            acfig.240 + theme(legend.position = "none"), ncol = 3, nrow = 2),
-                  ncol = 1,
-                  rel_heights = c(1.5,1,2)) +
-  draw_plot_label(label = c("A)", "B)", "C)", "D)", "E)"),
-                  x = c(0.02, 0.02, 0.45, 0.02, 0.02),
-                  y = c(0.98, 0.68, 0.67, 0.47, 0.25),
-                  hjust = .5, vjust = .5, size = 8) +
-  plot_theme
+          plot_grid(glu.fig + theme(legend.position = "none"),
+                    cpep.fig,
+                    ncol = 2, rel_widths = c(0.9,1.25)),
+          plot_grid(isom.mfig + theme(legend.position = "none"),
+                    mfig.60 + theme(legend.position = "none"), 
+                    mfig.240 + theme(legend.position = "none"),
+                    isom.acfig + theme(legend.position = "none"),
+                    acfig.60 + theme(legend.position = "none"), 
+                    acfig.240 + theme(legend.position = "none"), ncol = 3, nrow = 2),
+          ncol = 1,
+          rel_heights = c(1.5,1,2)) +
+  draw_plot_label(label = c("A)", "B)", "C)", "D)", "E)", "F)", "G)", "H)", "I)"),
+                  x = c(0.02, 0.035, 0.45, 0.035, 0.375, 0.71, 0.035, 0.375, 0.71),
+                  y = c(0.98, 0.66, 0.66, 0.45, 0.45, 0.45, 0.23, 0.23, 0.23),
+                  hjust = .5, vjust = .5, size = 7) 
+
 
 
 ggsave(
