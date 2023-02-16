@@ -5,7 +5,8 @@
 #
 #
 # Packages 
-library(tidyverse); library(emmeans); library(cowplot); library(grid); library(gridExtra); library(readxl)
+library(tidyverse); library(emmeans); library(cowplot); library(grid); library(gridExtra); library(readxl); 
+library(elementalist)
 #
 ## Data
 
@@ -43,156 +44,41 @@ lemm.240ac <- readRDS("./data/data-gen/humac/emm.ac.240.RDS")
 ### Plots
 pos <- position_dodge(width = 0.2)
 
-## Study design
+# Designing the plot theme
 
-biopsy_glyph <- "\U2193"
-blood_glyph <-  "\U2020"
-strength_glyph <- "\U2021"
+plot_theme <- theme(panel.grid.major = element_blank(),
+                    panel.grid.minor = element_blank(),
+                    panel.background = element_rect(fill = "lightblue", colour = NA),
+                    axis.line = element_line(colour = "black"))
 
-d.fig <- d.dat %>%
-  ggplot(aes(time, tp)) +
-  
-  
-  scale_y_continuous(limits = c(0,10), breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), expand = c(0,0)) +
-  
-  scale_x_continuous(limits = c(-3,21), breaks = seq(1:20), 
-                     labels = c("1" = "-7", "2" = "-6", "3" = "-5", "4" = "-4",
-                                "5" = "-3", "6" = "-2", "7" = "-1", "8" = "1",
-                                "9" = "2", "10" = "3", "11" = "4", "12" = "5", "13" = "6",
-                                "14" = "7", "15" = "8", "16" = "9", "17" = "10",
-                                "18" = "11", "19" = "12", "20" = "13")) +
-  
-  # Time periods (familiarisation/internvetion)
-  annotate("rect", xmin = -3, xmax = 21, ymin = 0, ymax = 5.3, alpha = 2, color = "lightblue", fill = "lightblue") +
-  annotate("text", x = 2, y = 5.1, label = "Familiarization (7 days)", size = 3) +
-  annotate("text", x = 11, y = 5.1, label = "Unilateral RT + Dietary intervention (12 days)", size = 3) +
-  
-  ## Signs
-  # Biopsy
-  annotate("text", x = -1.8, y = 4.5, label = "Muscle biopsies", vjust = 0, size = 2) +
-  annotate("text", x = -0.4, y = 4.45, label = rep(biopsy_glyph, 1), vjust = 0) +
-  annotate("text", x = c(8, 18), y = rep(3.7),
-           label = rep(biopsy_glyph, 2), color = "blue", vjust = 0) +
-  annotate("text", x = c(9, 19), y = rep(1.3),
-           label = rep(biopsy_glyph, 2), color = "red", vjust = 0) +
-  
-  # Strength
-  annotate("text", x = -2, y = 4, label = "Strength test", vjust = 0, size = 2) +
-  annotate("text", x = -0.8, y = 3.95, label = rep(strength_glyph, 1), vjust = 0) +
-  annotate("text", x = c(1, 3, 7), y = rep(2.5),
-           label = rep(strength_glyph, 3), vjust = 0) +
-  annotate("text", x = c(11, 15, 18, 18.2, 18.5, 19), y = rep(4),
-           label = rep(strength_glyph, 6), color = "blue", vjust = 0) +
-  annotate("text", x = c(12, 16, 19, 19.2, 19.5, 20), y = rep(1),
-           label = rep(strength_glyph, 6), color = "red", vjust = 0) +
-  
-  
-  # Blood
-  annotate("text", x = -2.3, y = 3.5, label = "Blood", vjust = 0, size = 2) +
-  annotate("text", x = -1.65, y = 3.45, label = rep(blood_glyph, 1), vjust = 0) +
-  annotate("text", x = 8, y = rep(2.5),
-           label = rep(blood_glyph, 3), vjust = 0) +
-  annotate("text", x = 18.2, y = rep(3.7),
-           label = rep(blood_glyph, 1), color = "blue", vjust = 0) +
-  annotate("text", x = 19.2, y = rep(1.3),
-           label = rep(blood_glyph, 1), color = "red", vjust = 0) +
-  
-  ## Randomization
-  
-  # Inclusion
-  
-  annotate("segment", x = -1.75, xend = 0.5, y = 2.3, yend = 2.3) +
-  annotate("segment", x = -1.75, xend = 0.5, y = 2.7, yend = 2.7) +
-  annotate("segment", x = -1.75, xend = -1.75, y = 2.3, yend = 2.7) +
-  annotate("segment", x = 0.5, xend = 0.5, y = 2.3, yend = 2.7) +
-  annotate(geom = "text", x = -0.6, y = 2.5, label = c("Inclusion (n=16)"), size = 2) +
-  
-  # Randomization
-
-  annotate("segment", x = 4.1, xend = 5.9, y = 2.3, yend = 2.3) +
-  annotate("segment", x = 4.1, xend = 5.9, y = 2.7, yend = 2.7) +
-  annotate("segment", x = 4.1, xend = 4.1, y = 2.3, yend = 2.7) +
-  annotate("segment", x = 5.9, xend = 5.9, y = 2.3, yend = 2.7) +
-  annotate(geom = "text", x = 5, y = 2.5, label = c("Randomization"), size = 2) +
-  
-  # Pointers
-  annotate("segment", x = 5.9, xend = 7.3, y = 2.5, yend = 4.3) +
-  annotate("segment", x = 5.9, xend = 8.3, y = 2.5, yend = 0.7) +
-  
-  # Glucose
-  #annotate("segment", x = 7.3, xend = 9, y = 6.3, yend = 6.3) +
-  #annotate("segment", x = 7.3, xend = 9, y = 6.9, yend = 6.9) +
-  #annotate("segment", x = 7.3, xend = 7.3, y = 6.3, yend = 6.9) +
-  #annotate("segment", x = 9, xend = 9, y = 6.3, yend = 6.9) +
-  annotate(geom = "text", x = 8.2, y = 4.5, label = c("Leg 1 RT +\nGLU (n=8)\n"), color = "blue", angle = 0, size = 2) +
-  
-  # Placebo
-  #annotate("segment", x = 7.5, xend = 8.5, y = 0.7, yend = 0.7) +
-  #annotate("segment", x = 7.5, xend = 8.5, y = 2.3, yend = 2.3) +
-  #annotate("segment", x = 7.5, xend = 7.5, y = 0.7, yend = 2.3) +
-  #annotate("segment", x = 8.5, xend = 8.5, y = 0.7, yend = 2.3) +
-  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "red", angle = 0, size = 2) +
-  
-  
-  
-  
-  # Training (start with GLU)
-  # Day 3
-  annotate(geom = "text", x = 10, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
-  # Day 5
-  annotate(geom = "text", x = 12, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
-  # Day 7
-  annotate(geom = "text", x = 14, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
-  # Day 9
-  annotate(geom = "text", x = 16, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
-  # Day 11
-  annotate(geom = "text", x = 18, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "blue", angle = 0, size = 2) +
-  
-  
-  ## Training (start with PLA)
-  # Day 4
-  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
-  # Day 6
-  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
-  # Day 8
-  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
-  # Day 10
-  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
-  # Day 12
-  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "red", angle = 0, size = 2) +
-  
-  theme_classic() +
-  labs(x = "Days", y = "") +
-  theme(axis.line.y = element_blank(),
-        axis.title.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        axis.text.y = element_blank())
 
 ## C-peptide
+
 cpep.fig <- cpep.change %>%
   data.frame() %>%
   add_row(supplement = "PLACEBO", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
   add_row(supplement = "GLUCOSE", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before = 2) %>%
   mutate(time.c = gsub("change.", "", time), 
          time.c = as.numeric(time.c)) %>%
-  #mutate(time = factor(time, levels = c("change.45", "change.90", "change.120", "change.135", "change.150", "change.270"))) %>%
-  #mutate(time = as.numeric(time)) %>%
   ggplot(aes(time.c, emmean, group = supplement, fill = supplement)) +
-  annotate("text", x = c(120, 150), y = c(1000, 1000), label = "*") +
+  annotate("text", x = c(120, 150), y = c(975, 950), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
   labs(x = "", y = "C-peptide levels \n(pmol/L change)\n", fill = "") +
-  theme_classic() +
-  # theme(plot.background = element_rect(fill = "gray80")) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120", "change.90" = "-30", "change.120" = "0", 
                                                        "change.150" = "30", "change.270" = "120")) +
-  #scale_y_continuous(limits = c(0,1000)) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
-
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  scale_fill_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
+  plot_theme
+  
 
 ## Blood glucose
 glu.fig <- glu.change %>%
@@ -201,25 +87,23 @@ glu.fig <- glu.change %>%
   add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before = 2) %>%
   mutate(time.c = gsub("change.", "", time), 
          time.c = as.numeric(time.c)) %>%
-  #mutate(time = factor(time, levels = c("change.45", "change.90", "change.120", "change.135", "change.150", "change.270"))) %>%
-  #mutate(time = as.numeric(time)) %>%
   ggplot(aes(time.c, emmean, group = supplement, fill = supplement)) +
-  annotate("text", x = c(120, 135, 150), y = c(2.5, 2.1, 2.1), label = "*") +
+  annotate("text", x = c(120, 135, 150), y = c(2.4, 2, 2.04), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
-  #scale_x_discrete(labels=c("change.45" = "45", "change.90" = "90",
-  #                         "change.120" = "120", "change.135" = "135", 
-  #                        "change.150" = "150", "change.270" = "270")) +
-  labs(x = "", y = "Plasma glucose levels \n(mmol/L change)\n", fill = "") +
-  theme_classic() +
-  # theme(plot.background = element_rect(fill = "gray80")) +
+  labs(x = "", y = "Plasma glucose levels \n(mmol/L change)\n", fill = "Supplement") +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 135, 150, 270),
                      expand = expansion(0), labels = c("0" = "-120", "45" = "-90", "90" = "-30", "120" = "0", "135" = "15",
                                                        "150" = "30", "270" = "120")) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  plot_theme
 
 ## Humac pre->post 5 sessions
 
@@ -234,14 +118,16 @@ isom.mfig <- lemm.isom %>%
                 position = pos,
                 width = 0.2) +
   geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 3) +
+  geom_point(shape = 21, position = pos, size = 2) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
                             "change.4" = "Post")) +
   labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme_classic() +
-  theme(axis.text.x = element_text(size=8))
-  #theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
-   #     axis.ticks.x = element_blank())
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  plot_theme
 
 # Isokinetic 60 d/s
 
@@ -255,14 +141,17 @@ mfig.60 <- lemm.60 %>%
                 position = pos,
                 width = 0.2) +
   geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 3) +
+  geom_point(shape = 21, position = pos, size = 2) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
                             "change.4" = "Post")) +
   labs(x = "", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme_classic() +
-  theme(axis.text.x = element_text(size=8))
-#  theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
- #       axis.ticks.x = element_blank())
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        axis.title.x = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  plot_theme
 
 # Isokinetic 240
 
@@ -275,14 +164,16 @@ mfig.240 <- lemm.240 %>%
                 position = pos,
                 width = 0.2) +
   geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 3) +
+  geom_point(shape = 21, position = pos, size = 2) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
                             "change.4" = "Post")) +
   labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme_classic() +
-  theme(axis.text.x = element_text(size=8))
-  #theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
-   #     axis.ticks.x = element_blank())
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  plot_theme
 
 ## Humac pre->post 6th session
 
@@ -297,12 +188,16 @@ isom.acfig <- lemm.isomac %>%
                 position = pos,
                 width = 0.2) +
   geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 3) +
+  geom_point(shape = 21, position = pos, size = 2) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme_classic() +
-  theme(axis.text.x = element_text(size=8))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  plot_theme
 
 # Isokinetic 60 d/s
 
@@ -315,12 +210,17 @@ acfig.60 <- lemm.60ac %>%
                 position = pos,
                 width = 0.2) +
   geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 3) +
+  geom_point(shape = 21, position = pos, size = 2) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "Time", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme_classic() +
-  theme(axis.text.x = element_text(size=8))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        axis.title.x = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  plot_theme
 
 # Isokinetic 240
 
@@ -333,55 +233,170 @@ acfig.240 <- lemm.240ac %>%
                 position = pos,
                 width = 0.2) +
   geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 3) +
+  geom_point(shape = 21, position = pos, size = 2) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme_classic() +
   scale_fill_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
-  theme(axis.text.x = element_text(size=8))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+        axis.title.y = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        axis.text.y = element_text(size = 6)) +
+  plot_theme
+
+## Study design
+
+biopsy_glyph <- "\U2193"
+blood_glyph <-  "\U2020"
+strength_glyph <- "\U2021"
+
+line_size <- 0.2
+htextsize <- 2.5
+textsize <- 2
+
+d.fig <- d.dat %>%
+  ggplot(aes(time, tp)) +
+  
+  
+  scale_y_continuous(limits = c(0,7), breaks = c(1, 2, 3, 4, 5, 6, 7), expand = c(0,0)) +
+  
+  scale_x_continuous(limits = c(-3,21), breaks = seq(1:20), expand = c(0,0),
+                     labels = c("1" = "-7", "2" = "-6", "3" = "-5", "4" = "-4",
+                                "5" = "-3", "6" = "-2", "7" = "-1", "8" = "1",
+                                "9" = "2", "10" = "3", "11" = "4", "12" = "5", "13" = "6",
+                                "14" = "7", "15" = "8", "16" = "9", "17" = "10",
+                                "18" = "11", "19" = "12", "20" = "13")) +
+  
+  # Time periods (familiarisation/internvetion)
+  annotate("rect", xmin = -3, xmax = 21, ymin = 0, ymax = 5.9, alpha = 2, color = "lightblue", fill = "lightblue") +
+  annotate("text", x = 2, y = 5.6, label = "Familiarization (7 days)", size = htextsize) +
+  annotate("text", x = 11, y = 5.6, label = "Unilateral RT + Dietary intervention (12 days)", size = htextsize) +
+  
+  ## Signs
+  # Biopsy
+  annotate("text", x = -1.7, y = 4.5, label = "Muscle biopsies", vjust = 0, size = textsize) +
+  annotate("text", x = -0.4, y = 4.45, label = rep(biopsy_glyph, 1), vjust = 0, size = textsize) +
+  annotate("text", x = c(8, 18), y = rep(3.6),
+           label = rep(biopsy_glyph, 2), color = "red", vjust = 0, size = textsize) +
+  annotate("text", x = c(9, 19), y = rep(1.6),
+           label = rep(biopsy_glyph, 2), color = "blue", vjust = 0, size = textsize) +
+  
+  # Strength
+  annotate("text", x = -2, y = 4, label = "Strength test", vjust = 0, size = textsize) +
+  annotate("text", x = -0.8, y = 4, label = rep(strength_glyph, 1), vjust = 0, size = textsize) +
+  annotate("text", x = c(1, 3, 7), y = rep(2.5),
+           label = rep(strength_glyph, 3), vjust = 0, size = textsize) +
+  annotate("text", x = c(11, 15, 18, 18.2, 18.5, 19), y = rep(4),
+           label = rep(strength_glyph, 6), color = "red", vjust = 0, size = textsize) +
+  annotate("text", x = c(12, 16, 19, 19.2, 19.5, 20), y = rep(1.2),
+           label = rep(strength_glyph, 6), color = "blue", vjust = 0, size = textsize) +
+  
+  
+  # Blood
+  annotate("text", x = -2.5, y = 3.5, label = "Blood", vjust = 0, size = textsize) +
+  annotate("text", x = -1.75, y = 3.5, label = rep(blood_glyph, 1), vjust = 0, size = textsize) +
+  annotate("text", x = 8, y = rep(2.5),
+           label = rep(blood_glyph, 3), vjust = 0, size = textsize) +
+  annotate("text", x = 18.2, y = rep(3.6),
+           label = rep(blood_glyph, 1), color = "red", vjust = 0, size = textsize) +
+  annotate("text", x = 19.2, y = rep(1.6),
+           label = rep(blood_glyph, 1), color = "blue", vjust = 0, size = textsize) +
+  
+  ## Randomization
+  
+  # Inclusion
+  annotate(geom = "label", x = -1, y = 2.5, label = c("Inclusion (n=16)"), fill = "lightblue", size = textsize) +
+  
+  # Randomization
+  annotate(geom = "label", x = 5, y = 2.5, label = c("Randomization"), fill = "lightblue", size = textsize) +
+  
+  # Pointers
+  annotate("segment", x = 6.3, xend = 7.3, y = 2.5, yend = 4.3, size = line_size) +
+  annotate("segment", x = 6.3, xend = 8.3, y = 2.5, yend = 0.7, size = line_size) +
+  
+  ## Randomized unilateral RT
+  # Glucose
+  # Day 1
+  annotate(geom = "text", x = 8.2, y = 4.5, label = c("Leg 1 RT +\nGLU (n=8)\n"), color = "red", angle = 0, size = textsize) +
+  # Day 3
+  annotate(geom = "text", x = 10, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  # Day 5
+  annotate(geom = "text", x = 12, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  # Day 7
+  annotate(geom = "text", x = 14, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  # Day 9
+  annotate(geom = "text", x = 16, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  # Day 11
+  annotate(geom = "text", x = 18, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  
+  # Placebo
+  # Day 2
+  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "blue", angle = 0, size = textsize) +
+  # Day 4
+  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  # Day 6
+  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  # Day 8
+  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  # Day 10
+  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  # Day 12
+  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "blue", angle = 0, size = textsize) +
+  
+  theme_classic() +
+  
+  # Experimenting with elementalist for rounded corners
+  
+  labs(x = "Days", y = "") +
+  theme(axis.line.y = element_blank(),
+        axis.title.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 8),
+        axis.text.x = element_text(size = 6),
+        plot.background = element_rect_round(color = "black",
+                                             size = 0.25,
+                                             radius = unit(0.25, "cm"),
+                                             fill = "lightblue"))
 
 
 # Joined figure 1
 
-legend <- get_legend(acfig.240 + theme(legend.box.margin = margin(0, 0, 0,12)))
+plot_grid(glu.fig,
+          cpep.fig) + plot_theme
 
-
-fig0.5 <- plot_grid(cpep.fig + theme(legend.position = "none"),
-                  glu.fig + theme(legend.position = "none"),
-                  isom.mfig + theme(legend.position = "none"),
-                  isom.acfig + theme(legend.position = "none"),
-                  mfig.60 + theme(legend.position = "none"),
-                  acfig.60 + theme(legend.position = "none"),
-                  mfig.240 + theme(legend.position = "none"),
-                  acfig.240 + theme(legend.position = "none"),
-                  ncol = 2, nrow = 4,
-                  align = "vh")
-
-
-fig05 <- plot_grid(d.fig,
-                   legend,
-                   ncol = 2, nrow = 1,
-                   rel_widths = c(7,1))
-
-fig1 <- plot_grid(fig05,
-          fig0.5,
-          ncol = 1,
-          nrow = 2)
+fig1 <- plot_grid(d.fig,
+                  plot_grid(glu.fig + theme(legend.position = "none"), 
+                            cpep.fig,
+                            ncol = 2, rel_widths = c(0.9,1.25)),
+                            
+                  plot_grid(isom.mfig + theme(legend.position = "none"),
+                            
+                            mfig.60 + theme(legend.position = "none"), 
+                            mfig.240 + theme(legend.position = "none"),
+                            isom.acfig + theme(legend.position = "none"),
+                            acfig.60 + theme(legend.position = "none"), 
+                             
+                            acfig.240 + theme(legend.position = "none"), ncol = 3, nrow = 2),
+                  ncol = 1,
+                  rel_heights = c(1.5,1,2)) +
+  draw_plot_label(label = c("A)", "B)", "C)", "D)", "E)"),
+                  x = c(0.02, 0.02, 0.45, 0.02, 0.02),
+                  y = c(0.98, 0.68, 0.67, 0.47, 0.25),
+                  hjust = .5, vjust = .5, size = 8) +
+  plot_theme
 
 
 ggsave(
   file = "fig1.pdf",
-  plot = last_plot(),
+  plot = fig1,
   device = "pdf",
   path = "./figures",
-  scale = 1,
-  width = 8.9,
-  height = 22,
-  units = c("in", "cm", "mm", "px"),
-  dpi = 600,
-  limitsize = TRUE,
-  bg = NULL
+  width = 7.7*2,
+  height = 23*0.75,
+  units = "cm",
+  dpi = 600
 )
 
 
