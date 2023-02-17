@@ -14,6 +14,13 @@ ubf.rdy <- readRDS("./data/data-gen/protein/ubf.rdy.RDS")
 
 rna.rdy <- readRDS("./data/data-gen/protein/rna.rdy.RDS")
 
+# Designing the plot theme
+
+plot_theme <- theme(panel.grid.major = element_blank(),
+                    panel.grid.minor = element_blank(),
+                    panel.background = element_rect(fill = "lightblue", colour = NA),
+                    axis.line = element_line(colour = "black"))
+
 ## Joining the data frames
 joined.dat <- ubf.rdy %>%
   right_join(rna.rdy) %>%
@@ -27,21 +34,18 @@ fig4 <- joined.dat %>%
   geom_smooth(method = "lm") +
   labs(x = "Log-UBF normalised by pool", y = "Log-total RNA per mg muscle tissue", 
        fill = "Supplement") +
-  scale_color_discrete(name = "Supplement", labels = c("Glucose", "Placebo")) +
-  theme_classic()
+  scale_color_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
+  plot_theme
   
 ggsave(
   file = "fig4.pdf",
-  plot = last_plot(),
+  plot = fig4,
   device = "pdf",
   path = "./figures",
-  scale = 1,
-  width = 6,
-  height = 12,
-  units = c("in", "cm", "mm", "px"),
-  dpi = 600,
-  limitsize = TRUE,
-  bg = NULL
+  width = 7.7*2,
+  height = 23*0.75,
+  units = "cm",
+  dpi = 600
 )
 
 

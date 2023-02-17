@@ -204,6 +204,7 @@ isom.acfig <- lemm.isomac %>%
         axis.text.y = element_text(size = 6)) +
   plot_theme
 
+
 # Isokinetic 60 d/s
 
 acfig.60 <- lemm.60ac %>%
@@ -386,7 +387,25 @@ fig1 <- plot_grid(d.fig,
                   y = c(0.98, 0.66, 0.66, 0.45, 0.45, 0.45, 0.23, 0.23, 0.23),
                   hjust = .5, vjust = .5, size = 7) 
 
+#b.fig <- plot_grid(glu.fig + theme(legend.position = "none"),
+ #                  cpep.fig,
+  #                 ncol = 2, rel_widths = c(1,1.25))
 
+#hum.mfig <- plot_grid(isom.mfig + theme(legend.position = "none"),
+ #                     mfig.60 + theme(legend.position = "none"),
+  #                    mfig.240 + theme(legend.position = "none"),
+   #                   ncol = 3)
+
+#hum.acfig <- plot_grid(isom.acfig + theme(legend.position = "none"),
+ #         acfig.60 + theme(legend.position = "none"),
+  #        acfig.240 + theme(legend.position = "none"),
+   #       ncol = 3)
+
+#plot_grid(d.fig,
+ #                    b.fig,
+  #                   hum.mfig,
+   #                  hum.acfig,
+    #                 ncol = 1)
 
 ggsave(
   file = "fig1.pdf",
