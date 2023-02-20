@@ -23,6 +23,12 @@ plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.background = element_rect(fill = "lightblue", colour = NA),
                     axis.line = element_line(colour = "black"))
 
+labsize <- 8
+textsize <- 6
+htextsize <- 7
+atext <- 2
+keysize <- 2
+
 
 ## cmyc fig
 
@@ -31,16 +37,19 @@ cmyc.plot <- cmyc %>%
   add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  #annotate("text", x = "Post", y = 2.1, label = "p = 0.585", size = 3) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "c-Myc signal \n(fold change)\n", fill = "") + plot_theme
-  #theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
-   #     axis.ticks.x = element_blank()) + plot_theme
+  labs(x = "Time", y = "c-Myc signal \n(fold change)\n", fill = "Supplement") + plot_theme +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(size = htextsize),
+        axis.text = element_text(size = textsize))
+        
+
+# UBF plot
 
 
 ubf.plot <- ubf %>%
@@ -55,9 +64,13 @@ ubf.plot <- ubf %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "UBF signal \n(fold change)\n", fill = "") + plot_theme 
- # theme(axis.title.x = element_blank(), axis.text.x = element_blank(), axis.line.x = element_blank(),
-  #      axis.ticks.x = element_blank()) 
+  labs(x = "Time", y = "UBF signal \n(fold change)\n", fill = "") + plot_theme +
+  theme(axis.title = element_text(size = htextsize),
+      axis.text = element_text(size = textsize))
+
+
+# rpS6 plot
+
 
 rps6.plot <- rps6 %>%
   mutate(time = "post") %>%
@@ -71,24 +84,25 @@ rps6.plot <- rps6 %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "", y = "rps6 signal \n(fold change)\n", fill = "") + plot_theme
+  labs(x = "Time", y = "rps6 signal \n(fold change)\n", fill = "Supplement") + plot_theme +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(size = htextsize),
+        axis.text = element_text(size = textsize),
+        legend.title = element_text(size = htextsize),
+        legend.text = element_text(size = 5),
+        legend.key = element_rect(fill = "white"))
 
 
 # Cowplot for gathering figures
 
-legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
 
-rps6.fig <- plot_grid(rps6.plot + theme(legend.position = "none"),
-          legend,
-          ncol = 2)
-
-fig3 <- plot_grid(rps6.fig,
-          plot_grid(cmyc.plot + theme(legend.position = "none"),
-                    ubf.plot + theme(legend.position = "none"),
-                    ncol = 2),
-                  nrow = 2,
-          align = "h")
-
+fig3 <- plot_grid(rps6.plot,
+          cmyc.plot + theme(legend.position = "none"),
+          ubf.plot + theme(legend.position = "none"),
+          ncol = 1,
+          labels = c("A)", "B)", "C)"),
+          label_size = labsize,
+          align = "v", axis = "l")
 
 ggsave(
   file = "fig3.pdf",

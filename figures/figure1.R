@@ -52,6 +52,7 @@ plot_theme <- theme(panel.grid.major = element_blank(),
                     axis.line = element_line(colour = "black"))
 
 
+
 ## C-peptide
 
 cpep.fig <- cpep.change %>%
@@ -76,11 +77,14 @@ cpep.fig <- cpep.change %>%
         axis.title.y = element_text(size = 7),
         legend.title = element_text(size = 7),
         legend.text = element_text(size = 4),
+        legend.key = element_rect(fill = "white"),
         axis.text.y = element_text(size = 6)) +
   plot_theme
   
 
+
 ## Blood glucose
+
 glu.fig <- glu.change %>%
   data.frame() %>%
   add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
@@ -106,7 +110,13 @@ glu.fig <- glu.change %>%
         axis.text.y = element_text(size = 6)) +
   plot_theme
 
+
+
+
+
 ## Humac pre->post 5 sessions
+
+
 
 # Isometric
 
@@ -130,6 +140,8 @@ isom.mfig <- lemm.isom %>%
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
+
+
 
 # Isokinetic 60 d/s
 
@@ -156,6 +168,8 @@ mfig.60 <- lemm.60 %>%
         axis.text.y = element_text(size = 6)) +
   plot_theme
 
+
+
 # Isokinetic 240
 
 mfig.240 <- lemm.240 %>%
@@ -179,7 +193,13 @@ mfig.240 <- lemm.240 %>%
         axis.text.y = element_text(size = 6)) +
   plot_theme
 
+
+
+
+
 ## Humac pre->post 6th session
+
+
 
 # Isometric
 
@@ -203,6 +223,7 @@ isom.acfig <- lemm.isomac %>%
         legend.text = element_text(size = 6),
         axis.text.y = element_text(size = 6)) +
   plot_theme
+
 
 
 # Isokinetic 60 d/s
@@ -229,6 +250,8 @@ acfig.60 <- lemm.60ac %>%
         axis.text.y = element_text(size = 6)) +
   plot_theme
 
+
+
 # Isokinetic 240
 
 acfig.240 <- lemm.240ac %>%
@@ -252,6 +275,10 @@ acfig.240 <- lemm.240ac %>%
         axis.text.y = element_text(size = 6)) +
   plot_theme
 
+
+
+
+
 ## Study design
 
 biopsy_glyph <- "\U2193"
@@ -264,10 +291,7 @@ textsize <- 2
 
 d.fig <- d.dat %>%
   ggplot(aes(time, tp)) +
-  
-  
   scale_y_continuous(limits = c(0,7), breaks = c(1, 2, 3, 4, 5, 6, 7), expand = c(0,0)) +
-  
   scale_x_continuous(limits = c(-3,21), breaks = seq(1:20), expand = c(0,0),
                      labels = c("1" = "-7", "2" = "-6", "3" = "-5", "4" = "-4",
                                 "5" = "-3", "6" = "-2", "7" = "-1", "8" = "1",
@@ -387,25 +411,7 @@ fig1 <- plot_grid(d.fig,
                   y = c(0.98, 0.66, 0.66, 0.45, 0.45, 0.45, 0.23, 0.23, 0.23),
                   hjust = .5, vjust = .5, size = 7) 
 
-#b.fig <- plot_grid(glu.fig + theme(legend.position = "none"),
- #                  cpep.fig,
-  #                 ncol = 2, rel_widths = c(1,1.25))
 
-#hum.mfig <- plot_grid(isom.mfig + theme(legend.position = "none"),
- #                     mfig.60 + theme(legend.position = "none"),
-  #                    mfig.240 + theme(legend.position = "none"),
-   #                   ncol = 3)
-
-#hum.acfig <- plot_grid(isom.acfig + theme(legend.position = "none"),
- #         acfig.60 + theme(legend.position = "none"),
-  #        acfig.240 + theme(legend.position = "none"),
-   #       ncol = 3)
-
-#plot_grid(d.fig,
- #                    b.fig,
-  #                   hum.mfig,
-   #                  hum.acfig,
-    #                 ncol = 1)
 
 ggsave(
   file = "fig1.pdf",

@@ -14,28 +14,33 @@ ubf.rdy <- readRDS("./data/data-gen/protein/ubf.rdy.RDS")
 
 rna.rdy <- readRDS("./data/data-gen/protein/rna.rdy.RDS")
 
-# Designing the plot theme
-
-plot_theme <- theme(panel.grid.major = element_blank(),
-                    panel.grid.minor = element_blank(),
-                    panel.background = element_rect(fill = "lightblue", colour = NA),
-                    axis.line = element_line(colour = "black"))
-
 ## Joining the data frames
 joined.dat <- ubf.rdy %>%
   right_join(rna.rdy) %>%
   #filter(supplement != "GLUCOSE") %>%
   print()
 
+
 # Correlation plot
+
+textsize <- 8
+htextsize <- 9
+
 fig4 <- joined.dat %>%
   ggplot(aes(log(mean.sign), log(mean.rna), color = supplement)) + 
   geom_point() +
   geom_smooth(method = "lm") +
   labs(x = "Log-UBF normalised by pool", y = "Log-total RNA per mg muscle tissue", 
-       fill = "Supplement") +
+       color = "Supplement") +
   scale_color_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  plot_theme
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "lightblue", colour = NA),
+        axis.line = element_line(colour = "black"),
+        axis.title = element_text(size = htextsize),
+        axis.text = element_text(size = textsize),
+        legend.title = element_text(size = htextsize),
+        legend.text = element_text(size = 6))
   
 ggsave(
   file = "fig4.pdf",
