@@ -17,10 +17,12 @@ rna.dat <- readRDS("./data/data-gen/rna/rna.dat.RDS") # Quantified and cleaned (
 ## Prepare data frames for joining
 
 ubf.rdy <- west.dat %>%  # One data frame without outliers
-  select(subject, time, outlier, supplement, target, norm.sign) %>%
+  select(subject, time, outlier, supplement, target, norm.sign, tpl) %>%
   filter(target == "ubf",
          outlier == "in") %>%
   select(-target) %>%
+  mutate(norm.sign = norm.sign / tpl) %>%
+  #print()
   group_by(subject, time, supplement) %>%
   summarise(mean.sign = mean(norm.sign, na.rm = TRUE)) %>%
   print()

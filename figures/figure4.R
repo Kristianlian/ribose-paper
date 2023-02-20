@@ -30,7 +30,7 @@ fig4 <- joined.dat %>%
   ggplot(aes(log(mean.sign), log(mean.rna), color = supplement)) + 
   geom_point() +
   geom_smooth(method = "lm") +
-  labs(x = "Log-UBF normalised by pool", y = "Log-total RNA per mg muscle tissue", 
+  labs(x = "Mean log-UBF \nper normalization factor\n", y = "Mean log-total RNA \nper mg muscle tissue\n", 
        color = "Supplement") +
   scale_color_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   theme(panel.grid.major = element_blank(),

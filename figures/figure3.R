@@ -57,7 +57,7 @@ ubf.plot <- ubf %>%
   add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  #annotate("text", x = "Post", y = 2.1, label = "p = 0.585", size = 3) +
+  annotate("text", x = "Post", y = 3, label = "*", size = 3) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
@@ -77,7 +77,7 @@ rps6.plot <- rps6 %>%
   add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  #annotate("text", x = "Post", y = 2.1, label = "p = 0.585", size = 3) +
+  annotate("text", x = "Post", y = 1.87, label = "*", size = 3) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +

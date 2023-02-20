@@ -93,6 +93,7 @@ glu.fig <- glu.change %>%
          time.c = as.numeric(time.c)) %>%
   ggplot(aes(time.c, emmean, group = supplement, fill = supplement)) +
   annotate("text", x = c(120, 135, 150), y = c(2.4, 2, 2.04), label = "*") +
+  annotate("text", x = c(270), y = c(0.23), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
@@ -115,8 +116,6 @@ glu.fig <- glu.change %>%
 
 
 ## Humac pre->post 5 sessions
-
-
 
 # Isometric
 
@@ -214,7 +213,7 @@ isom.acfig <- lemm.isomac %>%
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
   scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
+  scale_x_discrete(labels=c("change.1" = "Post session 5", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
@@ -239,7 +238,7 @@ acfig.60 <- lemm.60ac %>%
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
   scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
+  scale_x_discrete(labels=c("change.1" = "Post session 5", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "Time", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
@@ -265,7 +264,7 @@ acfig.240 <- lemm.240ac %>%
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
   scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "30min", "change.3" = "2hrs",
+  scale_x_discrete(labels=c("change.1" = "Post session 5", "change.2" = "30min", "change.3" = "2hrs",
                             "change.4" = "23hrs")) +
   labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),

@@ -1,0 +1,402 @@
+---
+title: "results"
+output: word_document
+date: "2023-02-20"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r packages}
+library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr);library(nlme); library(pbkrtest);library(ggpubr)
+```
+
+
+## Results
+
+```{r glucose data + model}
+## Scripts:
+# - gluc.responsechange.R
+
+
+# Data
+glu.change <- readRDS("./data/data-gen/glucose/glu.change.RDS") # Untransformed data, used in figures
+glu.logchange <- readRDS("./data/data-gen/glucose/glu.logchange.RDS") # Log-transformed data, used in the analysis
+
+## Model
+# Untransformed
+glu.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = glu.change)
+glu.res <- plot(glu.mod)
+glu.sum <- summary(glu.mod)
+
+# Log-transformed
+glu.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = glu.logchange)
+glu.lres <- plot(glu.lmod)
+glu.lsum <- summary(glu.lmod)
+
+## Emmeans
+# Untransformed
+glu.emm <- confint(emmeans(glu.mod, specs = ~"supplement|time")) %>%
+        data.frame()
+
+# Log-transformed
+glu.lemm <- confint(emmeans(glu.lmod, specs = ~"supplement|time")) %>%
+        data.frame()
+
+# For inline plotting
+bcoef <- coef(summary(glu.lmod))
+pscient.120 <- round(bcoef[8,5], 30)
+p.120 <- sprintf("%.5f", 1.700971e-16)
+pscient.135 <- round(bcoef[9,5], 30)
+p.135 <- sprintf("%.5f", 4.299568e-11)
+pscient.150 <- round(bcoef[10,5], 30)
+p.150 <- sprintf("%.5f", 1.445712e-11)
+p.270 <- round(bcoef[11,5], 2)
+```
+
+```{r c-peptide data + model}
+## Scripts
+# - insulin.change.R
+
+## Data
+cpep.change <- readRDS("./data/data-gen/glucose/cpep.change.RDS") # Untransformed data, for figures
+cpep.lchange <- readRDS("./data/data-gen/glucose/cpep.logchange.RDS") # Log-transformed data, for analysis
+
+
+## Linear mixed effects model
+# Untransformed
+cpep.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = cpep.change) 
+cpep.res <- plot(cpep.mod)
+cpep.sum <- summary(cpep.mod)
+
+# Log-transformed
+cpep.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = cpep.lchange) 
+cpep.lres <- plot(cpep.lmod)
+cpep.lsum <- summary(cpep.lmod)
+
+## Emmeans
+# Untransformed
+cpep.emm <- confint(emmeans(cpep.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# Log-transformed
+cpep.lemm <- confint(emmeans(cpep.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# For inline plotting
+cpcoef <- coef(summary(cpep.lmod))
+pscient.120 <- round(cpcoef[6,5], 30)
+cpp.120 <- sprintf("%.5f", 3.229267e-15)
+cpscient.150 <- round(cpcoef[7,5], 30)
+cpp.150 <- sprintf("%.5f", 1.414491e-15)
+cpp.270 <- round(cpcoef[8,5], 2)
+
+```
+
+At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in mean macro nutrient (calories, carbohydrate, fat or protein) ingestion (Tab 4), or mean change in macro nutrient ingestion (Fig 3). Resistance training with glucose led to significant increases in blood levels glucose and c-peptide compared to RT with placebo, before, during and after the session (Fig 1B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`], Fig 1C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]), measured during the final RT session. At 2hrs post-exercise, RT with glucose led to significantly lower blood glucose levels compared to RT with placebo (1B, 270min: -8 ± 4% [*p* = `r p.270`].
+
+FIG1 HERE
+
+**Figure 1:** A) Overview of the experimental design with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days of testing. Familiarization = days -7 to -1 included familiarization to RT exercises (via 1RM leg press and knee extension tests) and strength tests (Humac dynamometer) at days -7 and -5. Baseline strength tests were conducted at day -1. Biopsies were taken from vastus lateralis at baseline (Day 1 leg 1, Day 2 leg 2) and after five RT sessions (Day 11 leg 1, Day 12 leg 2). The order in which participants performed the two intervention blocks was determined in a planned randomized fashion, where one leg was randomized to RT with GLU (glucose) and the other to RT with PLA (placebo). The randomization also entailed half starting with GLU (n = 8) and the other half with PLA (n = 8), in addition they where further randomized to start either with their dominant or non-dominant leg. Thus, 4 participants were randomized to start RT with their dominant leg and GLU supplement, and 4 with their non-dominant leg and GLU - the same was true for participtants commencing the intervention with PLA. From intervention start (Day 1 leg 1, Day 2 leg 2), the participants exercised in a unilateral, alternating fashion until post intervention testing (Day 11/12 leg 1, Day 12/13 leg 2). Three participants dropped out of the intervention, either due to reported muscular discomforts to heavy strength training or sickness in the family. B and C) Changes in Plasma glucose (mmol/L) and -c-peptide levels (pmol/L) during RT session six (Day 11 leg 1, Day 12 leg 2). Finger draws and venous blood were sampled at baseline (Day -1), as well as before, during and after session six. Plasma glucose was measured via finger draws, 120 (-120), 90 (-90) and 30 (-30) minutes and immediately before RT (0), during RT (15), immediately after (30) and 2hrs after RT (120). Levels of c-peptide were measured via venous blood samples collected at the same time points as finger draws, except for 90min before RT and during RT. D, E, F) Changes in muscular performance (D: nm fold change in isometric peak torque, E/F: nm fold change in isokinetic peak torque at 60/240 d/s.). Muscular performance was measured via a Humac Norm Dynamometer at baseline (Day -1), during (Day 4 and 8 leg 1, Day 5 and 9 leg 2), and after five RT sessions (Day 11 leg 1, Day 12 leg 2). G, H, I) Changes in muscular recovery (G: nm fold change in isometric peak torque, H/I: nm fold change in isokinetic peak torque at 60/240 d/s). Muscular recovery was measured via Humac Norm Dynamometer with baseline being post fifth RT session test, and then 30min, 2hrs and 23hrs following the sixth and final RT session. Values are presented as estimated marginal means ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
+
+### Markers of ribosome biogenesis
+
+```{r total RNA model}
+## Scripts
+# - totrna.cleanup.R
+# - totrna.analysis.R
+
+
+# Data
+trna.lchange <- readRDS("./data/data-gen/rna/totrna.change.RDS")
+
+# Create model: 
+trna.lmod <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+           data = trna.lchange)
+    
+trna.lres <- plot(trna.lmod)
+trna.lsum <- summary(trna.lmod)
+
+### Get estimated means from the model
+trna.emm <- confint(emmeans(trna.lmod, specs = ~"supplement")) %>%
+    data.frame()
+
+# For inline reporting
+trcoef <- coef(summary(trna.lmod))
+trdiff <- round(trcoef[3,1], 2)
+trdiffp <- round(trcoef[3,5], 2)
+trdiffse <- round(trcoef[3,2], 2)
+
+```
+
+```{r rRNA data model}
+## Scripts
+# - qpcr-import
+# - qpcr-analysis
+# - rrna.change
+# - rrnachange.figs
+
+# Log-transformed data
+lchange.18 <- readRDS("./data/data-gen/rna/lchange.18.RDS")
+lchange.28 <- readRDS("./data/data-gen/rna/lchange.28.RDS")
+lchange.58 <- readRDS("./data/data-gen/rna/lchange.58.RDS")
+lchange.5 <- readRDS("./data/data-gen/rna/lchange.5.RDS")
+lchange.47 <- readRDS("./data/data-gen/rna/lchange.47.RDS")
+
+# Create model: 
+# Needs to have an intercept per participant (mixed model)
+# Control for pre values.
+
+# 18S
+lmod.18 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.18)
+lres.18 <- plot(lmod.18)
+lsum.18 <- summary(lmod.18)
+
+# 28S
+lmod.28 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.28)
+lres.28 <- plot(lmod.28)
+lsum.28 <- summary(lmod.28)
+
+# 5.8S
+lmod.58 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.58)
+lres.58 <- plot(lmod.58)
+lsum.58 <- summary(lmod.58)
+
+# 5S
+lmod.5 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.5)
+lres.5 <- plot(lmod.5)
+lsum.5 <- summary(lmod.5)
+
+# 47S
+lmod.47 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                     data = lchange.47)
+lres.47 <- plot(lmod.47)
+lsum.47 <- summary(lmod.47)
+
+### Get estimated means from the model, these are average increase at 
+# pre = 0 (the average pre value)
+# remember that these are originally log-fold change values, transformed back using exp(emmean) etc
+
+# 18S
+lemm.18 <- confint(emmeans(lmod.18, specs = ~"supplement")) %>%
+        data.frame()
+
+# 28S
+lemm.28 <- confint(emmeans(lmod.28, specs = ~"supplement")) %>%
+        data.frame()
+
+# 5.8S
+lemm.58 <- confint(emmeans(lmod.58, specs = ~"supplement")) %>%
+        data.frame()
+
+# 5S
+lemm.5 <- confint(emmeans(lmod.5, specs = ~"supplement")) %>%
+        data.frame()
+
+# 47S
+lemm.47 <- confint(emmeans(lmod.47, specs = ~"supplement")) %>%
+        data.frame()
+
+## For inline reporting
+
+# 18S
+rr18coef <- coef(summary(lmod.18))
+rr18diffp <- round(rr18coef[3,5], 3)
+rr18diffse <- round(rr18coef[3,2], 3)
+
+# 28S
+rr28coef <- coef(summary(lmod.28))
+rr28diffp <- round(rr28coef[3,5], 3)
+rr28diffse <- round(rr28coef[3,2], 3)
+
+# 5.8S
+rr58coef <- coef(summary(lmod.58))
+rr58diffp <- round(rr58coef[3,5], 3)
+rr58diffse <- round(rr58coef[3,2], 3)
+
+# 5S
+rr5coef <- coef(summary(lmod.5))
+rr5diffp <- round(rr5coef[3,5], 3)
+rr5diffse <- round(rr5coef[3,2], 3)
+
+# 47S
+rr47coef <- coef(summary(lmod.47))
+rr47diffp <- round(rr47coef[3,5], 3)
+rr47tdiffp <- round(rr47coef[1,5], 3)
+rr47diffse <- round(rr47coef[3,2], 3)
+
+```
+
+Resistance training with glucose did not induce a higher accumulation of total RNA (fig 2A, *p* = `r trdiffp`), or rRNA  (fig 2B-2F *p* > 0.05), compared to RT with placebo, measured as mean change from baseline to post. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, where only RT with placebo increased significantly from baseline to post (fig 45, *p* = `r rr47tdiffp`).
+
+FIG2 HERE
+
+###### **Figure 2:** Changes in total RNA and ribosomal RNA. A) Total RNA, B) 47S pre-rRNA, C) 18S rRNA, D) 28S rRNA, E) 5.8S rRNA, F) 5S rRNA. Baseline = Training day 1/2, Post = Training day 11/12. Total RNA and rRNA were analyzed in duplicates, with two duplicates per biopsy (two biopsies per time point). Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg per supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
+
+```{r western modelling}
+## Script: 
+# - western.import.R
+# - western.change.R
+
+# Data
+
+prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS") # cleaned up and quantified western data
+prot.out <- readRDS("./data/data-gen/protein/protein_complete.RDS") # Cleaned up and quantified western data, checked for outliers
+prot.change <- readRDS("./data/data-gen/protein/prot.change.RDS") # change-score data
+
+
+# By target
+
+cmyc <- prot.change %>%
+  filter(target == "cmyc") 
+
+ubf <- prot.change %>%
+  filter(target == "ubf",
+         subject != "103") # Subject 103 has missing values
+  
+
+rps6 <- prot.change %>%
+  filter(target == "rps6") 
+
+# c-Myc change
+
+m1 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = cmyc) # same model as in "western import", but with change scores of norm.sign
+
+#plot(m1)
+
+sum.m1 <- summary(m1)
+
+cmyc.emm <- emmeans(m1, specs = ~"supplement") %>%
+  data.frame
+
+
+# UBF change
+
+m2 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = ubf) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
+
+#plot(m2)
+
+sum.m2 <- summary(m2)
+
+ubf.emm <- emmeans(m2, specs = ~"supplement") %>%
+  data.frame()
+
+# rps6 change
+
+m3 <- lme(change ~ pre + supplement,
+            random = list(subject = ~ 1),
+            data = rps6) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
+
+#plot(m3)
+
+sum.m3 <- summary(m3)
+
+rps6.emm <- emmeans(m3, specs = ~"supplement") %>%
+  data.frame()
+
+### For inline reporting
+## Diff cmyc
+ccoef <- coef(summary(m1))
+cdiff <- round(ccoef[3,5], 3)
+cdiffse <- round(ccoef[3,2], 3)
+
+## Diff UBF
+ucoef <- coef(summary(m2))
+udiff <- round(ucoef[3,5], 3)
+udiffse <- round(ucoef[3,2], 3)
+
+## Diff rps6
+rpcoef <- coef(summary(m3))
+rpdiff <- round(rpcoef[3,5], 3)
+rpdiffse <- round(rpcoef[3,2], 3)
+
+```
+
+```{r correlation model}
+# Data 
+west.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") # Quantified and cleaned western data,
+                                                               # (outliers marked) normalised by pool
+
+rna.dat <- readRDS("./data/data-gen/rna/rna.dat.RDS") # Quantified and cleaned (outliers marked), 
+                                                      # total RNA data, normalised by wet muscle weight
+
+
+## Prepare data frames for joining
+
+ubf.rdy <- west.dat %>%  # One data frame without outliers
+  select(subject, time, outlier, supplement, target, norm.sign) %>%
+  filter(target == "ubf",
+         outlier == "in") %>%
+  select(-target) %>%
+  group_by(subject, time, supplement) %>%
+  summarise(mean.sign = mean(norm.sign, na.rm = TRUE)) %>%
+  print()
+
+
+rna.rdy <- rna.dat %>%
+  select(subject, time, outlier, supplement, RNA.weight) %>%
+  filter(outlier == "in") %>%
+  mutate(subject = as.character(subject)) %>%
+  group_by(subject, time, supplement) %>%
+  summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) %>%
+  print()
+
+
+## Correlation analysis
+
+joined.dat <- ubf.rdy %>%
+  right_join(rna.rdy) %>%
+  #filter(supplement != "GLUCOSE") %>%
+  
+  mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE )/sd(mean.sign, na.rm = TRUE))) %>%
+  print()
+
+
+m <- lme(log(mean.rna) ~ mean.sign + time , 
+         random = list(subject = ~ 1), 
+          data = joined.dat, 
+         na.action = na.omit)
+
+summary(m)
+plot(m)
+```
+
+
+Interestingly, RT with placebo led to significantly higher change in levels of rpS6 and UBF protein compared to RT with glucose, with no difference in levels of c-Myc (Fig 3A rpS6: *p* = `r rpdiff`, 3C UBF: *p* = `r udiff`, 3B c-Myc: *p* = `r cdiff`). Levels of rpS6 change by 40% in placebo and 7% in glucose (Fig 3A), UBF levels changed by 68% in placebo and 26% in glucose (Fig 3C), and c-Myc levels changed by 110% in placebo and 59% in glucose (Fig 3B). 
+
+FIG3 HERE
+
+###### **Figure 3:** Changes in levels of protein. A) rPS6, B) c-Myc, C) UBF. Baseline = Training day 1/2, Post = Training day 11/12. Protein samples were analyzed in duplicates, with two duplicates per biopsy (two biopsies per time point). The duplicates were loaded on different gels, in an inverted order. Change in protein levels were calculated as log-fold change score normalised by pools (pools of all protein samples). Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg per supplement ± 95% CI. * = significant between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
+
+Further, we observed a linear relationship between levels of UBF and accumulation of total RNA, where ...
+
+FIG4 HERE
+
+######**Figure 4:** Relationship between levels of total RNA and UBF. Total RNA was normalized by wet muscle weight, and UBF levels were normalized by pools and total protein per lane. Values are presented as log-transformed means.
+
+
+
+
+
+
+
+
+
+
+
+
