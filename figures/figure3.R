@@ -110,7 +110,7 @@ ggsave(
   device = "pdf",
   path = "./figures",
   width = 7.7*2,
-  height = 23*0.75,
+  height = 23*0.5,
   units = "cm",
   dpi = 600
 )
