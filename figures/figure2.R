@@ -12,10 +12,14 @@ emm.tot <- readRDS("./data/data-gen/rna/emm.tot.RDS")
 
 ## rRNA
 # 18S
-emm.18 <- readRDS("./data/data-gen/rna/emm.18.RDS")
+emm.18 <- readRDS("./data/data-gen/rna/emm.18.RDS") %>%
+  mutate(target = "18S rRNA") %>%
+  print()
 
 # 28S
-emm.28 <- readRDS("./data/data-gen/rna/emm.28.RDS")
+emm.28 <- readRDS("./data/data-gen/rna/emm.28.RDS") %>%
+  mutate(target = "28S rRNA") %>%
+  print()
 
 # 5.8S
 emm.5.8 <- readRDS("./data/data-gen/rna/emm.5.8.RDS")
@@ -167,7 +171,11 @@ plot.5 <- emm.5 %>%
         legend.title = element_text(size = htextsize),
         legend.text = element_text(size = 5)) + plot_theme
 
-
+bind_rows(emm.18, emm.28) %>%
+  ggplot(aes(supplement, emmean)) +
+  geom_point() +
+  facet_wrap(~target, nrow = 1) +
+  theme(strip.text = element_text(hjust = 0))
 
 
 # Cowplot for gathering figures

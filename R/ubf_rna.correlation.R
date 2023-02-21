@@ -51,12 +51,15 @@ joined.dat <- ubf.rdy %>%
 
 library(nlme)
 
-m <- lme(log(mean.rna) ~ mean.sign + time , 
+m <- lme(mean.rna ~ mean.sign + time , 
          random = list(subject = ~ 1), 
           data = joined.dat, 
          na.action = na.omit)
 
 summary(m)
+
+coef(summary(m))
+
 plot(m)
 
 
