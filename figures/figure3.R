@@ -16,6 +16,20 @@ ubf <- readRDS("./data/data-gen/protein/ubf.change.RDS")
 
 rps6 <- readRDS("./data/data-gen/protein/rps6.change.RDS")
 
+# Images
+
+tot.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/tot_gel2_annotated.png", scale = 0.9)
+
+rps6.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_3_115_annotated.png", scale = 0.9)
+rps6.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_6_115_annotated.png", scale = 0.9)
+
+cmyc.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_3_115_annotated.png", scale = 0.9)
+cmyc.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_6_115_annotated.png", scale = 0.9)
+
+ubf.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_3_115_annotated.png", scale = 0.9)
+ubf.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_6_115_annotated.png", scale = 0.9)
+
+
 # Designing the plot theme
 
 plot_theme <- theme(panel.grid.major = element_blank(),
@@ -95,14 +109,69 @@ rps6.plot <- rps6 %>%
 
 # Cowplot for gathering figures
 
+legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
 
-fig3 <- plot_grid(rps6.plot,
-          cmyc.plot + theme(legend.position = "none"),
-          ubf.plot + theme(legend.position = "none"),
-          ncol = 1,
-          labels = c("A)", "B)", "C)"),
-          label_size = labsize,
-          align = "v", axis = "l")
+#fig3 <- plot_grid(rps6.plot,
+#          cmyc.plot + theme(legend.position = "none"),
+#          ubf.plot + theme(legend.position = "none"),
+#          ncol = 1,
+#          labels = c("A)", "B)", "C)"),
+#          label_size = labsize,
+#          align = "v", axis = "l")
+
+rps6.fig <- plot_grid(rps6.plot + theme(legend.position = "none"),
+          plot_grid(rps6.img1,
+                    NULL,
+                    rps6.img2,
+                    NULL,
+                    nrow = 2,
+                    ncol = 2,
+                    rel_widths = c(2, 1)),
+          ncol = 2)
+
+cmyc.fig <- plot_grid(cmyc.plot + theme(legend.position = "none"),
+                      plot_grid(cmyc.img1,
+                                NULL,
+                                cmyc.img2,
+                                NULL,
+                                nrow = 2,
+                                ncol = 2,
+                                rel_widths = c(2,1)),
+                      ncol = 2)
+
+ubf.fig <- plot_grid(ubf.plot + theme(legend.position = "none"),
+                      plot_grid(ubf.img1,
+                                NULL,
+                                ubf.img2,
+                                NULL,
+                                nrow = 2,
+                                ncol = 2,
+                                rel_widths = c(2, 1)),
+                      ncol = 2)
+
+prot.fig <- plot_grid(ubf.fig,
+          cmyc.fig,
+          rps6.fig,
+          nrow = 3)
+
+tot.fig <- plot_grid(tot.img,
+          legend,
+          ncol = 2,
+          rel_widths = c(1, 1))
+
+
+
+fig3 <- plot_grid(tot.fig,
+                  NULL,
+                  prot.fig,
+                  NULL,
+                  nrow = 2,
+                  ncol = 2,
+                  rel_heights = c(1, 1.5),
+                  rel_widths = c(0.75/2,1),
+                  align = "h")
+
+
 
 ggsave(
   file = "fig3.pdf",
