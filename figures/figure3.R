@@ -32,15 +32,9 @@ ubf.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_6_115
 
 plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
-                    panel.background = element_rect(fill = "white", colour = NA),
-                    plot.background = element_rect(fill = "lightblue"),
-                    axis.line = element_line(colour = "black"))
-
-
-back_theme <- theme(panel.grid.major = element_blank(),
-                    panel.grid.minor = element_blank(),
                     panel.background = element_rect(fill = "lightblue", colour = NA),
                     axis.line = element_line(colour = "black"))
+
 
 labsize <- 8
 textsize <- 6
@@ -113,8 +107,7 @@ rps6.plot <- rps6 %>%
         axis.text = element_text(size = textsize),
         legend.title = element_text(size = legendti),
         legend.text = element_text(size = legendtex),
-        legend.key = element_rect(fill = "lightblue"),
-        legend.background = element_rect(fill = "lightblue")) +
+        legend.key = element_rect(fill = "white")) +
   plot_theme
 
 # Cowplot for gathering figures
@@ -182,7 +175,7 @@ fig3 <- plot_grid(tot.fig,
                   prot.fig,
                   nrow = 3,
                   rel_heights = c(2.5,0.1,3),
-                  rel_widths = c(0.2, 1)) + back_theme
+                  rel_widths = c(0.2, 1)) 
 
           
 
