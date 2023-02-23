@@ -27,9 +27,9 @@ tot.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/tot_gel2_L
 #ubf.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_3_115_annotated.png", scale = 0.9)
 #ubf.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_6_115_annotated.png", scale = 0.9)
 
-ubf.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_x2_115.png", scale = 0.5)
-cmyc.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_x2_115.png", scale = 0.5)
-rps6.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_x2_115.png", scale = 0.5)
+ubf.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_x2_115.png", scale = 0.8)
+cmyc.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_x2_115.png", scale = 0.8)
+rps6.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_x2_115.png", scale = 0.8)
 
 # Designing the plot theme
 
@@ -128,15 +128,53 @@ legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
 
 rps6.fig <- plot_grid(rps6.plot + theme(legend.position = "none"),
           rps6.x2.img,
-          ncol = 2) 
+          ncol = 2) +
+  draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
+                            "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
+                            "kDa 75", "50", "75", "50", "Duplicate 1", "Duplicate 2"),
+                  x = c(0.58, 0.62, 0.66, 0.70,
+                        0.81, 0.85, 0.89, 0.93, 
+                        .525, .539, .775, .775, 
+                        .64, .87),
+                  y = c(.74, .74, .74, .74,
+                        .74, .74, .74, .74, 
+                        .64, .35, .64, .35,
+                        .99, .99),
+                  hjust = .5, vjust = .5, size = 5) 
+
 
 cmyc.fig <- plot_grid(cmyc.plot + theme(legend.position = "none"),
                       cmyc.x2.img,
-                      ncol = 2)
+                      ncol = 2) +
+  draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
+                            "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
+                            "kDa 75", "50", "75", "50", "Duplicate 1", "Duplicate 2"),
+                  x = c(0.58, 0.62, 0.66, 0.70,
+                        0.81, 0.85, 0.89, 0.93, 
+                        .525, .539, .775, .775, 
+                        .64, .87),
+                  y = c(.74, .74, .74, .74,
+                        .74, .74, .74, .74, 
+                        .64, .35, .64, .35,
+                        .99, .99),
+                  hjust = .5, vjust = .5, size = 5) 
+
 
 ubf.fig <- plot_grid(ubf.plot + theme(legend.position = "none"),
                       ubf.x2.img,
-                      ncol = 2)
+                      ncol = 2) +
+  draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
+                            "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
+                            "kDa 75", "50", "75", "50", "Duplicate 1", "Duplicate 2"),
+                  x = c(0.58, 0.62, 0.66, 0.70,
+                        0.81, 0.85, 0.89, 0.93, 
+                        .525, .539, .775, .775, 
+                        .64, .87),
+                  y = c(.74, .74, .74, .74,
+                        .74, .74, .74, .74, 
+                        .64, .35, .64, .35,
+                        .99, .99),
+                  hjust = .5, vjust = .5, size = 5) 
 
 
 prot.fig <- plot_grid(ubf.fig,
@@ -151,9 +189,13 @@ tot.fig <- plot_grid(NULL,
           plot_grid(NULL,
                     tot.img,
                     ncol = 2,
-                    rel_widths = c(0.15, 1)),
+                    rel_widths = c(0.25, 1)),
           ncol = 3,
-          rel_widths = c(0.15,0.1,2)) 
+          rel_widths = c(0.4,0.1,2)) +
+  draw_plot_label(label = c("kDa 250", "150", "100", "75", "50", "37", "25", "20", "15"),
+                  x = c(.367, .38, .38, .383, .383, .383, .383, .383, .383),
+                  y = c(.93, .885, .835, .78, .658, .54, .345, .28, 0.095),
+                  hjust = .5, vjust = .5, size = 5)
 
 
 ## Gathered fig
@@ -164,7 +206,9 @@ fig3 <- plot_grid(tot.fig,
                   prot.fig,
                   nrow = 3,
                   rel_heights = c(2.5,0.1,3),
-                  rel_widths = c(0.2, 1))  + plot_theme2
+                  rel_widths = c(0.2, 1))  + 
+  plot_theme2 
+
 
           
 
