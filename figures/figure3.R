@@ -4,9 +4,7 @@
 #
 #
 # Packages
-library(emmeans)
-library(tidyverse)
-library(cowplot)
+library(emmeans); library(tidyverse); library(cowplot); library(magick)
 #
 # Data
 
@@ -34,12 +32,21 @@ ubf.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_6_115
 
 plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
+                    panel.background = element_rect(fill = "white", colour = NA),
+                    plot.background = element_rect(fill = "lightblue"),
+                    axis.line = element_line(colour = "black"))
+
+
+back_theme <- theme(panel.grid.major = element_blank(),
+                    panel.grid.minor = element_blank(),
                     panel.background = element_rect(fill = "lightblue", colour = NA),
                     axis.line = element_line(colour = "black"))
 
 labsize <- 8
 textsize <- 6
 htextsize <- 7
+legendti <- 5
+legendtex <- 4.25
 atext <- 2
 keysize <- 2
 
@@ -55,12 +62,13 @@ cmyc.plot <- cmyc %>%
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
+  geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "c-Myc signal \n(fold change)\n", fill = "Supplement") + plot_theme +
+  labs(x = "Time", y = "c-Myc signal \n(fold change)\n", fill = "Supplement") +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = htextsize),
-        axis.text = element_text(size = textsize))
+        axis.text = element_text(size = textsize)) +
+  plot_theme
         
 
 # UBF plot
@@ -76,11 +84,13 @@ ubf.plot <- ubf %>%
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
+  geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "UBF signal \n(fold change)\n", fill = "") + plot_theme +
-  theme(axis.title = element_text(size = htextsize),
-      axis.text = element_text(size = textsize))
+  labs(x = "Time", y = "UBF signal \n(fold change)\n", fill = "") + 
+  theme(axis.title.x = element_blank(),
+    axis.title = element_text(size = htextsize),
+      axis.text = element_text(size = textsize)) +
+  plot_theme
 
 
 # rpS6 plot
@@ -96,16 +106,16 @@ rps6.plot <- rps6 %>%
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
+  geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "rps6 signal \n(fold change)\n", fill = "Supplement") + plot_theme +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_text(size = htextsize),
+  labs(x = "Time", y = "rps6 signal \n(fold change)\n", fill = "Supplement") +
+  theme(axis.title = element_text(size = htextsize),
         axis.text = element_text(size = textsize),
-        legend.title = element_text(size = htextsize),
-        legend.text = element_text(size = 5),
-        legend.key = element_rect(fill = "white"))
-
+        legend.title = element_text(size = legendti),
+        legend.text = element_text(size = legendtex),
+        legend.key = element_rect(fill = "lightblue"),
+        legend.background = element_rect(fill = "lightblue")) +
+  plot_theme
 
 # Cowplot for gathering figures
 
@@ -115,64 +125,64 @@ legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
 ## Individual protein figs
 rps6.fig <- plot_grid(rps6.plot + theme(legend.position = "none"),
                       NULL,
-          plot_grid(NULL,
-                    rps6.img1,
-                    rps6.img2,
-                    nrow = 3,
-                    rel_heights = c(1,2,2)),
-          ncol = 3,
-          rel_widths = c(1.5,0,2))
+                      plot_grid(
+                        rps6.img1,
+                        rps6.img2,
+                        ncol = 2,
+                        rel_heights = c(1,0.5,0.5)),
+                      ncol = 3,
+                      rel_widths = c(1.5,0,2))
 
 
 
 cmyc.fig <- plot_grid(cmyc.plot + theme(legend.position = "none"),
-                      NULL,
-                      plot_grid(NULL,
-                                cmyc.img1,
-                                cmyc.img2,
-                                nrow = 3,
-                                rel_heights = c(1,2,2)),
-                      ncol = 3,
-                      rel_widths = c(1.5,0,2))
+                     NULL,
+                     plot_grid(
+                       cmyc.img1,
+                       cmyc.img2,
+                       ncol = 2,
+                       rel_heights = c(1, 0.5, 0.5)),
+                     ncol = 3,
+                     rel_widths = c(1.5,0,2))
 
 
 
 ubf.fig <- plot_grid(ubf.plot + theme(legend.position = "none"),
                       NULL,
-                      plot_grid(NULL,
+                      plot_grid(
                                 ubf.img1,
                                 ubf.img2,
-                                nrow = 3,
-                                rel_heights = c(1,2,2)),
+                                ncol = 2,
+                                rel_heights = c(1,0.5,0.5)),
                       ncol = 3,
                       rel_widths = c(1.5,0,2))
-## Gathered fig
+
 prot.fig <- plot_grid(ubf.fig,
           cmyc.fig,
           rps6.fig,
-          nrow = 3)
+          nrow = 3) 
 
-#tot.fig <- plot_grid(legend,
-#                     tot.img,
-#                     ncol = 2,
-#          rel_widths = c(1, 2/2))
 
+# Total Protein stain image
 tot.fig <- plot_grid(NULL,
-          plot_grid(legend,
+                     legend,
+          plot_grid(NULL,
                     tot.img,
                     ncol = 2,
-                    rel_widths = c(0.1, 1)),
-          ncol = 2,
-          rel_widths = c(0.2,2),
-          axis = "l")
+                    rel_widths = c(0.15, 1)),
+          ncol = 3,
+          rel_widths = c(0.15,0.1,2))
 
+
+## Gathered fig
 
 
 fig3 <- plot_grid(tot.fig,
+                  NULL,
                   prot.fig,
-                  nrow = 2,
-                  rel_heights = c(1, 2),
-                  rel_widths = c(0.2, 1))
+                  nrow = 3,
+                  rel_heights = c(2.5,0.1,3),
+                  rel_widths = c(0.2, 1)) + back_theme
 
           
 
