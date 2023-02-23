@@ -16,24 +16,32 @@ rps6 <- readRDS("./data/data-gen/protein/rps6.change.RDS")
 
 # Images
 
-tot.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/tot_gel2_annotated.png", scale = 0.9)
+tot.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/tot_gel2_L_annotated.png", scale = 0.9)
 
-rps6.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_3_115_annotated.png", scale = 0.9)
-rps6.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_6_115_annotated.png", scale = 0.9)
+#rps6.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_3_115_annotated.png", scale = 0.9)
+#rps6.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_6_115_annotated.png", scale = 0.9)
+#
+#cmyc.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_3_115_annotated.png", scale = 0.9)
+#cmyc.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_6_115_annotated.png", scale = 0.9)
+#
+#ubf.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_3_115_annotated.png", scale = 0.9)
+#ubf.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_6_115_annotated.png", scale = 0.9)
 
-cmyc.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_3_115_annotated.png", scale = 0.9)
-cmyc.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_6_115_annotated.png", scale = 0.9)
-
-ubf.img1 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_3_115_annotated.png", scale = 0.9)
-ubf.img2 <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_6_115_annotated.png", scale = 0.9)
-
+ubf.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/ubf_x2_115.png", scale = 0.5)
+cmyc.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/cmyc_x2_115.png", scale = 0.5)
+rps6.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_x2_115.png", scale = 0.5)
 
 # Designing the plot theme
 
 plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
-                    panel.background = element_rect(fill = "lightblue", colour = NA),
+                    panel.background = element_rect(fill = "white", colour = NA),
+                    plot.background = element_rect(fill = "lightblue", color = NA),
                     axis.line = element_line(colour = "black"))
+
+plot_theme2 <- theme(panel.grid.major = element_blank(),
+                    panel.grid.minor = element_blank(),
+                    panel.background = element_rect(fill = "lightblue", colour = NA))
 
 
 labsize <- 8
@@ -107,7 +115,8 @@ rps6.plot <- rps6 %>%
         axis.text = element_text(size = textsize),
         legend.title = element_text(size = legendti),
         legend.text = element_text(size = legendtex),
-        legend.key = element_rect(fill = "white")) +
+        legend.key = element_rect(fill = "lightblue"),
+        legend.background = element_rect(fill = "lightblue")) +
   plot_theme
 
 # Cowplot for gathering figures
@@ -116,39 +125,19 @@ legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
 
 
 ## Individual protein figs
+
 rps6.fig <- plot_grid(rps6.plot + theme(legend.position = "none"),
-                      NULL,
-                      plot_grid(
-                        rps6.img1,
-                        rps6.img2,
-                        ncol = 2,
-                        rel_heights = c(1,0.5,0.5)),
-                      ncol = 3,
-                      rel_widths = c(1.5,0,2))
-
-
+          rps6.x2.img,
+          ncol = 2) 
 
 cmyc.fig <- plot_grid(cmyc.plot + theme(legend.position = "none"),
-                     NULL,
-                     plot_grid(
-                       cmyc.img1,
-                       cmyc.img2,
-                       ncol = 2,
-                       rel_heights = c(1, 0.5, 0.5)),
-                     ncol = 3,
-                     rel_widths = c(1.5,0,2))
-
-
+                      cmyc.x2.img,
+                      ncol = 2)
 
 ubf.fig <- plot_grid(ubf.plot + theme(legend.position = "none"),
-                      NULL,
-                      plot_grid(
-                                ubf.img1,
-                                ubf.img2,
-                                ncol = 2,
-                                rel_heights = c(1,0.5,0.5)),
-                      ncol = 3,
-                      rel_widths = c(1.5,0,2))
+                      ubf.x2.img,
+                      ncol = 2)
+
 
 prot.fig <- plot_grid(ubf.fig,
           cmyc.fig,
@@ -164,7 +153,7 @@ tot.fig <- plot_grid(NULL,
                     ncol = 2,
                     rel_widths = c(0.15, 1)),
           ncol = 3,
-          rel_widths = c(0.15,0.1,2))
+          rel_widths = c(0.15,0.1,2)) 
 
 
 ## Gathered fig
@@ -175,7 +164,7 @@ fig3 <- plot_grid(tot.fig,
                   prot.fig,
                   nrow = 3,
                   rel_heights = c(2.5,0.1,3),
-                  rel_widths = c(0.2, 1)) 
+                  rel_widths = c(0.2, 1))  + plot_theme2
 
           
 
