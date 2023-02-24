@@ -66,7 +66,7 @@ cmyc.plot <- cmyc %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "c-Myc signal \n(fold change)\n", fill = "Supplement") +
+  labs(x = "Time", y = "c-Myc AU \n(fold change)\n", fill = "Supplement") +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = htextsize),
         axis.text = element_text(size = textsize)) +
@@ -88,7 +88,7 @@ ubf.plot <- ubf %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "UBF signal \n(fold change)\n", fill = "") + 
+  labs(x = "Time", y = "UBF AU \n(fold change)\n", fill = "") + 
   theme(axis.title.x = element_blank(),
     axis.title = element_text(size = htextsize),
       axis.text = element_text(size = textsize)) +
@@ -110,7 +110,7 @@ rps6.plot <- rps6 %>%
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "Time", y = "rps6 signal \n(fold change)\n", fill = "Supplement") +
+  labs(x = "Time", y = "rpS6 AU \n(fold change)\n", fill = "Supplement") +
   theme(axis.title = element_text(size = htextsize),
         axis.text = element_text(size = textsize),
         legend.title = element_text(size = legendti),
@@ -206,6 +206,10 @@ fig3 <- plot_grid(tot.fig,
                   nrow = 3,
                   rel_heights = c(2.5,0.1,3),
                   rel_widths = c(0.2, 1))  + 
+  draw_plot_label(label = c("A)", "B)"),
+                  x = c(.32, .065),
+                  y = c(.97, .55),
+                  hjust = .5, vjust = .5, size = 5) +
   plot_theme2 
 
 
