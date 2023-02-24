@@ -73,7 +73,7 @@ fig4 <- joined.dat %>%
   
   
   labs(x = "Mean log-UBF \nper normalization factor\n", y = "Mean log-total RNA \nper mg muscle tissue\n", 
-       color = "Supplement") +
+       fill = "Time") +
   scale_fill_manual(values = c("pre" = "red", "post" = "royalblue")) +
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
