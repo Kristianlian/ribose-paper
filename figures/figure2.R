@@ -95,14 +95,16 @@ totrna.plot <- emm.tot %>%
 
 rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post")),
-         target = factor(target, levels = c("47S rRNA", "18S rRNA", "28S rRNA", "5.8S rRNA", "5S rRNA"))) %>%
+         target = factor(target, levels = c("47S rRNA", "18S rRNA", "28S rRNA", "5.8S rRNA", "5S rRNA"),
+                         labels = c("47S", "18S", "28S", "5.8S", "5S"))) %>%
   ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 width = 0.1,
-                position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
-  geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
+                position = position_dodge(width = 0.3)) +
+  geom_line(position = position_dodge(width = 0.3)) +
+  geom_point(shape = 21, size = 1.5, position = position_dodge(width = 0.3)) +
   scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   labs(x = "Time", y = "AU fold change", fill = "Supplement") +
   facet_wrap(~target, nrow = 1) +
   theme(axis.title = element_text(size = htextsize),
@@ -112,7 +114,7 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
         strip.text = element_text(hjust = 0, size = htextsize),
         strip.background = element_rect(fill = "white")) + 
   plot_theme +
-  theme()
+  theme(axis.title.x = element_blank())
 
 
 # Cowplot for gathering figures
@@ -132,7 +134,11 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
 #                  ncol = 2, rel_widths = c(1, 1.4), labels = c("E)", "F)"),
 #                  label_size = labsize)
 
-fig2 <- plot_grid(totrna.plot,
+fig2 <- plot_grid(plot_grid(NULL,
+                            totrna.plot,
+                            nrow = 1,
+                            rel_widths = c(0.05, 1)),
+            
           rrna.fig + theme(legend.position = "none"),
           nrow = 2,
           rel_heights = c(1.5, 1),
@@ -145,8 +151,8 @@ ggsave(
   plot = fig2,
   device = "pdf",
   path = "./figures",
-  width = 7.7*2,
-  height = 23*0.5,
+  width = 7.7,
+  height = 23*0.33,
   units = "cm",
   dpi = 600
 )
