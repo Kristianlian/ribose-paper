@@ -200,7 +200,6 @@ tot.fig <- plot_grid(NULL,
 
 ## Gathered fig
 
-
 fig3 <- plot_grid(tot.fig,
                   NULL,
                   prot.fig,

@@ -119,7 +119,7 @@ str.fig <- str.emm %>%
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
   scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Post 2nd RT", "change.3" = "Post 4th RT",
                             "change.4" = "Post 5th RT", "change.5" = "30min post 6th RT", 
                             "change.6" = "2h post 6th RT", "change.7" = "23h post 6th RT")) +
   labs(x = "", y = "Isometric peak torque \n(Nm fold change)\n", fill = "Supplement") +
