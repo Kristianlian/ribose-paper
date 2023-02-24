@@ -1,0 +1,53 @@
+---
+title: "Disp"
+output: word_document
+date: "2023-02-24"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Intro
+
+
+## Methods
+
+### Materials and methods
+
+### Participants
+
+### Experimental design
+
+### Dietary intervention
+
+### Assessment of muscular strength
+
+### Resistance training protocol
+
+### Sampling of muscle tissue and blood
+
+### Total RNA extraction and quantitative real-time reverse transcription polymerase chain reaction
+
+### Protein extraction and immunoblotting
+
+
+## Results
+
+Baseline etc.
+- Blood data
+- Dietary data
+
+### Markers of ribosome biogenesis?
+- Total RNA? 
+- Protein?
+- UBF/total RNA?
+
+### Muscular performance and recovery?
+
+## Discussion
+
+
+
+
+
