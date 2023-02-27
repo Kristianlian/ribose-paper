@@ -31,6 +31,9 @@ joined.dat <- ubf.rdy %>%
   ungroup() %>%
   mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE ))/sd(mean.sign, na.rm = TRUE)) %>%
   print()
+
+saveRDS(joined.dat, "./data/data-gen/rna.prot.RDS")
+
 ## Model
 
 library(nlme)

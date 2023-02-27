@@ -59,6 +59,13 @@ plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.background = element_rect(fill = "lightblue", colour = NA),
                     axis.line = element_line(colour = "black"))
 
+# Colours
+
+colors <- c("#d7191c",
+                     "#fdae61",
+                     "#abd9e9",
+                     "#2c7bb6")
+
 # Default textsizes
 labsize <- 8
 textsize <- 6
@@ -71,15 +78,13 @@ totrna.plot <- emm.tot %>%
   mutate(time = "post") %>%
   add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, SE = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
-  # print()
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  #annotate("text", x = "Post", y = 1.5, label = "p = 0.499", size = atext) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
-  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
   geom_point(position = position_dodge(width = 0.2), shape = 21, size = 2) +
+  scale_fill_manual(values = colors[c(1,4)]) +
   labs(x = "Time-point", y = "Total RNA (ng &times; mg<sup>-1</sup> fold change)", fill = "Supplement") +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
@@ -103,7 +108,7 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
                 position = position_dodge(width = 0.3)) +
   geom_line(position = position_dodge(width = 0.3)) +
   geom_point(shape = 21, size = 1.5, position = position_dodge(width = 0.3)) +
-  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
+  scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   labs(x = "Time", y = "AU fold change", fill = "Supplement") +
   facet_wrap(~target, nrow = 1) +
@@ -113,26 +118,9 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
         legend.text = element_text(size = textsize),
         strip.text = element_text(hjust = 0, size = htextsize),
         strip.background = element_rect(fill = "white")) + 
-  plot_theme +
-  theme(axis.title.x = element_blank())
-
-
-# Cowplot for gathering figures
-
-#row1.2 <- plot_grid(totrna.plot + theme(legend.position = "none"),
-#          plot.47 + theme(legend.position = "none"),
-#          plot.18 + theme(legend.position = "none"),
-#          plot.28 + theme(legend.position = "none"),
-#          ncol = 2, 
-#          nrow = 2,
-#          labels = c("A)", "B)", "C)", "D)"),
-#          label_size = labsize,
-#          align = "v", axis = "l")
-#
-#row3 <- plot_grid(plot.5.8+ theme(legend.position = "none"),
-#                  plot.5,
-#                  ncol = 2, rel_widths = c(1, 1.4), labels = c("E)", "F)"),
-#                  label_size = labsize)
+  theme(axis.title.x = element_blank()) +
+  plot_theme 
+  
 
 fig2 <- plot_grid(plot_grid(NULL,
                             totrna.plot,

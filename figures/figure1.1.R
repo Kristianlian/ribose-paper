@@ -15,15 +15,9 @@ d.dat <- read_excel("./data/design.dat.xlsx", na = "NA")
 
 # C-peptide
 cpep.change <- readRDS("./data/data-gen/glucose/insulin.figchange.RDS") # Untransformed data
-cpep.emm <- readRDS("./data/data-gen/glucose/cpep.emm.RDS") # Unstransformed emmeans
-cpep.lchange <- readRDS("./data/data-gen/glucose/insulin.change.RDS") # Log-transformed data
-cpep.lemm <- readRDS("./data/data-gen/glucose/cpep.lemm.RDS") # Log-transformed emmeans
 
 # Blood glucose
 glu.change <- readRDS("./data/data-gen/glucose/gluc.change.RDS") # Untransformed data
-glu.emm <- readRDS("./data/data-gen/glucose/gluc.emm.RDS") # Untransformed emmeans
-glu.lchange <- readRDS("./data/data-gen/glucose/glu.change.RDS") # Log-transformed data
-glu.lemm <- readRDS("./data/data-gen/glucose/gluc.logemm.RDS") # Log-transformed emmeans
 
 # Humac data
 str.change <- readRDS("./data/data-gen/humac/str.change.RDS")
@@ -38,6 +32,14 @@ plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
                     panel.background = element_rect(fill = "lightblue", colour = NA),
                     axis.line = element_line(colour = "black"))
+
+# Colours
+# Colours
+
+colors <- c("#d7191c",
+            "#fdae61",
+            "#abd9e9",
+            "#2c7bb6")
 
 
 
@@ -56,11 +58,11 @@ cpep.fig <- cpep.change %>%
                 position = pos) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "", y = "Plasma c-peptide levels <br>(pmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
+  scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120 min", "change.90" = "-30 min", "change.120" = "0 min", 
                                                        "change.150" = "30 min", "change.270" = "120 min")) +
+  labs(x = "", y = "Plasma c-peptide levels <br>(pmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
         axis.title.y = element_markdown(size = 7),
         legend.title = element_text(size = 7),
@@ -87,11 +89,11 @@ glu.fig <- glu.change %>%
                 position = pos) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  labs(x = "", y = "Plasma glucose levels <br>(mmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
+  scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 135, 150, 270),
                      expand = expansion(0), labels = c("0" = "-120 min", "45" = "-90 min", "90" = "-30 min", "120" = "0 min", "135" = "15 min",
                                                        "150" = "30 min", "270" = "120 min")) +
+  labs(x = "", y = "Plasma glucose levels <br>(mmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
         axis.title.y = element_markdown(size = 7),
         legend.title = element_text(size = 7),
@@ -101,11 +103,7 @@ glu.fig <- glu.change %>%
 
 
 
-
-
-## Humac pre->post 5 sessions
-
-# Isometric
+## Gathered strenght figure
 
 str.fig <- str.emm %>%
   data.frame() %>%
@@ -118,7 +116,7 @@ str.fig <- str.emm %>%
                 width = 0.2) +
   geom_line(position = pos) +
   geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
+  scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Post 2nd RT", "change.3" = "Post 4th RT",
                             "change.4" = "Post 5th RT", "change.5" = "30min post 6th RT", 
                             "change.6" = "2h post 6th RT", "change.7" = "23h post 6th RT")) +
@@ -258,7 +256,7 @@ fig1 <- plot_grid(d.fig,
                   ncol = 1,
                   rel_heights = c(1.5, 0.3, 1.5, 1.5)) +
   draw_plot_label(label = c("A)", "B)", "C)", "D)"),
-                  x = c(0.02, 0.035, 0.55, 0.035),
+                  x = c(0.02, 0.02, 0.53, 0.02),
                   y = c(0.98, 0.63, 0.63, 0.3),
                   hjust = .5, vjust = .5, size = 7) 
 
