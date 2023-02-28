@@ -311,8 +311,8 @@ fig3 <- plot_grid(plot_grid(corr.fig,
                   nrow = 3,
                   rel_heights = c(.85, .05, 1.2))  + 
   draw_plot_label(label = c("A)", "B)", "C)"),
-                  x = c(.015, .5, .18),
-                  y = c(.97, .97, .5),
+                  x = c(.015, .5, .015),
+                  y = c(.97, .97, .57),
                   hjust = .5, vjust = .5, size = 5) 
           
 
