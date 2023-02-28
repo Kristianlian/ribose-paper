@@ -185,6 +185,7 @@ corr.fig <- joined.dat %>%
         axis.text = element_text(size = 7),
         legend.title = element_text(size = 6),
         legend.text = element_text(size = 5),
+        legend.key = element_rect(fill = "white"),
         axis.title.y = element_markdown(size = 7))
 
 # Cowplot for gathering figures
