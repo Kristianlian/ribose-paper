@@ -38,9 +38,9 @@ saveRDS(joined.dat, "./data/data-gen/rna.prot.RDS")
 
 library(nlme)
 
-m <- lme(mean.rna ~ sd.ubf + time , 
+m <- lme(mean.rna ~ sd.ubf + time, 
          random = list(subject = ~ 1), 
-         data = joined.dat, 
+         data = filter(joined.dat), 
          na.action = na.omit)
 
 summary(m)

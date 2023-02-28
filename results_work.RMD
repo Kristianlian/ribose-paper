@@ -381,7 +381,11 @@ Interestingly, RT with placebo led to significantly higher change in levels of r
 
 FIG3 HERE
 
-###### **Figure 3:** Changes in levels of protein. A) Representative total protein stain blot, B) AU fold change in UBF, c-Myc and rpS6 + representative antibody stain images of the respective proteins. Baseline = Training day 1/2, Post = Training day 11/12. Protein samples were analyzed in duplicates, with two duplicates per biopsy (two biopsies per time point). The duplicates were loaded on different gels, in an inverted order. Change in protein levels were calculated as log-fold change score normalised by pools (pools of all protein samples). Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg per supplement ± 95% CI. * = significant between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
+###### **Figure 3:** Changes in levels of protein. A) Linear relationship between total RNA (ng x mg) and UBF levels (SD units). 
+
+B) Representative total protein stain blot, both duplicates from one participant (115). C) Fold change in UBF, c-Myc and rpS6 (AU) + representative antibody stains of the respective proteins. Baseline = Day 1 leg 1, Day 2 leg 2, post = Day 11 leg 1, Day 12 leg 2. GLU = glucose, PLA = placebo. Protein samples were analyzed in two duplicates per biopsy per time point, loaded on separate gels in an inverted order, e.g. from gel 3 to 6, as shown by the duplicates (1 and 2). Change in protein levels were calculated as log-fold change scores normalized by pools (pool of all protein samples per gel). Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are reverse transformed estimated marginal means fold change per leg per supplement ± 95% CI. * = significant between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
+
+
 
 Further, we observed a linear relationship between levels of UBF and accumulation of total RNA, where ...
 

@@ -69,7 +69,8 @@ dat2 <- western.dat %>%
   group_by(gel, target) %>% 
   mutate(signal = signal / max(signal)) %>% 
   ungroup() %>%
-  mutate(norm.sign = signal) %>% 
+  #print()
+  mutate(norm.sign = signal / tpl) %>% 
   
   ## Adds pool on all samples per gel, so we can normalise the signal by pool via the mutate(norm.sign = norm.sign / pool).
   # Thereafter, "pool" is filtered out, as we no longer need this in the data frame.
@@ -126,26 +127,9 @@ m0 <- lme(log(norm.sign) ~ time + supplement + time:supplement,
          random = list(subject = ~ 1),
          data = filter(dat2, target == "cmyc"))
 
-#m1 <- lme(log(norm.sign) ~ tpl + target + target:time + target:supplement + target:time:supplement, 
- #        random = list(subject = ~ 1, 
-  #                     gel.sample = ~ 1),
-   #      weights = varExp(form = ~ tpl|target),
-    #     method = "ML",
-     #    data = dat2)
-
-#m0.2 <- lme(log(norm.sign) ~ tpl + time + supplement + time:supplement, 
- #       random = list(subject = ~ 1, 
-  #                   gel.sample = ~ 1),
-   #     weights = varExp(form = ~ tpl|target),
-    #    method = "ML",
-     #   data = filter(dat2, target == "cmyc"))
-
-
 summary(m0)
-#summary(m0.2)
 
 plot(m0, resid(., type = "p") ~ fitted(.))
-#plot(m0.2, resid(., type = "p") ~ fitted(.))
 
 
 # UBF model
@@ -154,15 +138,8 @@ m1 <- lme(log(norm.sign) ~ time + supplement + time:supplement,
           random = list(subject = ~ 1),
           data = filter(dat2, target == "ubf"))
 
-#m1.2 <- lme(log(norm.sign) ~ tpl + time + supplement + time:supplement, 
- #           random = list(subject = ~ 1, 
-  #                        gel.sample = ~ 1),
-   #         weights = varExp(form = ~ tpl|target),
-    #        method = "ML",
-     #       data = filter(dat2, target == "UBF"))
 
 summary(m1)
-#summary(m1.2)
 
 plot(m1, resid(., type = "p") ~ fitted(.))
 
@@ -185,8 +162,6 @@ plot(m2, resid(., type = "p") ~ fitted(.))
 cmyc.emm <- emmeans(m0, specs = ~ time|supplement) %>%
   data.frame()
 
-#cmyc.emm2 <- emmeans(m0.2, specs = ~ time|supplement) %>%
-  #data.frame()
 
 cmyc.emm %>%  
   mutate(time = factor(time, levels = c("pre", "post"))) %>%
@@ -194,11 +169,6 @@ cmyc.emm %>%
   geom_line() + 
   geom_point(shape= 21) 
 
-#cmyc.emm2 %>%  
- # mutate(time = factor(time, levels = c("pre", "post"))) %>%
-  #ggplot(aes(time, emmean, fill = supplement, group = supplement)) + 
-  #geom_line() + 
-  #geom_point(shape= 21) 
 
 saveRDS(cmyc.emm, "./data/data-gen/protein/cmyc.emm.RDS")
 

@@ -1,0 +1,17 @@
+---
+title: "Ext. suppl."
+author: "Kristian Lian"
+date: "2023-02-28"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+Notes for extended methods supplementary
+
+- UBF/RNA correlation: Make a new model to see if data point affects the current model
+
+
+
