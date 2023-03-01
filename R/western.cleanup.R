@@ -7,7 +7,7 @@ library(tidyverse); library(nlme); library(emmeans)
 
 # Data
 
-prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS")
+prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS") # from the script: western.import.R
 
 
 ## Visualising individual changes with ggplot

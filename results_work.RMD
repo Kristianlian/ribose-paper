@@ -100,11 +100,52 @@ cpp.270 <- round(cpcoef[8,5], 2)
 
 ```
 
-At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in mean macro nutrient (calories, carbohydrate, fat or protein) ingestion (Tab 4), or mean change in macro nutrient ingestion (Fig 3). Glucose ingestion before and after RT led to significant increases in plasma levels of glucose and c-peptide compared to RT with placebo, before, during and after the session (Fig 1B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`], Fig 1C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]), measured during the final RT session. At 2hrs post-exercise, RT with glucose led to significantly lower blood glucose levels compared to RT with placebo (1B, 270min: -8 ± 4% [*p* = `r p.270`].
+```{r strength model}
+## Scripts:
+# - Strength.index.R
 
-FIG1 HERE
+## Data
+str.change <- readRDS("./data/data-gen/humac/str.change.RDS") # Untransfromed data
+str.lchange <- readRDS("./data/data-gen/humac/str.lchange.RDS") # Log-transfromed data
 
-**Figure 1:** A) An overview of the experimental design with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days involving familiarization. Between days -7 and -1, participants were familiarized to the RT exercises via 1RM leg press and knee extension testing, and strength tests (Humac Norm dynamometer, days -7 and -5). Biopsies were taken from vastus lateralis at baseline (Day 1 leg 1, Day 2 leg 2), and after five RT sessions (Day 11 leg 1, Day 12 leg 2). Through randomization, one leg was allocated to RT with GLU (glucose) and the other leg to RT with PLA (placebo). The randomization also entailed whether participants initiated the intervention with their dominant or non-dominant leg, and whether they initiated with RT+GLU or RT+PLA. From baseline, the participants exercised in a unilateral, alternating fashion, until post intervention testing (Day 11/12 leg 1, Day 12/13 leg 2). Three participants dropped out of the intervention, either due to reported muscular discomforts of heavy RT, or sickness in their family. B and C) Changes in plasma glucose (mmol/L) and c-peptide levels (pmol/L) during post testing (Day 11 leg 1, Day 12 leg 2). Glucose levels in blood was measured via finger draws 120 (-120), 90 (-90), 30 (-30) minutes and immediately before RT (0), during RT (15), immediately after (30) and 2hrs after RT (120). C-peptide levels were measured simultaneously to these finger draws, except for 90min before and during RT. Finger draws and venous blood were sampled at baseline (Day 1) and post (Day 11 leg 1, Day 12 leg 2). D) Changes in muscular performance/recovery measured as isometric and isokinetic peak torque (60 and 240 d/s) via Humac Norm Dynamometer, conducted at baseline (Day -1), during the intervention (Day 4 and 8 leg 1, Day 5 and 9 leg 2), after five RT sessions/before the 6th session (Day 11 leg 1, Day 12 leg 2), as well as 30min, 2hrs and 23hrs after the 6th RT session (Day 11/12 leg 1, Day 12/13 leg 2). Values are presented as changes in estimated marginal means ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
+
+## Linear mixed effects model
+
+# Untransformed model
+str.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                         data = str.change)
+str.res <- plot(str.mod)
+str.sum <- summary(str.mod)
+
+# Log-transformed model
+str.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                        data = str.lchange)
+str.lres <- plot(str.lmod)
+str.lsum <- summary(str.lmod)
+
+## Emmeans
+# Untransformed
+str.emm <- confint(emmeans(str.mod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+# Log-transformed
+str.lemm <- confint(emmeans(str.lmod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+# For inline plotting
+strcoef <- coef(summary(str.mod))
+pdiff.c4 <- round(strcoef[10,5], 2)
+
+```
+
+
+At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in mean macro nutrient (calories, carbohydrate, fat or protein) intake, or mean change in macro nutrient ingestion (Tab 4). 
+
+Glucose ingestion before and after RT led to significant increases in plasma levels of glucose and c-peptide compared to RT with placebo, before, during and after the session (Fig 1B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`], Fig 1C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]), measured during the final RT session. At 2hrs post-exercise, RT with glucose led to significantly lower blood glucose levels compared to RT with placebo (1B, 270min: -8 ± 4% [*p* = `r p.270`]. There were no significant difference in change of skeletal muscle strength, at time points post 2 RT sessions, post 4 RT sessions, 30min after 6th session, 2hrs after 6th session and 23hrs after 6th session (*p* > 0.05). After 5 RT sessions (Fig 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength 7% more than glucose (*p* = `r pdiff.c4`).
+
+**Figure 1:** A) An overview of the experimental design with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days involving familiarization. Between days -7 and -1, participants were familiarized to the RT exercises via 1RM leg press and knee extension testing, and to the strength tests via Humac Norm dynamometer (days -7 and -5). Before baseline testing, the participants were randomly allocated to exercise one leg with GLU (glucose) and the other with PLA (placebo), in a unilateral, alternating fashion. Further, non-dominant/dominant + GLU/PLA, and onset with GLU or PLA was also randomized, i.e. the figure illustrates an example where the participant was randomized to start RT with GLU. Biopsies were taken from m. vastus lateralis at baseline (Day 1 leg 1, Day 2 leg 2), and after five RT sessions (Day 11 leg 1, Day 12 leg 2). Three participants dropped out of the intervention, either due to reported muscular discomforts of heavy RT, or sickness in their family. B and C) Changes in plasma glucose (mmol/L) and c-peptide levels (pmol/L) during post testing (Day 11 leg 1, Day 12 leg 2). Glucose levels in blood was measured via finger draws 120 (-120), 90 (-90), 30 (-30) minutes and immediately before RT (0), during RT (15), immediately after (30) and 2hrs after RT (120). C-peptide levels were measured simultaneously to these finger draws, except for 90min before and during RT. Finger draws and venous blood were sampled at baseline (Day 1) and post (Day 11 leg 1, Day 12 leg 2). D) Changes in muscular performance/recovery measured as isometric and isokinetic peak torque (60 and 240 d/s) via Humac Norm Dynamometer, conducted at baseline (A: Day -1), after 2 and 4 RT sessions (A: Day 4 and 8 leg 1, Day 5 and 9 leg 2), after five RT sessions/before the 6th session (Day 11 leg 1, Day 12 leg 2), as well as 30min, 2hrs and 23hrs after the 6th RT session (A: Day 11/12 leg 1, Day 12/13 leg 2). The index was calculated by normalizing individual peak torque to the highest peak torque at each respective speed, and then summarised and used in change score calculations.
+
+Values are presented as changes in estimated marginal means ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
 
 ### Markers of ribosome biogenesis
 
@@ -247,83 +288,128 @@ FIG2 HERE
 ```{r western modelling}
 ## Script: 
 # - western.import.R
-# - western.change.R
+# - western.cleanup.R
+# - western.analysis.R
 
 # Data
-
-prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS") # cleaned up and quantified western data
-prot.out <- readRDS("./data/data-gen/protein/protein_complete.RDS") # Cleaned up and quantified western data, checked for outliers
-prot.change <- readRDS("./data/data-gen/protein/prot.change.RDS") # change-score data
+prot.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") # from the script: western.cleanup.R
 
 
-# By target
+### Modelling target signal per supplement 
+# These models try to explain the normalised signal by time, supplement and time+supplement (?). The random = list command creates an individual 
+# intercept for the included (e.g., subject, gel.sample). 
 
-cmyc <- prot.change %>%
-  filter(target == "cmyc") 
+## c-Myc model
 
-ubf <- prot.change %>%
-  filter(target == "ubf",
-         subject != "103") # Subject 103 has missing values
-  
+# Untransformed
+cmyc.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
+                random = list(subject = ~ 1),
+                data = filter(prot.dat, target == "cmyc"))
 
-rps6 <- prot.change %>%
-  filter(target == "rps6") 
-
-# c-Myc change
-
-m1 <- lme(change ~ pre + supplement,
-            random = list(subject = ~ 1),
-            data = cmyc) # same model as in "western import", but with change scores of norm.sign
-
-#plot(m1)
-
-sum.m1 <- summary(m1)
-
-cmyc.emm <- emmeans(m1, specs = ~"supplement") %>%
-  data.frame
+cmyc.sum <- summary(cmyc.mod)
+cmyc.res <- plot(cmyc.mod, resid(., type = "p") ~ fitted(.))
 
 
-# UBF change
 
-m2 <- lme(change ~ pre + supplement,
-            random = list(subject = ~ 1),
-            data = ubf) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
+# Log-transformed
+cmyc.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
+                 random = list(subject = ~ 1),
+                 data = filter(prot.dat, target == "cmyc"))
 
-#plot(m2)
+cmyc.lsum <- summary(cmyc.lmod)
+cmyc.lres <- plot(cmyc.lmod, resid(., type = "p") ~ fitted(.))
 
-sum.m2 <- summary(m2)
 
-ubf.emm <- emmeans(m2, specs = ~"supplement") %>%
+
+
+## UBF model
+# Untransformed
+ubf.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
+               random = list(subject = ~ 1),
+               data = filter(prot.dat, target == "ubf"))
+
+
+ubf.sum <- summary(ubf.mod)
+ubf.res <- plot(ubf.mod, resid(., type = "p") ~ fitted(.))
+
+# Log-transformed
+ubf.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
+                random = list(subject = ~ 1),
+                data = filter(prot.dat, target == "ubf"))
+
+
+ubf.lsum <- summary(ubf.lmod)
+ubf.lres <- plot(ubf.lmod, resid(., type = "p") ~ fitted(.))
+
+
+# RPS6 model
+# Untransformed
+rps6.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
+                 random = list(subject = ~ 1),
+                 data = filter(prot.dat, target == "rps6"))
+
+rps6.sum <- summary(rps6.mod)
+rps6.res <- plot(rps6.mod, resid(., type = "p") ~ fitted(.))
+
+
+# Log-transformed
+rps6.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
+          random = list(subject = ~ 1),
+          data = filter(prot.dat, target == "rps6"))
+
+rps6.lsum <- summary(rps6.lmod)
+rps6.lres <- plot(rps6.lmod, resid(., type = "p") ~ fitted(.))
+
+
+### Getting emmeans from the models
+
+## c-Myc emmeans
+# Untransformed
+cmyc.emm <- emmeans(cmyc.mod, specs = ~ time|supplement) %>%
   data.frame()
 
-# rps6 change
-
-m3 <- lme(change ~ pre + supplement,
-            random = list(subject = ~ 1),
-            data = rps6) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
-
-#plot(m3)
-
-sum.m3 <- summary(m3)
-
-rps6.emm <- emmeans(m3, specs = ~"supplement") %>%
+# Log-transformed
+cmyc.lemm <- emmeans(cmyc.lmod, specs = ~ time|supplement) %>%
   data.frame()
+
+
+
+## UBF emmeans
+# Untransformed
+ubf.emm <- emmeans(ubf.mod, specs = ~ time|supplement) %>%
+  data.frame()
+
+# Log-transformed
+ubf.lemm <- emmeans(ubf.lmod, specs = ~ time|supplement) %>%
+  data.frame()
+
+
+
+## RPS6
+# Untransformed
+rps6.emm <- emmeans(rps6.mod, specs = ~ time|supplement) %>%
+  data.frame()
+
+# Log-transformed
+rps6.lemm <- emmeans(rps6.lmod, specs = ~ time|supplement) %>%
+  data.frame()
+
+
 
 ### For inline reporting
 ## Diff cmyc
-ccoef <- coef(summary(m1))
-cdiff <- round(ccoef[3,5], 3)
-cdiffse <- round(ccoef[3,2], 3)
+
+ccoef <- coef(summary(cmyc.lmod))
+cdiff <- round(ccoef[4,5], 3)
+cpla <- round(ccoef[2,5], 20)
 
 ## Diff UBF
-ucoef <- coef(summary(m2))
-udiff <- round(ucoef[3,5], 3)
-udiffse <- round(ucoef[3,2], 3)
+ucoef <- coef(summary(ubf.lmod))
+udiff <- round(ucoef[4,5], 3)
 
 ## Diff rps6
-rpcoef <- coef(summary(m3))
-rpdiff <- round(rpcoef[3,5], 3)
-rpdiffse <- round(rpcoef[3,2], 3)
+rpcoef <- coef(summary(rps6.lmod))
+rpdiff <- round(rpcoef[4,5], 3)
 
 ```
 
@@ -356,7 +442,6 @@ rna.rdy <- rna.dat %>%
   summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) %>%
   print()
 
-
 ## Correlation analysis
 
 joined.dat <- ubf.rdy %>%
@@ -367,33 +452,42 @@ joined.dat <- ubf.rdy %>%
   print()
 
 
-m <- lme(log(mean.rna) ~ mean.sign + time , 
+library(nlme)
+
+corr.mod <- lme(mean.rna ~ mean.sign + time , 
          random = list(subject = ~ 1), 
           data = joined.dat, 
          na.action = na.omit)
 
-summary(m)
-plot(m)
+corr.sum <- summary(corr.mod)
+corr.res <- plot(corr.mod)
+
+corr.lmod <- lme(log(mean.rna) ~ log(mean.sign) + time , 
+         random = list(subject = ~ 1), 
+          data = joined.dat, 
+         na.action = na.omit)
+
+corr.lsum <- summary(corr.lmod)
+corr.lres <- plot(corr.lmod)
+
+corrcoef <- coef(summary(corr.mod))
+corrp <- round(corrcoef[2,5], 3)
 ```
 
-
-Interestingly, RT with placebo led to significantly higher change in levels of rpS6 and UBF protein compared to RT with glucose, with no difference in levels of c-Myc (Fig 3A rpS6: *p* = `r rpdiff`, 3C UBF: *p* = `r udiff`, 3B c-Myc: *p* = `r cdiff`). Levels of rpS6 change by 40% in placebo and 7% in glucose (Fig 3A), UBF levels changed by 68% in placebo and 26% in glucose (Fig 3C), and c-Myc levels changed by 110% in placebo and 59% in glucose (Fig 3B). 
+C-myc levels increased 109% after RT with placebo, compared to an increase of 58% after RT with glucose, which was a significant difference (Fig 3A: *p* = `r cdiff`). Levels of UBF and rpS6 increased 42 and 33% more in placebo compared to glucose, however, this was not a significant difference (Fig 3A: UBF: *p* = `r udiff`, rpS6: *p* = `r rpdiff`). Compared to baseline, both RT with glucose and RT with placebo increased significantly () Further, we observed a linear relationship between levels of UBF and accumulation of total RNA, where an increase of 1 SD unit of UBF equated to 13% increase in total RNA (*p* = `r corrp`).
 
 FIG3 HERE
 
-###### **Figure 3:** Changes in levels of protein. A) Linear relationship between total RNA (ng x mg) and UBF levels (SD units), with time added as a covariate in the model. 
+###### **Figure 3:** Changes in levels of protein. 
+
+A) Mean UBF, c-Myc and rpS6 (AU) at baseline and post + representative antibody stains of the respective proteins. Baseline = Day 1 leg 1, Day 2 leg 2, post = Day 11 leg 1, Day 12 leg 2. GLU = glucose, PLA = placebo. Protein samples were analyzed in two duplicates per biopsy per time point, loaded on separate gels in an inverted order, e.g. from gel 3 to 6, as shown by the duplicates (1 and 2). Change in protein levels were calculated as log-fold change scores normalized by pools (pool of all protein samples per gel). Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are reverse transformed estimated marginal means fold change per leg per supplement ± 95% CI. * = significant between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13. B) Representative total protein stain blot. C) Linear relationship between total RNA (ng x mg) and UBF levels (SD units), with time added as a covariate. Total RNA was normalized by wet muscle weight, and UBF was normalized by pools per gel, and total protein per lane factor. Values are presented as log-transformed means.
+
+#MISSING: CHECK % INCREASE OF TOTAL RNA PER 1 SD INCREASE OF UBF (MAY HAVE TO LOG-TRANSFORM)
 
 (We must add time as a covariate, as both total RNA and UBF are expected to increase with "time" in this intervention, due to RT. Therefore, adding time as a covariate allows us to model the relationship between RNA and UBF, without variations of time interfering)
 
-B) Representative total protein stain blot, both duplicates from one participant (115). C) Fold change in UBF, c-Myc and rpS6 (AU) + representative antibody stains of the respective proteins. Baseline = Day 1 leg 1, Day 2 leg 2, post = Day 11 leg 1, Day 12 leg 2. GLU = glucose, PLA = placebo. Protein samples were analyzed in two duplicates per biopsy per time point, loaded on separate gels in an inverted order, e.g. from gel 3 to 6, as shown by the duplicates (1 and 2). Change in protein levels were calculated as log-fold change scores normalized by pools (pool of all protein samples per gel). Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are reverse transformed estimated marginal means fold change per leg per supplement ± 95% CI. * = significant between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
 
 
-
-Further, we observed a linear relationship between levels of UBF and accumulation of total RNA, where ...
-
-FIG4 HERE
-
-######**Figure 4:** Relationship between levels of total RNA and UBF. Total RNA was normalized by wet muscle weight, and UBF levels were normalized by pools and total protein per lane. Values are presented as log-transformed means.
 
 
 

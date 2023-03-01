@@ -9,11 +9,11 @@ library(ggpubr); library(nlme); library(ggtext)
 #
 # Data
 
-cmyc <- readRDS("./data/data-gen/protein/cmyc.change.RDS")
+cmyc <- readRDS("./data/data-gen/protein/cmyc.lemm.RDS")
 
-ubf <- readRDS("./data/data-gen/protein/ubf.change.RDS")
+ubf <- readRDS("./data/data-gen/protein/ubf.lemm.RDS")
 
-rps6 <- readRDS("./data/data-gen/protein/rps6.change.RDS")
+rps6 <- readRDS("./data/data-gen/protein/rps6.lemm.RDS")
 
 joined.dat <- readRDS("./data/data-gen/rna.prot.RDS")
 
@@ -54,19 +54,20 @@ plot_theme <- theme(panel.grid.major = element_blank(),
 ## cmyc fig
 
 cmyc.plot <- cmyc %>%
-  mutate(time = "post") %>%
-  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
+ # mutate(time = "post") %>%
+ # add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
+  annotate("text", x = "Post", y = 1.6, label = "*", size = 3) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
-  scale_fill_manual(values = colors[c(1,4)]) +
-  scale_y_continuous(breaks = c(1,2,3,4),
-                   labels = c("1.0", "2.0", "3.0", "4.0"))+
-  labs(x = "Time", y = "c-Myc AU \n(fold change)\n", fill = "Supplement") +
+  scale_fill_manual(values = colors[c(4,1)]) +
+  #scale_y_continuous(breaks = c(1,2,3,4),
+   #                labels = c("1.0", "2.0", "3.0", "4.0"))+
+  labs(x = "Time", y = "c-Myc AU", fill = "Supplement") +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = htextsize),
         axis.text = element_text(size = textsize)) +
@@ -77,18 +78,18 @@ cmyc.plot <- cmyc %>%
 
 
 ubf.plot <- ubf %>%
-  mutate(time = "post") %>%
-  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
+  #mutate(time = "post") %>%
+  #add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  annotate("text", x = "Post", y = 3, label = "*", size = 3) +
+  
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
-  scale_fill_manual(values = colors[c(1,4)]) +
-  labs(x = "Time", y = "UBF AU \n(fold change)\n", fill = "") + 
+  scale_fill_manual(values = colors[c(4,1)]) +
+  labs(x = "Time", y = "UBF AU", fill = "") + 
   theme(axis.title.x = element_blank(),
     axis.title = element_text(size = htextsize),
       axis.text = element_text(size = textsize)) +
@@ -99,18 +100,18 @@ ubf.plot <- ubf %>%
 
 
 rps6.plot <- rps6 %>%
-  mutate(time = "post") %>%
-  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
+  #mutate(time = "post") %>%
+  #add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  annotate("text", x = "Post", y = 1.87, label = "*", size = 3) +
+ # annotate("text", x = "Post", y = 1.87, label = "*", size = 3) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2)) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
-  scale_fill_manual(values = colors[c(1,4)]) +
-  labs(x = "Time", y = "rpS6 AU \n(fold change)\n", fill = "Supplement") +
+  scale_fill_manual(values = colors[c(4,1)]) +
+  labs(x = "Time", y = "rpS6 AU", fill = "Supplement") +
   theme(axis.title = element_text(size = htextsize),
         axis.title.x = element_blank(),
         axis.text = element_text(size = textsize),

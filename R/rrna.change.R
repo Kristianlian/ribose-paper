@@ -112,7 +112,7 @@ change.58 <- rrna5.8 %>%
 
 saveRDS(change.58, "./data/data-gen/rna/lchange.58.RDS")
 
-base.5.8 <- change.5.8 %>%
+base.5.8 <- change.58 %>%
   select(subject, supplement, Pre) %>%
   pivot_wider(names_from = supplement,
               values_from = Pre) %>%

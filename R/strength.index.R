@@ -79,16 +79,43 @@ str.change <- strength.index %>%
 
 saveRDS(str.change, "./data/data-gen/humac/str.change.RDS")
 
+str.lchange <- strength.index %>%
+  pivot_wider(names_from = time,
+              values_from = strength) %>%
+  mutate(change.2 = log(test2) - log(baseline),
+         change.3 = log(test3) - log(baseline),
+         change.4 = log(test4) - log(baseline),
+         change.5 = log(test5) - log(baseline),
+         change.6 = log(test6) - log(baseline),
+         change.7 = log(test7) - log(baseline),
+         baseline = baseline - mean(baseline, na.rm = TRUE)) %>%
+  select(subject, supplement, baseline, change.2:change.7) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = c(change.2:change.7)) %>%
+  print()
+
+saveRDS(str.lchange, "./data/data-gen/humac/str.lchange.RDS")
+
+
 
 ## Change model
 
 m.str <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
                          data = str.change)
+
+m.lstr <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                        data = str.lchange)
 plot(m.str)
+plot(m.lstr)
 
 summary(m.str)
+summary(m.lstr)
 
 emm.str <- confint(emmeans(m.str, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+emm.str <- confint(emmeans(m.lstr, specs = ~"supplement|time")) %>%
   data.frame() 
 
 saveRDS(emm.str, "./data/data-gen/humac/emm.str.RDS")
