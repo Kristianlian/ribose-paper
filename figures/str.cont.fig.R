@@ -3,7 +3,7 @@
 
 library(readxl); library(tidyverse)
 
-str.emm <- readRDS("./data/data-gen/humac/emm.str.RDS") %>%
+str.emm2 <- readRDS("./data/data-gen/humac/emm.str.RDS") %>%
   add_row(supplement = "placebo", time = "0", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
   add_row(supplement = "glucose", time = "0", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
   mutate(timeh = if_else(time == "0",
@@ -42,7 +42,7 @@ colors <- c("#d7191c",
                      "#abd9e9",
                      "#2c7bb6")
 
-str.fig <- str.emm %>%
+str.fig2 <- str.emm %>%
   data.frame() %>%
   ggplot(aes(timeh, emmean, fill = supplement)) +
   #annotate("text", x = "change.4", y = -0.04, label = "*") +
@@ -66,6 +66,6 @@ str.fig <- str.emm %>%
   plot_theme
 
   
-  
+saveRDS(str.fig2, "./data/data-gen/humac/str.fig2.RDS")
 
 

@@ -22,6 +22,7 @@ glu.change <- readRDS("./data/data-gen/glucose/gluc.change.RDS") # Untransformed
 # Humac data
 str.change <- readRDS("./data/data-gen/humac/str.change.RDS")
 str.emm <- readRDS("./data/data-gen/humac/emm.str.RDS")
+str.fig2 <- readRDS("./data/data-gen/humac/str.fig2.RDS")
 
 ### Plots
 pos <- position_dodge(width = 0.2)
@@ -105,29 +106,74 @@ glu.fig <- glu.change %>%
 
 ## Gathered strenght figure
 
-str.fig <- str.emm %>%
+str.emm2 <- str.emm %>%
+  add_row(supplement = "placebo", time = "0", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "0", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  mutate(timeh = if_else(time == "0",
+                         "0",
+                         if_else(time == "change.2",
+                                 "8",
+                                 if_else(time == "change.3",
+                                         "16",
+                                         if_else(time == "change.4",
+                                                 "21",
+                                                 if_else(time == "change.5",
+                                                         "22.7",
+                                                         if_else(time == "change.6",
+                                                                 "23.4",
+                                                                 if_else(time == "change.7", 
+                                                                         "24.4", time)))))))) %>%
+  mutate(#timeh = factor(timeh, levels = c("0", "72", "192", "264", "266", "268", "291")),
+    timeh = as.numeric(timeh))
+
+str.fig2 <- str.emm2 %>%
   data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
-  annotate("text", x = "change.4", y = -0.04, label = "*") +
+  ggplot(aes(timeh, emmean, fill = supplement)) +
+  annotate("text", x = 21, y = -0.04, label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 position = pos,
                 width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 2) +
+  geom_line() +
+  geom_point(shape = 21, size = 2) +
   scale_fill_manual(values = colors[c(1,4)]) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Post 2nd RT", "change.3" = "Post 4th RT",
-                            "change.4" = "Post 5th RT", "change.5" = "30min post 6th RT", 
-                            "change.6" = "2h post 6th RT", "change.7" = "23h post 6th RT")) +
-  labs(x = "", y = "Isometric peak torque \n(Nm fold change)\n", fill = "Supplement") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 7),
+  scale_x_continuous(limits = c(0,25), breaks = c(0, 8, 16, 21, 22.7, 23.4, 24.4),
+                     expand = expansion(0),
+                     labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "21" = "Post 5RT",
+                                "22.7" = "30min post 6RT", "23.4" = "2h post 6RT",
+                                "24.4" = "23h post 6RT")) +
+  labs(x = "Time", y = "Strength index fold change", fill = "Supplement") +
+  theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, size = 6),
+        axis.title = element_text(size = 7),
+        axis.title.x = element_blank(),
         legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
-        legend.key = element_rect(fill = "white"),
-        axis.text.y = element_text(size = 6)) +
+        legend.key = element_rect(fill = "white")) +
   plot_theme
+
+
+#str.fig <- str.emm %>%
+#  data.frame() %>%
+#  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+#  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+#  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
+#  annotate("text", x = "change.4", y = -0.04, label = "*") +
+#  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+#                position = pos,
+#                width = 0.2) +
+#  geom_line(position = pos) +
+#  geom_point(shape = 21, position = pos, size = 2) +
+#  scale_fill_manual(values = colors[c(1,4)]) +
+#  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Post 2nd RT", "change.3" = "Post 4th RT",
+#                            "change.4" = "Post 5th RT", "change.5" = "30min post 6th RT", 
+#                            "change.6" = "2h post 6th RT", "change.7" = "23h post 6th RT")) +
+#  labs(x = "", y = "Isometric peak torque \n(Nm fold change)\n", fill = "Supplement") +
+#  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+#        axis.title.y = element_text(size = 7),
+#        legend.title = element_text(size = 7),
+#        legend.text = element_text(size = 6),
+#        legend.key = element_rect(fill = "white"),
+#        axis.text.y = element_text(size = 6)) +
+#  plot_theme
 
 
 
@@ -252,7 +298,7 @@ fig1 <- plot_grid(d.fig,
                   plot_grid(glu.fig + theme(legend.position = "none"),
                             cpep.fig + theme(legend.position = "none"),
                             ncol = 2),
-                  plot_grid(str.fig),
+                  plot_grid(str.fig2),
                   ncol = 1,
                   rel_heights = c(1.5, 0.3, 1.5, 1.5)) +
   draw_plot_label(label = c("A)", "B)", "C)", "D)"),
