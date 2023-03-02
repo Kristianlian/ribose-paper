@@ -25,7 +25,7 @@ str.emm <- readRDS("./data/data-gen/humac/emm.str.RDS")
 str.fig2 <- readRDS("./data/data-gen/humac/str.fig2.RDS")
 
 ### Plots
-pos <- position_dodge(width = 0.2)
+pos <- position_dodge(width = .2)
 
 # Designing the plot theme
 
@@ -57,7 +57,7 @@ cpep.fig <- cpep.change %>%
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
-  geom_line(position = pos) +
+  geom_line(position = pos, lty = 2) +
   geom_point(shape = 21, position = pos, size = 2) +
   scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
@@ -88,7 +88,7 @@ glu.fig <- glu.change %>%
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
-  geom_line(position = pos) +
+  geom_line(position = pos, lty = 2) +
   geom_point(shape = 21, position = pos, size = 2) +
   scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 135, 150, 270),
@@ -133,7 +133,7 @@ str.fig2 <- str.emm2 %>%
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 position = pos,
                 width = 0.2) +
-  geom_line() +
+  geom_line(lty = 2) +
   geom_point(shape = 21, size = 2) +
   scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_continuous(limits = c(0,25), breaks = c(0, 8, 16, 21, 22.7, 23.4, 24.4),
@@ -141,7 +141,7 @@ str.fig2 <- str.emm2 %>%
                      labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "21" = "Post 5RT",
                                 "22.7" = "30min post 6RT", "23.4" = "2h post 6RT",
                                 "24.4" = "23h post 6RT")) +
-  labs(x = "Time", y = "Strength index fold change", fill = "Supplement") +
+  labs(x = "Time", y = "Strength index change", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, size = 6),
         axis.title = element_text(size = 7),
         axis.title.x = element_blank(),

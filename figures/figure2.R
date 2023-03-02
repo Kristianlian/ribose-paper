@@ -102,8 +102,8 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post")),
          target = factor(target, levels = c("47S rRNA", "18S rRNA", "28S rRNA", "5.8S rRNA", "5S rRNA"),
                          labels = c("47S", "18S", "28S", "5.8S", "5S"))) %>%
-  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
-  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
+  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.3)) +
   geom_line(position = position_dodge(width = 0.3)) +
