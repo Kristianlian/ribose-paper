@@ -128,7 +128,11 @@ summary(m1)
 # These are log-fold change values (changeble with the mutate function)
 
 confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
-  data.frame()
+  data.frame() %>%
+  filter(supplement == "glucose") %>%
+  print()
+
+saveRDS(confint.m1, "./data/data-gen/training/vol.lemm.RDS")
 
 # Figure
 pos <- position_dodge(width = 0.2) # creates a position dodge easier to implement
@@ -138,7 +142,6 @@ totvolfold.plot <- confint.m1 %>%
   add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
   add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  annotate("text", x = "change.2", y = 1.32, label = "p = NS", size = 2.5) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 position = pos,
                 width = 0.2) +

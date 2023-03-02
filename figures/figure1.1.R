@@ -22,7 +22,10 @@ glu.change <- readRDS("./data/data-gen/glucose/gluc.change.RDS") # Untransformed
 # Humac data
 str.change <- readRDS("./data/data-gen/humac/str.change.RDS")
 str.emm <- readRDS("./data/data-gen/humac/emm.str.RDS")
-str.fig2 <- readRDS("./data/data-gen/humac/str.fig2.RDS")
+
+# Training volume data
+vol.lemm <- readRDS("./data/data-gen/training/vol.lemm.RDS")
+
 
 ### Plots
 pos <- position_dodge(width = .2)
@@ -124,7 +127,11 @@ str.emm2 <- str.emm %>%
                                                                  if_else(time == "change.7", 
                                                                          "24.4", time)))))))) %>%
   mutate(#timeh = factor(timeh, levels = c("0", "72", "192", "264", "266", "268", "291")),
-    timeh = as.numeric(timeh))
+    timeh = as.numeric(timeh)) 
+ # mutate(status = if_else(timeh %in% c("0", "change.2", "change.3", "change.4"),
+ #                        "rest",
+ #                        if_else(timeh %in% c("change.5", "change.6", "change.7"),
+ #                                             "acute", timeh))) 
 
 str.fig2 <- str.emm2 %>%
   data.frame() %>%
@@ -150,30 +157,29 @@ str.fig2 <- str.emm2 %>%
         legend.key = element_rect(fill = "white")) +
   plot_theme
 
+# Training volume figure
 
-#str.fig <- str.emm %>%
-#  data.frame() %>%
-#  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-#  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-#  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
-#  annotate("text", x = "change.4", y = -0.04, label = "*") +
-#  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
-#                position = pos,
-#                width = 0.2) +
-#  geom_line(position = pos) +
-#  geom_point(shape = 21, position = pos, size = 2) +
-#  scale_fill_manual(values = colors[c(1,4)]) +
-#  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Post 2nd RT", "change.3" = "Post 4th RT",
-#                            "change.4" = "Post 5th RT", "change.5" = "30min post 6th RT", 
-#                            "change.6" = "2h post 6th RT", "change.7" = "23h post 6th RT")) +
-#  labs(x = "", y = "Isometric peak torque \n(Nm fold change)\n", fill = "Supplement") +
-#  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-#        axis.title.y = element_text(size = 7),
-#        legend.title = element_text(size = 7),
-#        legend.text = element_text(size = 6),
-#        legend.key = element_rect(fill = "white"),
-#        axis.text.y = element_text(size = 6)) +
-#  plot_theme
+vol.fig <- vol.lemm %>%
+  data.frame() %>%
+  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
+  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
+                position = pos,
+                width = 0.2) +
+  geom_line(position = pos) +
+  geom_point(shape = 21, position = pos, size = 3) +
+  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Session 2", "change.3" = "Session 3",
+                            "change.4" = "Session 4", "change.5" = "Session 5", 
+                            "change.6" = "Session 6")) +
+  labs(x = "", y = "Training volume \n(Fold change)\n", fill = "Supplement") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 7, angle = 45, hjust = 1))
+#theme(plot.background = element_rect(fill = "gray80")) 
+
+# Code for annotating each time point
+# annotate("text", x = c("change.1", "change.2", "change.3", "change.4", "change.5", "change.6"),
+#       y = c(1.05, 1.2, 1.18, 1.3, 1.27, 1.32), label = "p > 0.05", size = 2.5) +
 
 
 
