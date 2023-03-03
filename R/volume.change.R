@@ -62,6 +62,8 @@ vol.exp <- tot.volh %>%
             sd.vol = sd(tot.volume)) %>%
   print()
 
+saveRDS(vol.exp, "./data/data-gen/training/volume.absolute.RDS")
+
 totvol.barplot <- ggplot(vol.exp, aes(fill = supplement, y = mean.vol, x = time)) +
   annotate("text", x = c("session4", "session5", "session6"),
            y = c(8500, 8500, 8700), label = "†") +
@@ -97,6 +99,30 @@ change_dat <- tot.volh %>%
   # print()
   
   ungroup() %>%
+  mutate(change.2 = session2-baseline,
+         change.3 = session3-baseline,
+         change.4 = session4-baseline,
+         change.5 = session5-baseline,
+         change.6 = session6-baseline,
+         baseline = baseline - mean(baseline, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, baseline, change.2, change.3, change.4, change.5, change.6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.2:change.6)) %>%
+  print()
+
+saveRDS(change_dat, "./data/data-gen/training/vol.change.RDS")
+
+change_ldat <- tot.volh %>%
+  dplyr::select(subject, time, tot.volume, supplement) %>%
+  group_by(subject, time, supplement) %>%
+  summarise(tot.volume = mean(tot.volume, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time, 
+              values_from = tot.volume) %>%
+  # print()
+  
+  ungroup() %>%
   mutate(change.2 = log(session2)-log(baseline),
          change.3 = log(session3)-log(baseline),
          change.4 = log(session4)-log(baseline),
@@ -110,7 +136,7 @@ change_dat <- tot.volh %>%
                cols = (change.2:change.6)) %>%
   print()
 
-saveRDS(change_dat, "./data/data-gen/training/vol.lchange.RDS")
+saveRDS(change_ldat, "./data/data-gen/training/vol.lchange.RDS")
 
 ## Linear mixed effects model
 # This model tries to explain the change by time and supplement, accounting for potential differences in baseline values and that the same participants
@@ -118,7 +144,7 @@ saveRDS(change_dat, "./data/data-gen/training/vol.lchange.RDS")
 # It produces results on both the time effect and the difference between the groups at any timepoint. We are interested in the difference between groups.
 
 m1 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = change_dat)
+                     data = change_ldat)
 plot(m1)
 
 summary(m1)
@@ -128,9 +154,7 @@ summary(m1)
 # These are log-fold change values (changeble with the mutate function)
 
 confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
-  data.frame() %>%
-  filter(supplement == "glucose") %>%
-  print()
+  data.frame()
 
 saveRDS(confint.m1, "./data/data-gen/training/vol.lemm.RDS")
 

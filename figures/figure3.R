@@ -38,8 +38,8 @@ colors <- c("#d7191c",
 labsize <- 8
 textsize <- 6
 htextsize <- 7
-legendti <- 5
-legendtex <- 4.25
+legendti <- 6
+legendtex <- 5.25
 atext <- 2
 keysize <- 2
 
@@ -62,7 +62,7 @@ cmyc.plot <- cmyc %>%
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2), lty = 2) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = colors[c(4,1)]) +
   #scale_y_continuous(breaks = c(1,2,3,4),
@@ -86,7 +86,7 @@ ubf.plot <- ubf %>%
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2), lty = 2) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = colors[c(4,1)]) +
   labs(x = "Time", y = "UBF AU", fill = "") + 
@@ -108,9 +108,10 @@ rps6.plot <- rps6 %>%
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2), lty = 2) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
-  scale_fill_manual(values = colors[c(4,1)]) +
+  scale_fill_manual(values = colors[c(4,1)],
+                    labels = c("Glucose", "Placebo")) +
   labs(x = "Time", y = "rpS6 AU", fill = "Supplement") +
   theme(axis.title = element_text(size = htextsize),
         axis.title.x = element_blank(),
@@ -118,7 +119,8 @@ rps6.plot <- rps6 %>%
         legend.title = element_text(size = legendti),
         legend.text = element_text(size = legendtex),
         legend.key = element_rect(fill = "white"),
-        legend.background = element_rect(fill = "white")) +
+        legend.background = element_rect(fill = "white"),
+        legend.key.size = unit(0.3, "cm")) +
   plot_theme
 
 # UBF/Total RNA correlation plot
@@ -156,7 +158,8 @@ corr.fig <- joined.dat %>%
   ggplot(aes(sd.ubf, mean.rna, fill = time)) + 
   geom_point(shape = 24, size = 1) +
   # geom_smooth(method = "lm", se = FALSE) +
-  scale_fill_manual(values = colors[c(2,3)]) +
+  scale_fill_manual(values = colors[c(2,3)],
+                    labels = c("Baseline", "Post")) +
   annotate("segment", 
            x = filter(min_max, time == "pre")$min, 
            xend = filter(min_max, time == "pre")$max, 
@@ -185,9 +188,10 @@ corr.fig <- joined.dat %>%
         axis.title.x = element_markdown(size = 7),
         axis.text = element_text(size = 7),
         legend.title = element_text(size = 6),
-        legend.text = element_text(size = 5),
+        legend.text = element_text(size = 6),
         legend.key = element_rect(fill = "white"),
-        axis.title.y = element_markdown(size = 7))
+        axis.title.y = element_markdown(size = 7),
+        legend.key.size = unit(0.3, "cm"))
 
 # Cowplot for gathering figures
 
@@ -204,21 +208,21 @@ rps6.fig <- plot_grid(rps6.plot + theme(legend.position = "none"),
           ncol = 5,
           rel_widths = c(.75,
                          .15, 
-                         .05, 
+                         .1, 
                          .0, 
                          1.5)) +
   draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
                             "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
                             "kDa 37", "25", "37", "25", 
                             "Duplicate 1", "Duplicate 2"),
-                  x = c(.4825, .529, .576, .625,
-                        .77, .818, .864, .907, 
-                        .428, .44, .7285, .7285, 
-                        .555, .84),
+                  x = c(.4885, .535, .59, .64,
+                        .776, .824, .869, .912, 
+                        .433, .448, .729, .73, 
+                        .561, .846),
                   y = c(.75, .75, .75, .75,
                         .75, .75, .75, .75, 
-                        .68, .315, .68, .315,
-                        .98, .98),
+                        .67, .32, .67, .33,
+                        .95, .95),
                   hjust = .5, vjust = .5, size = 5) 
 
 
@@ -230,20 +234,21 @@ cmyc.fig <- plot_grid(cmyc.plot + theme(legend.position = "none"),
                       ncol = 5,
                       rel_widths = c(.75,
                                      .1, 
-                                     .0, 
+                                     .05, 
                                      .1, 
                                      1.5)) +
   draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
                             "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
-                            "kDa 75", "50", "75", "50", "Duplicate 1", "Duplicate 2"),
-                  x = c(.4825, .529, .576, .625,
-                        .77, .818, .864, .907, 
-                        .428, .44, .7285, .7285, 
-                        .555, .84),
+                            "kDa 75", "50", "75", "50", 
+                            "Duplicate 1", "Duplicate 2"),
+                  x = c(.4885, .535, .59, .64,
+                        .776, .824, .869, .912, 
+                        .435, .45, .729, .73, 
+                        .561, .846),
                   y = c(.75, .75, .75, .75,
                         .75, .75, .75, .75, 
-                        .675, .32, .675, .33,
-                        .98, .98),
+                        .67, .32, .67, .33,
+                        .95, .95),
                   hjust = .5, vjust = .5, size = 5) 
 
 
@@ -255,16 +260,16 @@ ubf.fig <- plot_grid(ubf.plot + theme(legend.position = "none"),
                       ncol = 5,
                       rel_widths = c(.75,
                                      .15, 
-                                     .05, 
+                                     .1, 
                                      .0, 
                                      1.5))+
   draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
                             "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
                             "kDa 100", "75", "100", "75", "Duplicate 1", "Duplicate 2"),
-                  x = c(.4825, .529, .576, .625,
-                        .77, .818, .864, .907, 
-                        .425, .44, .725, .7285, 
-                        .555, .84),
+                  x = c(.4885, .535, .59, .64,
+                        .776, .824, .869, .912, 
+                        .433, .448, .729, .73, 
+                        .561, .846),
                   y = c(.75, .75, .75, .75,
                         .75, .75, .75, .75, 
                         .67, .32, .67, .33,
@@ -287,12 +292,12 @@ tot.fig <- plot_grid(NULL,
           NULL,
           ncol = 5, 
           rel_widths = c(0.4,1,0.1,1,0.65)) +
-  draw_plot_label(label = c("Gel 3", "kDa 250", "150", "100", "75", "50", "37", "25", "20", "15", 
-                            "Gel 6"), #"250", "150", "100", "75", "50", "37", "25", "20", "15"),
+  draw_plot_label(label = c("Duplicate 1", "kDa 250", "150", "100", "75", "50", "37", "25", "20", "15", 
+                            "Duplicate 2"), #"250", "150", "100", "75", "50", "37", "25", "20", "15"),
                                     x = c(.29, .11, .143, .143, .15, .15, .15, .15, .15, .15, 
                                           .64), #.683, .683, .683, .69, .69, .69, .69, .69, .69),
-                                    y = c(.97,.93, .885, .833, .775, .653, .53, .332, .25, .072,
-                                          .97),#.93, .885, .833, .775, .653, .535, .332, .25, .072),
+                                    y = c(.98,.93, .885, .833, .775, .653, .53, .332, .25, .072,
+                                          .98),#.93, .885, .833, .775, .653, .535, .332, .25, .072),
                                     hjust = .5, vjust = .5, size = 6)
                   
 

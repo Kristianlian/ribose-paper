@@ -119,31 +119,32 @@ str.emm2 <- str.emm %>%
                                  if_else(time == "change.3",
                                          "16",
                                          if_else(time == "change.4",
-                                                 "21",
+                                                 "20",
                                                  if_else(time == "change.5",
-                                                         "22.7",
+                                                         "21",
                                                          if_else(time == "change.6",
-                                                                 "23.4",
+                                                                 "22",
                                                                  if_else(time == "change.7", 
-                                                                         "24.4", time)))))))) %>%
+                                                                         "23.5", time)))))))) %>%
   mutate(#timeh = factor(timeh, levels = c("0", "72", "192", "264", "266", "268", "291")),
-    timeh = as.numeric(timeh)) 
- # mutate(status = if_else(timeh %in% c("0", "change.2", "change.3", "change.4"),
- #                        "rest",
- #                        if_else(timeh %in% c("change.5", "change.6", "change.7"),
- #                                             "acute", timeh))) 
+    timeh = as.numeric(timeh)) %>%
+  mutate(status = if_else(time %in% c("0", "change.2", "change.3", "change.4"),
+                         "rest",
+                         if_else(time %in% c("change.5", "change.6", "change.7"),
+                                              "acute", time))) 
 
 str.fig2 <- str.emm2 %>%
   data.frame() %>%
   ggplot(aes(timeh, emmean, fill = supplement)) +
-  annotate("text", x = 21, y = -0.04, label = "*") +
+  annotate("text", x = 20, y = -0.04, label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 position = pos,
                 width = 0.2) +
   geom_line(lty = 2) +
   geom_point(shape = 21, size = 2) +
-  scale_fill_manual(values = colors[c(1,4)]) +
-  scale_x_continuous(limits = c(0,25), breaks = c(0, 8, 16, 21, 22.7, 23.4, 24.4),
+  scale_fill_manual(values = colors[c(1,4)],
+                    labels = c("Glucose", "Placebo")) +
+  scale_x_continuous(limits = c(0,25), breaks = c(0, 8, 16, 20, 21, 22, 23.5),
                      expand = expansion(0),
                      labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "21" = "Post 5RT",
                                 "22.7" = "30min post 6RT", "23.4" = "2h post 6RT",
@@ -154,33 +155,37 @@ str.fig2 <- str.emm2 %>%
         axis.title.x = element_blank(),
         legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
-        legend.key = element_rect(fill = "white")) +
+        legend.key = element_rect(fill = "white"),
+        legend.key.size = unit(0.3, "cm")) +
   plot_theme
 
-# Training volume figure
+#str.emm2 %>%
+#mutate(status = factor(status, levels = c("rest", "acute"),
+#                       labels = c("Performance", 
+#                                  "Recovery"))) %>%
+#  ggplot(aes(timeh, emmean, group = supplement, fill = supplement)) +
+#  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+#                width = 0.1,
+#                position = position_dodge(width = 0.3)) +
+#  geom_line(position = position_dodge(width = 0.3)) +
+#  geom_point(shape = 21, size = 1.5, position = position_dodge(width = 0.3)) +
+#  facet_grid(~status, space = "free", scale = "free") +
+#  scale_fill_manual(values = colors[c(1,4)]) +
+#  scale_x_continuous(limits = c(0,45), breaks = c(0, 8, 16, 20, 20.5, 22, 45),
+#                                          labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "20" = "Post 5RT",
+#                                                     "20.5" = "30min post 6RT", "22" = "2h post 6RT",
+#                                                     "45" = "23h post 6RT")) +
+# # scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+#  labs(x = "", y = "", fill = "Supplement") 
 
-vol.fig <- vol.lemm %>%
-  data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                position = pos,
-                width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 3) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Session 2", "change.3" = "Session 3",
-                            "change.4" = "Session 4", "change.5" = "Session 5", 
-                            "change.6" = "Session 6")) +
-  labs(x = "", y = "Training volume \n(Fold change)\n", fill = "Supplement") +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 7, angle = 45, hjust = 1))
-#theme(plot.background = element_rect(fill = "gray80")) 
-
-# Code for annotating each time point
-# annotate("text", x = c("change.1", "change.2", "change.3", "change.4", "change.5", "change.6"),
-#       y = c(1.05, 1.2, 1.18, 1.3, 1.27, 1.32), label = "p > 0.05", size = 2.5) +
-
+# theme(axis.title = element_text(size = htextsize),
+#       axis.text = element_text(size = textsize),
+#       legend.title = element_text(size = htextsize),
+#       legend.text = element_text(size = textsize),
+#       strip.text = element_text(hjust = 0, size = htextsize),
+#       strip.background = element_rect(fill = "white")) + 
+# theme(axis.title.x = element_blank()) +
+#plot_theme 
 
 
 ## Study design

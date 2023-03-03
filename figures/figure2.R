@@ -82,9 +82,10 @@ totrna.plot <- emm.tot %>%
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
+  geom_line(position = position_dodge(width = 0.2), lty = 2) +
   geom_point(position = position_dodge(width = 0.2), shape = 21, size = 2) +
-  scale_fill_manual(values = colors[c(1,4)]) +
+  scale_fill_manual(values = colors[c(1,4)],
+                    labels = c("Glucose", "Placebo")) +
   labs(x = "Time-point", y = "Total RNA (ng &times; mg<sup>-1</sup> fold change)", fill = "Supplement") +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
@@ -92,7 +93,8 @@ totrna.plot <- emm.tot %>%
        axis.text.x = element_text(size = textsize),
        axis.text.y = element_text(size = textsize),
        legend.title = element_text(size = htextsize),
-       legend.text = element_text(size = textsize)) +
+       legend.text = element_text(size = textsize),
+       legend.key.size = unit(0.3, "cm")) +
   plot_theme
   
 
@@ -106,7 +108,7 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.3)) +
-  geom_line(position = position_dodge(width = 0.3)) +
+  geom_line(position = position_dodge(width = 0.3), lty = 2) +
   geom_point(shape = 21, size = 1.5, position = position_dodge(width = 0.3)) +
   scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
@@ -114,7 +116,7 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
   facet_wrap(~target, nrow = 1) +
   theme(axis.title = element_text(size = htextsize),
         axis.text = element_text(size = textsize),
-        legend.title = element_text(size = htextsize),
+        legend.title = element_text(size = textsize),
         legend.text = element_text(size = textsize),
         strip.text = element_text(hjust = 0, size = htextsize),
         strip.background = element_rect(fill = "white")) + 
