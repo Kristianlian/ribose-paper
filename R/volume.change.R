@@ -149,6 +149,13 @@ plot(m1)
 
 summary(m1)
 
+m2 <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = change_dat)
+plot(m2)
+summary(m2)
+
+
+
 ## Fold-change estimated means
 # Gets estimated means from the model, these are average increase at pre = 0 (the average pre value).
 # These are log-fold change values (changeble with the mutate function)
@@ -157,6 +164,11 @@ confint.m1 <- confint(emmeans(m1, specs = ~"supplement|time")) %>%
   data.frame()
 
 saveRDS(confint.m1, "./data/data-gen/training/vol.lemm.RDS")
+
+confint.m2 <- confint(emmeans(m2, specs = ~"supplement|time")) %>%
+  data.frame()
+
+saveRDS(confint.m2, "./data/data-gen/training/vol.emm.RDS")
 
 # Figure
 pos <- position_dodge(width = 0.2) # creates a position dodge easier to implement
