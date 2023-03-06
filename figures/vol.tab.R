@@ -27,7 +27,11 @@ vol.summarised <- vol.clean  %>%
   group_by(time, supplement) %>%
   # Summarises mean and SD of total session volume
   summarise(mean.vol = mean(tot.volume, na.rm = TRUE),
-            sd.vol = sd(tot.volume, na.rm = TRUE)) 
+            sd.vol = sd(tot.volume, na.rm = TRUE)) %>%
+  mutate(tot.stat = paste0(round(mean.vol, 2), " ± ", round(sd.vol, 2))) %>%
+  select(time, supplement, tot.stat) %>%
+  print()
+  
 
 
 # Then, summarizing the change in total session volume per time point and supplement
@@ -52,8 +56,10 @@ vol.ch <- vol.change %>%
                                                          "session5",
                                                          if_else(time == "change.6",
                                                                  "session6", time))))))) %>%
+  mutate(ch.stat = paste0(round(mean.change, 2), " ± ", round(sd.change, 2))) %>%
+  select(time, supplement, ch.stat) %>%
   print()
-
+  
 # Joining the two data frames
 joined.vol <- vol.summarised %>%
   full_join(vol.ch) %>%
@@ -103,24 +109,24 @@ vol.tab <- colformat_double(vol.tab,
 ## Headers 
 # Labelling
 vol.tab <- set_header_labels(vol.tab,
-                             time = "Session", supplement = "Supplement", mean.vol = "Avg. volume (kg)",
-                             sd.vol = "SD", mean.change = "Avg. change (kg)", sd.change = "SD")
+                             time = "Session", supplement = "Supplement", 
+                             tot.stat = "Mean volume (kg) ± SD", ch.stat = "Mean change (kg) ± SD")
 # Bold font
 vol.tab <- bold(vol.tab, bold = TRUE, part = "header")
 # Aligning numbers and headers
 vol.tab <- align_nottext_col(vol.tab, align = "center", header = TRUE, footer = FALSE)
 
 ## Body
-# Sets width for the entire table
-vol.tab <- width(vol.tab, width = 1.02)
 # Increases width for selected columns (j = ..)
-vol.tab <- width(vol.tab, j = c(3, 5), width = 1.3)
+vol.tab <- width(vol.tab, j = 1, width = 0.8)
+vol.tab <- width(vol.tab, j = 2, width = 1.1)
+vol.tab <- width(vol.tab, j = c(3,4), width = 2)
 
 ## Foot
 # Footnote to indicate statistics 
 vol.tab <- footnote(x = vol.tab,
                     i = 7:12,
-                    j = 5,
+                    j = 4,
                     ref_symbols = "#",
                     value = as_paragraph(" = p < 0.05, compared to baseline"))
 

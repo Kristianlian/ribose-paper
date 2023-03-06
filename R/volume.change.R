@@ -30,6 +30,8 @@ tot.volh <- tot.vol %>%
   mutate(time = factor(time, levels = c("baseline", "session1", "session2", "session3", "session4", "session5", "session6")),
          supplement = factor(supplement, levels = c("placebo", "glucose")))
 
+saveRDS(tot.volh, "./data/data-gen/training/vol.clean.RDS")
+
 ## Baseline analysis - comparison of the two legs
 # A baseline analysis comparing training volume at baseline sessions between the two legs via a paired t.test, and providing a summary of mean training
 # volume and sd
