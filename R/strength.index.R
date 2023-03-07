@@ -36,8 +36,9 @@ humac.clean2 <- humac %>%
                                                                         "test7", timepoint)))))))) %>%
   mutate(time = factor(time, levels = c("baseline", "test2", "test3", "test4", "test5", "test6", "test7")),
          acute = factor(acute, levels = c("rest", "post30min", "post2h", "post23h")),
-         supplement = factor(supplement, levels = c("glucose", "placebo"))) %>%
-  print()
+         supplement = factor(supplement, levels = c("glucose", "placebo"))) 
+
+saveRDS(humac.clean2, "./data/data-gen/humac/humac.clean2.RDS")
 
 strength.index <- humac.clean2 %>%
   group_by(time, supplement) %>%
@@ -58,7 +59,7 @@ strength.index <- humac.clean2 %>%
   group_by(subject, time, supplement) %>%
   summarise(strength = mean(strength.i))
 
-  
+saveRDS(strength.index, "./data/data-gen/humac/str.index.RDS")
 ### Change analysis
 
 str.change <- strength.index %>%
