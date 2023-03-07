@@ -1,83 +1,362 @@
-#### Nutrition analysis
+### Analysis of c-peptide data
+#
+#
+## Author: KL/DH
+#
+#
+## Project: Ribose
+#
+#
+## Purpose: This script analyses the cleaned up nutrition data by change-score
+# comparisons
+#
+#
+## Asscociated scripts: cpep.cleanup.R
+#
+#
+## Packages
+library(tidyverse); library(lme4); library(lmerTest); library(emmeans)
 
-# Author: SCM/DH
-# Edited: Kristian Lian - small changes, mainly different organizing etc.
-# Project: Ribose
-
-# This script analyses nutrition data extracted from "MyFitnessPal" and imported via excel. Macro-nutrient intake per participant per day
-# is calculated to investigate whether there where different intakes between training days.
-
-# Packages
-library(knitr);library(rmarkdown);library(tidyverse);library(readr);
-library(tinytex);library(tidyr);library(broom);library(arsenal);library(lme4);library(dplyr);
-library(lmerTest);library(emmeans);library(magrittr);library(dabestr) #library(dbplyr)?
 
 # Data
 
-fp.weight <- readRDS("./data/data-gen/dxa/fp.weight.RDS")
+nut.clean <- readRDS("./data/data-gen/nutrition/nut.clean.RDS")
 
-nut.res <- readRDS("./data/data-gen/dxa/nutha.RDS")
 
-## Macro nutrient analysis
+### Macro nutrient change analysis
 # The code beneath tests whether there are differences in macro nutrient intake from pre to post, 
 # divided into "protein", "fat" and "carbohydrates", and total calories in a linear model. The main interest is if there is difference between glucose and 
 # placebo.
 
+## Protein
+
+# Log transforming for analysis
+pro.lchange <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, protein) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = protein) %>%
+  ungroup() %>%
+  mutate(change.d2 = log(D2)-log(D1),
+         change.d3 = log(D3)-log(D1),
+         change.d4 = log(D4)-log(D1),
+         change.d5 = log(D5)-log(D1),
+         change.d6 = log(D6)-log(D1),
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6)) 
+
+saveRDS(pro.lchange, "./data/data-gen/nutrition/pro.lchange.RDS")
+
+# Untransformed change for figures
+pro.change <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, protein) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = protein) %>%
+  ungroup() %>%
+  mutate(change.d2 = D2-D1,
+         change.d3 = D3-D1,
+         change.d4 = D4-D1,
+         change.d5 = D5-D1,
+         change.d6 = D6-D1,
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6))
+
+saveRDS(pro.change, "./data/data-gen/nutrition/pro.change.RDS")
+
+
+pro.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = pro.lchange)
+pro.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = pro.change)
+
+pro.lres <- plot(pro.lmod)
+pro.lsum <- summary(pro.lmod)
+
+pro.res <- plot(pro.mod)
+pro.sum <- summary(pro.mod)
+
+## Fat
+# Log-transformed for analysis
+fat.lchange <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, fat) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = fat) %>%
+  ungroup() %>%
+  mutate(change.d2 = log(D2)-log(D1),
+         change.d3 = log(D3)-log(D1),
+         change.d4 = log(D4)-log(D1),
+         change.d5 = log(D5)-log(D1),
+         change.d6 = log(D6)-log(D1),
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6)) 
+
+saveRDS(fat.lchange, "./data/data-gen/nutrition/fat.lchange.RDS")
+
+# Untransformed for figures
+fat.change <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, fat) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = fat) %>%
+  ungroup() %>%
+  mutate(change.d2 = D2-D1,
+         change.d3 = D3-D1,
+         change.d4 = D4-D1,
+         change.d5 = D5-D1,
+         change.d6 = D6-D1,
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6))
+
+saveRDS(fat.change, "./data/data-gen/nutrition/fat.change.RDS")
+
+fat.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = fat.lchange)
+fat.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = fat.change)
+
+fat.lres <- plot(fat.lmod)
+fat.lsum <- summary(fat.lmod)
+fat.res <- plot(fat.mod)
+fat.sum <- summary(fat.mod)
+
+## Carbohydrates
+# Log-transformed for analysis
+
+cho.lchange <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, cho = carbohydrates) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = cho) %>%
+  ungroup() %>%
+  mutate(change.d2 = log(D2)-log(D1),
+         change.d3 = log(D3)-log(D1),
+         change.d4 = log(D4)-log(D1),
+         change.d5 = log(D5)-log(D1),
+         change.d6 = log(D6)-log(D1),
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6)) 
+
+saveRDS(cho.lchange, "./data/data-gen/nutrition/cho.lchange.RDS")
+
+# Untransformed for figures
+cho.change <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, cho = carbohydrates) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = cho) %>%
+  ungroup() %>%
+  mutate(change.d2 = D2-D1,
+         change.d3 = D3-D1,
+         change.d4 = D4-D1,
+         change.d5 = D5-D1,
+         change.d6 = D6-D1,
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6))
+
+saveRDS(cho.change, "./data/data-gen/nutrition/cho.change.RDS")
+
+cho.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = cho.lchange)
+cho.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = cho.change)
+
+
+cho.lres <- plot(cho.lmod)
+cho.lsum <- summary(cho.lmod)
+cho.res <- plot(cho.mod)
+cho.sum <- summary(cho.mod)
+
+## Total calories a day
+# Log-transformed for analysis
+cal.lchange <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, calories) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = calories) %>%
+  ungroup() %>%
+  mutate(change.d2 = log(D2)-log(D1),
+         change.d3 = log(D3)-log(D1),
+         change.d4 = log(D4)-log(D1),
+         change.d5 = log(D5)-log(D1),
+         change.d6 = log(D6)-log(D1),
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6)) 
+
+saveRDS(cal.lchange, "./data/data-gen/nutrition/cal.lchange.RDS")
+
+# Untransformed for figures
+cal.change <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, calories) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = calories) %>%
+  ungroup() %>%
+  mutate(change.d2 = D2-D1,
+         change.d3 = D3-D1,
+         change.d4 = D4-D1,
+         change.d5 = D5-D1,
+         change.d6 = D6-D1,
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6)) 
+
+saveRDS(cal.change, "./data/data-gen/nutrition/cal.change.RDS")
+
+cal.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = cal.lchange)
+cal.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = cal.change)
+
+cal.lres <- plot(cal.lmod)
+cal.lsum <- summary(cal.lmod)
+cal.res <- plot(cal.mod)
+cal.sum <- summary(cal.mod)
+
+## Protein per body weight
+# Log-transformed for analysis
+proprkg.lchange <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, proprkg) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = proprkg) %>%
+  ungroup() %>%
+  mutate(change.d2 = log(D2)-log(D1),
+         change.d3 = log(D3)-log(D1),
+         change.d4 = log(D4)-log(D1),
+         change.d5 = log(D5)-log(D1),
+         change.d6 = log(D6)-log(D1),
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6)) 
+
+saveRDS(proprkg.lchange, "./data/data-gen/nutrition/propr.lchange.RDS")
+
+# Untransformed for figures
+proprkg.change <- nut.clean %>%
+  select(time = timepoint, subject, supplement = group, proprkg) %>%
+  group_by(subject, time, supplement) %>%
+  #summarise(mean.pro = mean(protein, na.rm = TRUE)) %>%
+  pivot_wider(names_from = time,
+              values_from = proprkg) %>%
+  ungroup() %>%
+  mutate(change.d2 = D2-D1,
+         change.d3 = D3-D1,
+         change.d4 = D4-D1,
+         change.d5 = D5-D1,
+         change.d6 = D6-D1,
+         d1 = D1-mean(D1, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, d1, change.d2, change.d3, change.d4, change.d5, change.d6) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.d2:change.d6)) 
+
+saveRDS(proprkg.change, "./data/data-gen/nutrition/propr.change.RDS")
+
+propr.lmod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = proprkg.lchange)
+propr.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = proprkg.change)
+
+propr.lres <- plot(propr.lmod)
+propr.lsum <- summary(propr.lmod)
+propr.res <- plot(propr.mod)
+propr.sum <- summary(propr.mod)
+
+## Getting emmeans
 # Protein
+protein.lemm <- confint(emmeans(pro.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(protein.lemm, "./data/data-gen/nutrition/prot.lemm.RDS")
 
-pro.dat <- nut.res %>%
-  select(timepoint, subject, group, protein)
-
-prolm <- lmer(protein ~ timepoint + timepoint:group + (1|subject), data = pro.dat)
-
-plot(prolm)
-
-summary(prolm)
+protein.emm <- confint(emmeans(pro.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(protein.emm, "./data/data-gen/nutrition/prot.emm.RDS")
 
 # Fat
+fat.lemm <- confint(emmeans(fat.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(fat.lemm, "./data/data-gen/nutrition/fat.lemm.RDS")
 
-fat.dat <- nut.res %>%
-  select(timepoint, subject, group, fat)
+fat.emm <- confint(emmeans(fat.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(fat.emm, "./data/data-gen/nutrition/fat.emm.RDS")
 
-fatlm <- lmer(fat  ~ timepoint + timepoint:group +(1|subject), data = fat.dat)
+# Carbs
+cho.lemm <- confint(emmeans(cho.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(cho.lemm, "./data/data-gen/nutrition/cho.lemm.RDS")
 
-plot(fatlm)
+cho.emm <- confint(emmeans(cho.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(cho.emm, "./data/data-gen/nutrition/cho.emm.RDS")
 
-summary(fatlm)
+# Calories
+cal.lemm <- confint(emmeans(cal.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(cal.lemm, "./data/data-gen/nutrition/cal.lemm.RDS")
 
-# Carbohydrates
-carb.dat <- nut.res %>%
-  select(timepoint, subject, group, carbohydrates)
+cal.emm <- confint(emmeans(cal.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(cal.emm, "./data/data-gen/nutrition/cal.emm.RDS")
+
+# Protein per kg body weight
+propr.lemm <- confint(emmeans(propr.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(propr.lemm, "./data/data-gen/nutrition/propr.lemm.RDS")
+
+propr.emm <- confint(emmeans(propr.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+saveRDS(propr.emm, "./data/data-gen/nutrition/propr.emm.RDS")
 
 
-carblm <- lmer(carbohydrates  ~ timepoint + timepoint:group + (1|subject), data = carb.dat)
-
-plot(carblm)
-
-summary(carblm)
-
-# Total calories a day
-
-cal.dat <- nut.res %>%
-  select(timepoint, subject, group, calories,) 
 
 
-callm <- lmer(calories  ~ 0 + timepoint + timepoint:group + (1|subject), data = cal.dat)
-
-plot(callm)
-
-summary(callm)
-
-# Protein per body weight
-
-prowe <- nut.res %>%
-  select(timepoint, subject, group, proprkg)
-
-prokglm <- lmer(proprkg  ~ 0 + timepoint + timepoint:group + (1|subject), data = prowe)
-
-plot(prokglm)
-
-summary(prokglm)
 
 
 

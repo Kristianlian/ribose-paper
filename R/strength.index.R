@@ -1,13 +1,18 @@
+### Strength index analysis
+#
+#
+## Author: KL
+#
+#
+## Project: Ribose
+#
+#
+## Purpose: This script creates and analyses strength index combined of isometric and 
+# isokinetic peak torque, to be used in fig 1 
+#
+#
+## Packages
 
-
-
-
-
-
-
-
-
-# Packages
 library(readxl);library(tidyverse)
 
 ## Handling the data by creating a new factor called time from timepoint. This factor combines any observation at T1 and T2 to baseline, etc. 

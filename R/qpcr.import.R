@@ -1,18 +1,29 @@
-### QPCR IMPORT #################
-
-
-
-### Import of qPRC raw data
-
-#This script imports and saves a data frame with cq-values per sample and average efficiencies.
+### Import and cleaning of qPCR raw data
+#
+#
+## Author: DH
+#
+#
+## Project: Ribose
+#
+#
+## Purpose: This script imports and saves a data frame with cq-values per sample and average efficiencies.
 # Data are saved in data/derivedData/qpcr-data.RDS
-
+#
+#
+## Asscociated scripts: qpcr.import.R
+#
+#
+## Packages
 
 library(qpcR)
 library(qpcrpal)
 library(parallel)
 library(tidyverse)
 
+### QPCR IMPORT #################
+
+### Import of qPRC raw data
 
 ## Load batch 
 

@@ -1,25 +1,20 @@
-#### qPCR-analysis
-
-
-
-# This script creates and saves the data frame qpcr_data2, calculates normalization factor (based on lambda), and
-# plots mean expression per treatment
-
-
-# The data frame contains:
-# 1. Sample name (sample)
-# 2. Target genes (target)
-# 3. Cq-values (Cq)
-# 4. Amplification efficiencies (eff)
-# 5. Subject
-# 6. Time point (time)
-# 7. Replicate number (rep)
-# 8. Biopsy weight (weight)
-# 9. Supplement
-# 10. Expression (expr)
-# 11. Normalization factor weight (nf.w)
-
-# Packages
+### Analysis of qpcr data
+#
+#
+## Author: DH/KL
+#
+#
+## Project: Ribose
+#
+#
+## Purpose: This script analyses the cleaned up qpcr data by change-score
+# comparisons
+#
+#
+## Asscociated scripts: qpcr.import.R
+#
+#
+## Packages
 
 library(tidyverse)
 library(readxl)

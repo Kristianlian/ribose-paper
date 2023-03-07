@@ -1,7 +1,7 @@
 ###### Baseline tab
 #
 #
-## Author: KL/SCM
+## Author: KL
 #
 #
 ## Purpose:
@@ -118,12 +118,12 @@ desc.tab <- align_nottext_col(desc.tab, align = "center", header = TRUE, footer 
 
 ## Body
 # Increases width for selected columns (j = ..) or the whole table
-desc.tab <- width(desc.tab, width = 1.2)
+desc.tab <- width(desc.tab, width = 1.25)
 
 ## Background color
 desc.tab <- bg(desc.tab, i = 2, j = NULL, bg = "gray", part = "body", source = j)
 
 
-save_as_image(desc.tab, path = "./figures/desctab.png", res = 1080)
+save_as_image(desc.tab, path = "./figures/tab1.png")
 
 

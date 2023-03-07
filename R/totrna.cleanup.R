@@ -3,7 +3,7 @@
 ##
 ## Title: RNA cleanup
 ## Purpose: Filter away bad RNA estimates based on RNA/weight relationship
-## Author: DH/KL
+## Author: DH
 ##
 ##
 ##

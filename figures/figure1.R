@@ -15,34 +15,20 @@ d.dat <- read_excel("./data/design.dat.xlsx", na = "NA")
 
 # C-peptide
 cpep.change <- readRDS("./data/data-gen/glucose/insulin.figchange.RDS") # Untransformed data
-cpep.emm <- readRDS("./data/data-gen/glucose/cpep.emm.RDS") # Unstransformed emmeans
-cpep.lchange <- readRDS("./data/data-gen/glucose/insulin.change.RDS") # Log-transformed data
-cpep.lemm <- readRDS("./data/data-gen/glucose/cpep.lemm.RDS") # Log-transformed emmeans
 
 # Blood glucose
 glu.change <- readRDS("./data/data-gen/glucose/gluc.change.RDS") # Untransformed data
-glu.emm <- readRDS("./data/data-gen/glucose/gluc.emm.RDS") # Untransformed emmeans
-glu.lchange <- readRDS("./data/data-gen/glucose/glu.change.RDS") # Log-transformed data
-glu.lemm <- readRDS("./data/data-gen/glucose/gluc.logemm.RDS") # Log-transformed emmeans
 
-# Humac pre->post 5 session
-isom.lchange <- readRDS("./data/data-gen/humac/isom.lchange.RDS") # Log-transformed data
-lemm.isom <- readRDS("./data/data-gen/humac/emm.isom.RDS") # Log-transformed emmans
-isok60.lchange <- readRDS("./data/data-gen/humac/isok60.lchange.RDS") # Log-transformed data
-lemm.60 <- readRDS("./data/data-gen/humac/emm.60.RDS") # Log-transformed emmeans
-isok240.lchange <- readRDS("./data/data-gen/humac/isok240.lchange.RDS") # Log-transformed data
-lemm.240 <- readRDS("./data/data-gen/humac/emm.240.RDS") # Log-transformed emmeans
+# Humac data
+str.change <- readRDS("./data/data-gen/humac/str.change.RDS")
+str.emm <- readRDS("./data/data-gen/humac/emm.str.RDS")
 
-# Humac pre->post sessions 6
-isomac.lchange <- readRDS("./data/data-gen/humac/isom.lchange.ac.RDS") # Log-transformed
-lemm.isomac <- readRDS("./data/data-gen/humac/emm.ac.isom.RDS")
-iso60ac.lchange <- readRDS("./data/data-gen/humac/iso60.lchange.ac.RDS") # Log-transformed
-lemm.60ac <- readRDS("./data/data-gen/humac/emm.ac.60.RDS")
-iso240ac.lchange <- readRDS("./data/data-gen/humac/iso240.lchange.ac.RDS") # Log-transformed
-lemm.240ac <- readRDS("./data/data-gen/humac/emm.ac.240.RDS")
+# Training volume data
+vol.lemm <- readRDS("./data/data-gen/training/vol.lemm.RDS")
+
 
 ### Plots
-pos <- position_dodge(width = 0.2)
+pos <- position_dodge(width = .2)
 
 # Designing the plot theme
 
@@ -50,6 +36,14 @@ plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
                     panel.background = element_rect(fill = "lightblue", colour = NA),
                     axis.line = element_line(colour = "black"))
+
+# Colours
+# Colours
+
+colors <- c("#d7191c",
+            "#fdae61",
+            "#abd9e9",
+            "#2c7bb6")
 
 
 
@@ -66,13 +60,13 @@ cpep.fig <- cpep.change %>%
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
-  geom_line(position = pos) +
+  geom_line(position = pos, lty = 2) +
   geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("GLUCOSE" = "red", "PLACEBO" = "royalblue")) +
-  labs(x = "", y = "Plasma C-peptide levels <br>(pmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
+  scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
-                     expand = expansion(0), labels = c("change.1" = "-120", "change.90" = "-30", "change.120" = "0", 
-                                                       "change.150" = "30", "change.270" = "120")) +
+                     expand = expansion(0), labels = c("change.1" = "-120 min", "change.90" = "-30 min", "change.120" = "0 min", 
+                                                       "change.150" = "30 min", "change.270" = "120 min")) +
+  labs(x = "", y = "Plasma c-peptide levels <br>(pmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
         axis.title.y = element_markdown(size = 7),
         legend.title = element_text(size = 7),
@@ -80,7 +74,7 @@ cpep.fig <- cpep.change %>%
         legend.key = element_rect(fill = "white"),
         axis.text.y = element_text(size = 6)) +
   plot_theme
-  
+
 
 
 ## Blood glucose
@@ -97,13 +91,13 @@ glu.fig <- glu.change %>%
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
                 position = pos) +
-  geom_line(position = pos) +
+  geom_line(position = pos, lty = 2) +
   geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  labs(x = "", y = "Plasma glucose levels <br>(mmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
+  scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 135, 150, 270),
-                     expand = expansion(0), labels = c("0" = "-120", "45" = "-90", "90" = "-30", "120" = "0", "135" = "15",
-                                                       "150" = "30", "270" = "120")) +
+                     expand = expansion(0), labels = c("0" = "-120 min", "45" = "-90 min", "90" = "-30 min", "120" = "0 min", "135" = "15 min",
+                                                       "150" = "30 min", "270" = "120 min")) +
+  labs(x = "", y = "Plasma glucose levels <br>(mmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
         axis.title.y = element_markdown(size = 7),
         legend.title = element_text(size = 7),
@@ -113,174 +107,90 @@ glu.fig <- glu.change %>%
 
 
 
+## Gathered strenght figure
 
+str.emm2 <- str.emm %>%
+  add_row(supplement = "placebo", time = "0", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "0", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  mutate(timeh = if_else(time == "0",
+                         "0",
+                         if_else(time == "change.2",
+                                 "8",
+                                 if_else(time == "change.3",
+                                         "16",
+                                         if_else(time == "change.4",
+                                                 "20",
+                                                 if_else(time == "change.5",
+                                                         "21",
+                                                         if_else(time == "change.6",
+                                                                 "22",
+                                                                 if_else(time == "change.7", 
+                                                                         "23.5", time)))))))) %>%
+  mutate(#timeh = factor(timeh, levels = c("0", "72", "192", "264", "266", "268", "291")),
+    timeh = as.numeric(timeh)) %>%
+  mutate(status = if_else(time %in% c("0", "change.2", "change.3", "change.4"),
+                         "rest",
+                         if_else(time %in% c("change.5", "change.6", "change.7"),
+                                              "acute", time))) 
 
-## Humac pre->post 5 sessions
-
-# Isometric
-
-isom.mfig <- lemm.isom %>%
+str.fig2 <- str.emm2 %>%
   data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) + # exp() reverse-transformes log-data, so we get fold change in nm
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
+  ggplot(aes(timeh, emmean, fill = supplement)) +
+  annotate("text", x = 20, y = -0.04, label = "*") +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 position = pos,
                 width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
-                            "change.4" = "Post")) +
-  labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 7),
+  geom_line(lty = 2) +
+  geom_point(shape = 21, size = 2) +
+  scale_fill_manual(values = colors[c(1,4)],
+                    labels = c("Glucose", "Placebo")) +
+  scale_x_continuous(limits = c(0,25), breaks = c(0, 8, 16, 20, 21, 22, 23.5),
+                     expand = expansion(0),
+                     labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "21" = "Post 5RT",
+                                "22.7" = "30min post 6RT", "23.4" = "2h post 6RT",
+                                "24.4" = "23h post 6RT")) +
+  labs(x = "Time", y = "Strength index change", fill = "Supplement") +
+  theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1, size = 6),
+        axis.title = element_text(size = 7),
+        axis.title.x = element_blank(),
         legend.title = element_text(size = 7),
         legend.text = element_text(size = 6),
-        axis.text.y = element_text(size = 6)) +
+        legend.key = element_rect(fill = "white"),
+        legend.key.size = unit(0.3, "cm")) +
   plot_theme
 
+#str.emm2 %>%
+#mutate(status = factor(status, levels = c("rest", "acute"),
+#                       labels = c("Performance", 
+#                                  "Recovery"))) %>%
+#  ggplot(aes(timeh, emmean, group = supplement, fill = supplement)) +
+#  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+#                width = 0.1,
+#                position = position_dodge(width = 0.3)) +
+#  geom_line(position = position_dodge(width = 0.3)) +
+#  geom_point(shape = 21, size = 1.5, position = position_dodge(width = 0.3)) +
+#  facet_grid(~status, space = "free", scale = "free") +
+#  scale_fill_manual(values = colors[c(1,4)]) +
+#  scale_x_continuous(limits = c(0,45), breaks = c(0, 8, 16, 20, 20.5, 22, 45),
+#                                          labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "20" = "Post 5RT",
+#                                                     "20.5" = "30min post 6RT", "22" = "2h post 6RT",
+#                                                     "45" = "23h post 6RT")) +
+# # scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+#  labs(x = "", y = "", fill = "Supplement") 
 
-
-# Isokinetic 60 d/s
-
-mfig.60 <- lemm.60 %>%
-  data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) + # exp() reverse-transformes log-data, so we get fold change in nm
-  annotate("text", x = c("change.4"), y = c(1.02), label = "*") +
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                position = pos,
-                width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
-                            "change.4" = "Post")) +
-  labs(x = "", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 7),
-        axis.title.x = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        legend.text = element_text(size = 6),
-        axis.text.y = element_text(size = 6)) +
-  plot_theme
-
-
-
-# Isokinetic 240
-
-mfig.240 <- lemm.240 %>%
-  data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) + # exp() reverse-transformes log-data, so we get fold change in nm
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                position = pos,
-                width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Baseline", "change.2" = "Test 2", "change.3" = "Test 3",
-                            "change.4" = "Post")) +
-  labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        legend.text = element_text(size = 6),
-        axis.text.y = element_text(size = 6)) +
-  plot_theme
-
-
-
-
-
-## Humac pre->post 6th session
-
-
-
-# Isometric
-
-isom.acfig <- lemm.isomac %>%
-  data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) + # exp() reverse-transformes log-data, so we get fold change in nm
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                position = pos,
-                width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Post session 5", "change.2" = "30min", "change.3" = "2hrs",
-                            "change.4" = "23hrs")) +
-  labs(x = "", y = "Isometric peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        legend.text = element_text(size = 6),
-        axis.text.y = element_text(size = 6)) +
-  plot_theme
-
-
-
-# Isokinetic 60 d/s
-
-acfig.60 <- lemm.60ac %>%
-  data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) + # exp() reverse-transformes log-data, so we get fold change in nm
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                position = pos,
-                width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Post session 5", "change.2" = "30min", "change.3" = "2hrs",
-                            "change.4" = "23hrs")) +
-  labs(x = "Time", y = "Iso 60 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 7),
-        axis.title.x = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        legend.text = element_text(size = 6),
-        axis.text.y = element_text(size = 6)) +
-  plot_theme
-
-
-
-# Isokinetic 240
-
-acfig.240 <- lemm.240ac %>%
-  data.frame() %>%
-  add_row(supplement = "placebo", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
-  add_row(supplement = "glucose", time = "change.1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) + # exp() reverse-transformes log-data, so we get fold change in nm
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                position = pos,
-                width = 0.2) +
-  geom_line(position = pos) +
-  geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = c("glucose" = "red", "placebo" = "royalblue")) +
-  scale_x_discrete(labels=c("change.1" = "Post session 5", "change.2" = "30min", "change.3" = "2hrs",
-                            "change.4" = "23hrs")) +
-  labs(x = "", y = "Iso 240 d/s peak torque \n(nm fold change)\n", fill = "Supplement") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
-        axis.title.y = element_text(size = 7),
-        legend.title = element_text(size = 7),
-        legend.text = element_text(size = 6),
-        axis.text.y = element_text(size = 6)) +
-  plot_theme
-
-
-
+# theme(axis.title = element_text(size = htextsize),
+#       axis.text = element_text(size = textsize),
+#       legend.title = element_text(size = htextsize),
+#       legend.text = element_text(size = textsize),
+#       strip.text = element_text(hjust = 0, size = htextsize),
+#       strip.background = element_rect(fill = "white")) + 
+# theme(axis.title.x = element_blank()) +
+#plot_theme 
 
 
 ## Study design
 
-biopsy_glyph <- "\U2193"
+biopsy_glyph <- "\U0023" # U2303 works
 blood_glyph <-  "\U2020"
 strength_glyph <- "\U2021"
 
@@ -306,7 +216,7 @@ d.fig <- d.dat %>%
   ## Signs
   # Biopsy
   annotate("text", x = -1.7, y = 4.5, label = "Muscle biopsies", vjust = 0, size = textsize) +
-  annotate("text", x = -0.4, y = 4.45, label = rep(biopsy_glyph, 1), vjust = 0, size = textsize) +
+  annotate("text", x = -0.2, y = 4.45, label = rep(biopsy_glyph, 1), vjust = 0, size = textsize) +
   annotate("text", x = c(8, 18), y = rep(3.6),
            label = rep(biopsy_glyph, 2), color = "red", vjust = 0, size = textsize) +
   annotate("text", x = c(9, 19), y = rep(1.6),
@@ -393,22 +303,18 @@ d.fig <- d.dat %>%
 # Joined figure 1
 
 
+
 fig1 <- plot_grid(d.fig,
                   NULL,
-          plot_grid(glu.fig + theme(legend.position = "none"),
-                    cpep.fig,
-                    ncol = 2, rel_widths = c(0.9,1.25)),
-          plot_grid(isom.mfig + theme(legend.position = "none"),
-                    mfig.60 + theme(legend.position = "none"), 
-                    mfig.240 + theme(legend.position = "none"),
-                    isom.acfig + theme(legend.position = "none"),
-                    acfig.60 + theme(legend.position = "none"), 
-                    acfig.240 + theme(legend.position = "none"), ncol = 3, nrow = 2),
-          ncol = 1,
-          rel_heights = c(1.5, 0.5, 1,2)) +
-  draw_plot_label(label = c("A)", "B)", "C)", "D)", "E)", "F)", "G)", "H)", "I)"),
-                  x = c(0.02, 0.035, 0.45, 0.035, 0.375, 0.71, 0.035, 0.375, 0.71),
-                  y = c(0.98, 0.66, 0.66, 0.45, 0.45, 0.45, 0.23, 0.23, 0.23),
+                  plot_grid(glu.fig + theme(legend.position = "none"),
+                            cpep.fig + theme(legend.position = "none"),
+                            ncol = 2),
+                  plot_grid(str.fig2),
+                  ncol = 1,
+                  rel_heights = c(1.5, 0.3, 1.5, 1.5)) +
+  draw_plot_label(label = c("A)", "B)", "C)", "D)"),
+                  x = c(0.02, 0.02, 0.53, 0.02),
+                  y = c(0.98, 0.63, 0.63, 0.3),
                   hjust = .5, vjust = .5, size = 7) 
 
 

@@ -1,54 +1,28 @@
-#### Blood glucose change fig
-
-## Author: Kristian Lian
+### Plasma glucose analysis
+#
+#
+## Author: KL
+#
+#
 ## Project: Ribose
+#
+#
+## Purpose: This script analyses the cleaned up glucose data, by change-score
+# comparisons
+#
+#
+## Associated scripts: gluc.cleanup.R
+#
+#
+## Packages
+library(tidyverse); library(dplyr); library(nlme); library(lme4); library(emmeans); library(tidyr)
 
-## This script analyses is equal to mean-bloodglucose-change, except from not calculating log-fold change. Instead, absolute change scores are calculated
-# to illustrate the changes in absolute plasma glucose values. For description of the codes, see mean-bloodglucose-change.
+## Data
 
-## Other comments:
-# Participant 101, 102 and 103 did not get baseline samples at T3 and T4, therefore,
-# baseline values from T1 was used as baseline for T3 and T4
-
-# Packages
-library(dplyr)
-library(tidyverse)
-library(readxl)
-library(nlme)
-library(lme4)
-library(emmeans)
-library(tidyr)
-
-
-## Data handling
-
-gluc.dat <- read_excel("./data/glucose/fingerstick.xlsx", na = "NA")
-gluc.dat$sample_time <- as.character(gluc.dat$sample_time)
-
-glu.dat <- gluc.dat %>%
-  mutate(time = if_else(sample_time == "0",
-                        "baseline",
-                        if_else(sample_time == "45",
-                                "min45",
-                                if_else(sample_time == "90",
-                                        "min90",
-                                        if_else(sample_time == "120",
-                                                "min120",
-                                                if_else(sample_time == "135",
-                                                        "min135",
-                                                        if_else(sample_time == "150",
-                                                                "min150",
-                                                                if_else(sample_time == "270",
-                                                                        "min270", sample_time))))))),
-         time = factor(time, levels = c("baseline", "min45", "min90", "min120", "min135", "min150", "min270"))) %>%
-  mutate(glu = as.numeric(glu),
-         lak = as.numeric(lak)) %>%
-  print()
-
-## Change data
+gluc.clean <- readRDS("./data/data-gen/glucose/gluc.clean.RDS")
 
 # Un-transformed
-change_dat.glu <- glu.dat %>%
+change_dat.glu <- gluc.clean %>%
   # filter(subject != "107") %>%
   dplyr::select(subject, time, glu, supplement) %>%
   group_by(subject, time, supplement) %>%
@@ -76,7 +50,7 @@ change_dat.glu <- glu.dat %>%
 saveRDS(change_dat.glu, "./data/data-gen/glucose/glu.change.RDS")
 
 # Log-transformed
-glu.logchange <- glu.dat %>%
+glu.logchange <- gluc.clean %>%
   # filter(subject != "107") %>%
   dplyr::select(subject, time, glu, supplement) %>%
   group_by(subject, time, supplement) %>%
@@ -102,6 +76,7 @@ glu.logchange <- glu.dat %>%
   print()
 
 saveRDS(glu.logchange, "./data/data-gen/glucose/glu.logchange.RDS")
+
 
 ## Linear mixed effects model
 

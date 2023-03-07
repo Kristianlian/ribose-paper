@@ -1,12 +1,19 @@
-#### Humac main data analysis
-
-## Author: Kristian Lian/DH
+### Humac main analysis
+#
+#
+## Author: KL
+#
+#
 ## Project: Ribose
-
-# Purpose: This script plots mean torque per supplement (both through intervention and pre vs. post) results from the ribose project, 
-# and analyses the data per test (isometric, isokinetic 60, isokinetic 240) in a linear model. This is the main data frame from humac,
-# meaning an analysis of change from pre to post 5 RT sessions.
-
+#
+#
+## Purpose: This script analyses humac data from baseline, post 2 session test,
+# post 4 session test and post 5 RT sessions test via change-score comparisons
+#
+#
+## Associated scripts: humac.cleanup.R
+#
+#
 # Packages
 library(tidyverse);library(nlme);library(lme4);library(emmeans)
 

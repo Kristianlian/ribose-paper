@@ -1,11 +1,20 @@
-## rRNA change analysis
-#### qPCR-analysis
-
-# Author: Daniel Hammarström & Kristian Lian
-
-
-# This script loads the qclean.RDS, derived from the "qpcr.analysis" script. The script also calculate change score for each of the rRNA's,
-# baseline analyses and models the change from pre to post in a linear mixed effects model.
+### Analysis of ribosomal RNA
+#
+#
+## Author: KL/DH
+#
+#
+## Project: Ribose
+#
+#
+## Purpose: This script analyses the cleaned up rRNA data by change-score
+# comparisons
+#
+#
+## Asscociated scripts: qpcr.import.R
+#
+#
+## Packages.
 
 # Packages
 library(tidyverse)

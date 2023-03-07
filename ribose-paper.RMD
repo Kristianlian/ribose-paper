@@ -300,7 +300,7 @@ nuttable %>%
 
 ```
 
-```{r nutrition change analysis and fig}
+```{r nutrition fig}
 # Associated scripts:
 # - nut.datahand.R
 # - nut.change.R

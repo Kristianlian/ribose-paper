@@ -5,7 +5,7 @@
 #
 #
 ## Purpose:
-# The purpose of this script is to produce table .., presenting average total 
+# The purpose of this script is to produce table 2, presenting average total 
 # session volume and average change per RT session per supplement.  
 
 ## Packages
@@ -134,7 +134,7 @@ vol.tab <- footnote(x = vol.tab,
 vol.tab <- bg(vol.tab, i = c(2, 4, 6, 8, 10, 12), j = NULL, bg = "gray", part = "body", source = j)
 
 
-save_as_image(vol.tab, path = "./figures/voltab.png", res = 1080)
+save_as_image(vol.tab, path = "./figures/tab2.png")
 
 
           

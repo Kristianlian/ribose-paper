@@ -1,9 +1,20 @@
-## Total RNA analysis
-
-# This script imports the data frame from "totrna.cleanup", to analyse baseline values, calculate log-fold change scores from pre to post and model change
-# scores using a linear mixed effects model and estimated marginal means. Finally, it saves a data frame for figure illustration.
-
-## Packages 
+### Analysis of total RNA data
+#
+#
+## Author: KL/DH
+#
+#
+## Project: Ribose
+#
+#
+## Purpose: This script analyses the cleaned up total RNA data by change-score
+# comparisons
+#
+#
+## Asscociated scripts: cpep.cleanup.R
+#
+#
+## Packages
 library(tidyverse); library(readxl);library(nlme);library(lme4);library(emmeans)
 
 ## Data 

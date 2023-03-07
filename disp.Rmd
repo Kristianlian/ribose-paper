@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Intro
-
+- To do: Check remaining comments
 
 ## Methods
 
@@ -32,22 +32,46 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Protein extraction and immunoblotting
 
 
+- To do: Read through - anything needs changing?
+
 ## Results
 
 Baseline etc.
-- Blood data
-- Dietary data
+- Fig1 + tabs?
+- Dietary data comments
 
 ### Markers of ribosome biogenesis?
-- Total RNA? 
-- Protein?
-- UBF/total RNA?
 
-### Muscular performance and recovery?
+#### RNA and rRNA
+- Fig2
+
+#### Protein
+- Fig3
+
+- To do: Check figure text, implement tabs and figures
 
 ## Discussion
 
+Main topics:
+- No difference between glu and plac in main outcomes - thoughts?
+  - No additional effect of glu, as long as daily macro intake is equal
+  - No direct effect of glu on anabolic signalling, i.e., glucose per se does not seem to induce RT responses 
+  - Based on findings in litterature, likely still important as a contributor to the cells energy pool, thus indirectly
+    affecting ribosome biogenesis
 
+- Is there any coherence between strength diff post session 5 and cmyc diff?
+  - I.e., post 5 data indicate that placebo experiences more fatigue, does this cause higher c-Myc levels, since c-Myc is a           general transcription factor responding to stress?
+  - There were no differences in total session volumes between glucose and placebo - how could placebo then experience more stress     than glucose?
+  - Does glucose, e.g. via increasing energy availability, reduce metabolic stress? If so, is that a good thing for adaptations?      If there is less stress, is there less stimulation to adapt to? Mechanical strain vs metabolic stress? 
+  - "Bifacial recovery"?
+ 
+- UBF/RNA: 
+  - Ref to Hammarström 21, similar observations
+  - One of the first studies to find this relationship in vivo in human muscle cells 
+  - The same was not true for c-Myc and rpS6, further strengthening the importance of UBF in ribosome biogenesis compared to c-Myc
+(We must add time as a covariate, as both total RNA and UBF are expected to increase with "time" in this intervention, due to RT. Therefore, adding time as a covariate allows us to model the relationship between RNA and UBF, without variations of time interfering)
+
+- Any perspectives to pick up from the thesis?
 
 
 

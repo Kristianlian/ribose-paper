@@ -1,11 +1,19 @@
-#### Humac "acute" data baseline analysis
-
-## Author: Kristian Lian/DH
+### Humac "acute" analysis
+#
+#
+## Author: KL
+#
+#
 ## Project: Ribose
-
-# Purpose: This script plots mean torque per supplement (both through intervention and pre vs. post) results from the ribose project, 
-# and calculates a baseline analysis between supplement legs, at each speed (isometric, 60 d/s and 240 d/s).
-
+#
+#
+## Purpose: This script analyses humac data from baseline, post 5 RT sessions,
+# 30min, 2hr and 23hrs post sixth session via change-score comparisons
+#
+#
+## Associated scripts: humac.cleanup.R
+#
+#
 # Packages
 library(tidyverse);library(nlme);library(lme4);library(emmeans)
 
