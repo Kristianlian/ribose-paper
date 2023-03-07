@@ -21,6 +21,7 @@ str.index <- readRDS("./data/data-gen/humac/str.index.RDS")
 
 code <- read_excel("./data/sup.xlsx")
 
+
 ## DXA
 
 dxa.tab <- leg.dat %>%
@@ -44,9 +45,8 @@ dxa.tab <- leg.dat %>%
                               "Glucose",
                               if_else(supplement == "placebo",
                                       "Placebo", supplement))) %>%
-  select(supplement, lm.stat, fm.stat, tm.stat) %>%
-  print()
-  
+  select(supplement, lm.stat) 
+
 
 
 ## Strength
@@ -61,6 +61,7 @@ index.tab <- str.index %>%
                               if_else(supplement == "placebo",
                                       "Placebo", supplement))) %>%
   select(supplement, str.stat) 
+
 
 humac.tab <- humac.clean2 %>%
   filter(time %in% c("rest", "baseline")) %>%
@@ -80,46 +81,49 @@ humac.tab <- humac.clean2 %>%
                               "Glucose",
                               if_else(supplement == "placebo",
                                       "Placebo", supplement))) %>%
-  select(supplement, isom.stat, isok60.stat, isok240.stat) %>%
-  print()
-  
-  
-## Flextables
-
-####################### OLD ###############################
-
-## Gendercount - from the script dxa.R by SCM
-
-#gendercount <- dxa.dat %>%
-#  count(sex)
-
-### Per subject
-#
-#sub.tab <- dxa.dat %>%
-#  select(-timepoint) %>%
-#  # Convert g to kg
-#  
-#  mutate(leanmass = leanmassg/1000) %>%
-#  select(subject, sex, age, height, weight, leanmass) %>%
-#  group_by(sex) %>%
-#  summarise(mean.age = mean(age, na.rm = TRUE),
-#            mean.height = mean(height, na.rm = TRUE),
-#            mean.weight = mean(weight, na.rm = TRUE),
-#            mean.leanm = mean(leanmass, na.rm = TRUE),
-#            sd.a = sd(age, na.rm = TRUE),
-#            sd.h = sd(height, na.rm = TRUE),
-#            sd.w = sd(weight, na.rm = TRUE),
-#            sd.l = sd(leanmass, na.rm = TRUE)) %>%
-#  mutate(a.stat = paste0(round(mean.age, 2), " ± ", round(sd.a, 2)),
-#         h.stat = paste0(round(mean.height, 2), " ± ", round(sd.h, 2)),
-#         w.stat = paste0(round(mean.weight, 2), " ± ", round(sd.w, 2)),
-#         l.stat = paste0(round(mean.leanm, 2), " ± ", round(sd.l, 2))) %>%
-#  full_join(gendercount) %>%
-#  select(sex, n, a.stat, h.stat, w.stat, l.stat, )
+  select(supplement, isom.stat, isok60.stat, isok240.stat)
 
 
 
+desc.dat <- dxa.tab %>%
+  full_join(index.tab) %>%
+  full_join(humac.tab) 
 
 
+### Flextable 
+# A table of average total session volume and the change per supplement from baseline/session 1 until session 6
+
+## Settings for the table
+set_flextable_defaults(
+  font.size = 10, theme_fun = theme_booktabs,
+  padding = 6,
+  background.color = "#EFEFEF")
+
+desc.tab <- flextable(desc.dat)
+
+## Sets decimal marks and digits
+desc.tab <- colformat_double(desc.tab,
+                            big.mark=",", digits = 2, na_str = "N/A")
+
+## Headers 
+# Labelling
+desc.tab <- set_header_labels(desc.tab,
+                              supplement = "Supplement", lm.stat = "LM (kg) ± SD", str.stat = "Strength ± SD",
+                              isom.stat = "Iso 0 PT ± SD", isok60.stat = "Iso 60 PT ± SD", isok240.stat = "Iso 240 PT ± SD")
+
+# Bold font
+desc.tab <- bold(desc.tab, bold = TRUE, part = "header")
+# Aligning numbers and headers
+desc.tab <- align_nottext_col(desc.tab, align = "center", header = TRUE, footer = FALSE)
+
+## Body
+# Increases width for selected columns (j = ..) or the whole table
+desc.tab <- width(desc.tab, width = 1.2)
+
+## Background color
+desc.tab <- bg(desc.tab, i = 2, j = NULL, bg = "gray", part = "body", source = j)
+
+
+save_as_image(desc.tab, path = "./figures/desctab.png", res = 1080)
 
 
