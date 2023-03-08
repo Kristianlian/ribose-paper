@@ -104,11 +104,16 @@ cpp.270 <- round(cpcoef[8,5], 2)
 # - Strength.index.R
 
 ## Data
+# Full data - baseline -> 23h post 6RT
 str.change <- readRDS("./data/data-gen/humac/str.change.RDS") # Untransfromed data
 str.lchange <- readRDS("./data/data-gen/humac/str.lchange.RDS") # Log-transfromed data
 
+# Acute data - Post 5RT -> 23h post 6RT
+astr.change <- readRDS("./data/data-gen/humac/astr.change.RDS") # Untransfromed data
+astr.lchange <- readRDS("./data/data-gen/humac/astr.lchange.RDS") # Log-transfromed data
 
-## Linear mixed effects model
+
+## Linear mixed effects model full data
 
 # Untransformed model
 str.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
@@ -122,7 +127,7 @@ str.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|s
 str.lres <- plot(str.lmod)
 str.lsum <- summary(str.lmod)
 
-## Emmeans
+## Emmeans full data
 # Untransformed
 str.emm <- confint(emmeans(str.mod, specs = ~"supplement|time")) %>%
   data.frame() 
@@ -131,9 +136,58 @@ str.emm <- confint(emmeans(str.mod, specs = ~"supplement|time")) %>%
 str.lemm <- confint(emmeans(str.lmod, specs = ~"supplement|time")) %>%
   data.frame() 
 
-# For inline plotting
+## Linear mixed effects model acute
+# Untransformed
+astr.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                        data = astr.change)
+
+astr.res <- plot(astr.mod)
+astr.sum <- summary(astr.mod)
+
+# Log-transformed
+astr.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                         data = astr.lchange)
+
+astr.lres <- plot(astr.lmod)
+astr.lsum <- summary(astr.lmod)
+
+## Emmeans acute data
+astr.emm <- confint(emmeans(astr.mod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+astr.lmod <- confint(emmeans(astr.lmod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+
+## For inline plotting full data
 strcoef <- coef(summary(str.mod))
-pdiff.c4 <- round(strcoef[10,5], 2)
+
+# Time points compared to baseline (full data)
+pc2 <- round(strcoef[2,5], 3)
+pc3 <- round(strcoef[3,5], 3)
+pscient.c4 <- round(strcoef[4,5], 40)
+pc4 <- sprintf("%.5f", 7.886277e-06)
+pc5 <- round(strcoef[5,5], 3)
+pc6 <- round(strcoef[6,5], 3)
+pc7 <- round(strcoef[7,5], 5)
+
+
+# Glucose compared to placebo (full data)
+pdiff.c2 <- round(strcoef[8,5], 3)
+pdiff.c3 <- round(strcoef[9,5], 3)
+pdiff.c4 <- round(strcoef[10,5], 3)
+pdiff.c5 <- round(strcoef[11,5], 3)
+pdiff.c6 <- round(strcoef[12,5], 3)
+pdiff.c7 <- round(strcoef[13,5], 3)
+
+## For inline plotting acute data
+astrcoef <- coef(summary(astr.mod))
+apc2 <- round(astrcoef[2,5], 3)
+apc3 <- round(astrcoef[3,5], 3)
+apc4 <- round(astrcoef[4,5], 3)
+
+
+
 
 ```
 
@@ -213,16 +267,69 @@ propr.emm <- confint(emmeans(propr.mod, specs = ~"supplement|time")) %>%
 
 ```
 
-At baseline, there were no significant differences between legs allocated to training with glucose or placebo in muscle mass, isometric or isokinetic peak torque (Tab 1). Total session volume (Tab 2) increased significantly from session 4 to session 6 compared to session 1 (*p* < 0.05), with no differences between exercising with glucose or placebo (*p* > 0.05). On pairwise consecutive days there were no significant differences in mean ingestion of protein, fat, carbohydrate or total calories (*p* > 0.05). 
+```{r volume model}
+## Scripts
+# - volume.cleanup.R
+# - volume.analysis.R
 
-###### **Table 1:**  Baseline descriptives of legs allocated to RT with glucose or RT. LM = Lean mass, Strength = strength index, calculated from isometric and isokinetic peak torque, Iso 0 PT = Isometric (0 d/s) peak torque, Iso 60 PT = Isokinetic peak torque at 60 d/s, Iso 240 PT = Isokinetic peak torque at 240 d/s.
-![](figures/tab1.png)
-Glucose ingestion before and after RT led to significant increases in plasma levels of glucose (Fig 1B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`]) and c-peptide (Fig 1C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]) before, during and after the session, compared to no change in placebo (*p* > 0.05). At 2hrs post-exercise, RT with glucose led to significantly lower plasma glucose levels compared to RT with placebo (1B, 270min: -8 ± 4% [*p* = `r p.270`]. 
+## Data
+vol.change <- readRDS("./data/data-gen/training/vol.change.RDS") # Untransformed data
+vol.lchange <- readRDS("./data/data-gen/training/vol.lchange.RDS") # Log-transformed data
 
-######**Table 2:** Mean total session volume and mean change in total session volume from session 1 to session 6. 
+## Models
+
+# Untransformed 
+vol.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = vol.change)
+vol.res <- plot(vol.mod)
+vol.sum <- summary(vol.mod)
+
+# Log-transformed
+vol.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = vol.lchange)
+
+vol.lres <- plot(vol.lmod)
+vol.lsum <- summary(vol.lmod)
+
+## Emmeans
+
+# Untransformed
+vol.emm <- confint(emmeans(vol.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# Log-transformed
+vol.lemm <- confint(emmeans(vol.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+## For inline plotting
+
+# Sessions compared to baseline
+volcoef <- coef(summary(vol.mod))
+pvol.s2 <- round(volcoef[2,5], 4)
+pvol.s3 <- round(volcoef[3,5], 4)
+pvol.s4 <- round(volcoef[4,5], 4)
+pvol.s5 <- round(volcoef[5,5], 3)
+pvol.s6 <- round(volcoef[6,5], 5)
+
+# Glucose compared to plac
+pvol.c2 <- round(volcoef[7,5], 3) 
+pvol.c3 <- round(volcoef[8,5], 3) 
+pvol.c4 <- round(volcoef[9,5], 3) 
+pvol.c5 <- round(volcoef[10,5], 3) 
+pvol.c6 <- round(volcoef[11,5], 3) 
+
+
+```
+
+
+There were no difference in mean change of total training session volume between exercising with placebo or glucose, with an increase of 18 and 16% from session 1 to session 6, respectively (Tab 2; Mean change, 2: *p* = `r pvol.c2`, 3: *p* = `r pvol.c3`, 4: *p* = `r pvol.c4`, 5: *p* = `r pvol.c5`, 6: *p* = `r pvol.c6`). Both exercising with glucose and placebo led to significant increases in mean total training session volume at session four, five and six, compared to session 1 (Tab 2; Mean change, 2: *p* = `r pvol.s2`, 3: *p* = `r pvol.s3`, 4: *p* = `r pvol.s4`, 5: *p* = `r pvol.s5`, 6: *p* = `r pvol.s6`). In regard to the dietary intervention, there were no difference in mean macro nutrient intake (protein, fat, carbohydrates) or total calorie intake between glucose and placebo on pairwise consecutive days (*p* > 0.05). 
+
+######**Table 2:** Mean total session volume and mean change in total session volume from session 1 to session 6.
 ![](figures/tab2.png)
 
-After 5 RT sessions (Fig 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength 7% more than glucose (Fig 1D, *p* = `r pdiff.c4`). At the remaining time points, there were no significant differences between exercising with glucose and placebo (*p* > 0.05). While both RT with glucose and placebo led to significantly reduced strength post fifth session compared to baseline (*p* < 0.05), there were no significant differences in strength at baseline and 23hrs post sixth RT session (Fig 1D, Baseline and 23h post 6RT).
+Glucose ingestion before and after RT led to significant increases in plasma levels of glucose by 38% immediately before RT (Fig 1B, 0 min: *p* = `r p.120`), by 31% during RT (1B, 15 min: *p* = `r p.135`) and by 32% immediately after RT (1B, 30 min: *p* = `r p.150`), compared to placebo ingestion before and after RT. Two hours after the session, RT with glucose measured 8% lower plasma glucose levels compared to RT with placebo (1B, 270min: *p* = `r p.270`). Similarly, levels of c-peptide increased significantly more in exercises with glucose compared to placebo, by 95% immediately before (Fig 1C, 0 min: *p* = `r cpp.120`) and 87% after RT (1C, 30 min: *p* = `r cpp.150`). 
+
+After 5 RT sessions (Fig 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength 7% more than glucose (1D, *p* = `r pdiff.c4`). At the remaining time points, there were no significant differences in mean change between exercising with glucose and placebo (1D, Post 2RT: *p* = `r pdiff.c2`, Post 4RT: *p* = `r pdiff.c3`, 30min post 6RT: *p* = `r pdiff.c5`, 2h post 6RT: *p* = `r pdiff.c6`, 23h post 6RT: *p* = `r pdiff.c7`). Both RT with glucose and placebo led to significantly reduced strength post fifth session compared to baseline, by 11 and 18% respectively (1D, Post 5RT: *p* = `r pc4`). Comparisons of the acute data gathered from post fifth session until and including 23hrs post sixth session showed a significant mean increase in strength of 5-9% after RT with glucose and placebo 30min after sixth RT session (1D, 30min post 6RT: *p* = `r apc2`) and two hours after sixth RT session (1D, 2h post 6RT: *p* = `r apc3`). Twenty-three hours after the last RT, strength was unchanged compared to after fifth RT session (23h post 6RT: *p* = `r apc4`).
 
 ###### **Figure 1:** A) An overview of the experimental design with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days involving familiarization. Between days -7 and -1, participants were familiarized to the RT exercises via 1RM leg press and knee extension testing, and to the strength tests via Humac Norm dynamometer (days -7 and -5). Before baseline testing, the participants were randomly allocated to exercise one leg with GLU (glucose) and the other with PLA (placebo), in a unilateral, alternating fashion. Further, non-dominant/dominant + GLU/PLA, and onset with GLU or PLA was also randomized, i.e. the figure illustrates an example where the participant was randomized to start RT with GLU. Biopsies were taken from m. vastus lateralis at baseline (Day 1 leg 1, Day 2 leg 2), and after five RT sessions (Day 11 leg 1, Day 12 leg 2). Blood for measurement of plasma glucose and -c-peptide was sampled at baseline (Day 1), and during post testing (Day 11 leg 1, Day 12 leg 2), via finger draws and venous blood samples. Skeletal muscle strength was measured as peak torque in unilateral isometric and isokinetic (at 60 and 240 d/s) knee extension before, multiple times during, and after five and six session. A total of three participants dropped out of the intervention, either due to reported muscular discomforts of heavy RT, or sickness in their family. B and C) Changes in plasma glucose (B, mmol/L) and c-peptide levels (C, pmol/L). Glucose levels in blood was measured via finger draws 120 (-120), 90 (-90), and 30min (-30) before RT, immediately before RT (0), during RT (15), immediately after RT (30) and 2hrs after RT (120). C-peptide levels were measured simultaneously to these finger draws, except for 90min before and during RT. D) Changes in muscular strength measured as isometric and isokinetic peak torque (60 and 240 d/s) via Humac Norm Dynamometer, conducted at baseline (A: Day -1), after two and four RT sessions (A: Day 4 and 8 leg 1, Day 5 and 9 leg 2), after five RT sessions/before the 6th session (Day 11 leg 1, Day 12 leg 2), as well as 30min, 2hrs and 23hrs after the 6th RT session (A: Day 11/12 leg 1, Day 12/13 leg 2). The index was calculated by normalizing peak torque values to the highest peak torque value at each respective speed, and then summarized and used in change score calculations. Values are presented as changes in estimated marginal means ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
 

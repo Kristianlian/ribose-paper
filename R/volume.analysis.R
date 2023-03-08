@@ -1,63 +1,27 @@
-### Total volume change, both absolute values and fold-change
-
-# This script provides log-fold change score calculation of training volume, and illustration of absolute and fold change in training volume. 
-# Absolute changes are presented as mean change ± SD per supplement, fold changes are represented as mean change ± CI. 
-
+### Training volume analysis
+#
+#
+## Author: KL
+#
+#
+## Project: Ribose
+#
+#
+## Purpose: This script analyses the training volume data by change-score
+# comparisons
+#
 # Packages
-library(readxl);library(tidyverse);library(knitr);library(lme4);library(broom);library(emmeans)
+library(tidyverse); library(lme4); library(nlme); library(emmeans)
 
 # Data
-tot.vol <- read_excel("./data/training/ribose_volume.xlsx", na = "NA") %>%
-  select(subject, timepoint, tot.volume, supplement) 
 
-## Handling the data by creating a new factor called time from timepoint. This factor combines any observation at T1 and T2 to baseline, etc. 
-# The code also sorts the order of the factor time, from baseline to session 6, using time = factor(time, levels c()), and sets placebo to be compared to 
-# glucose via supplement = factor(supplement, levels = c()).
+vol.clean <- readRDS("./data/data-gen/training/vol.clean.RDS")
 
-tot.volh <- tot.vol %>%
-  mutate(time = if_else(timepoint %in% c("T1", "T2"),
-                        "baseline",
-                        if_else(timepoint %in% c("D3", "D4"),
-                                "session2",
-                                if_else(timepoint %in% c("D5", "D6"),
-                                        "session3",
-                                        if_else(timepoint %in% c("D7", "D8"),
-                                                "session4",
-                                                if_else(timepoint %in% c("D9", "D10"),
-                                                        "session5",
-                                                        if_else(timepoint %in% c("T3", "T4"),
-                                                                "session6", timepoint))))))) %>%
-  mutate(time = factor(time, levels = c("baseline", "session1", "session2", "session3", "session4", "session5", "session6")),
-         supplement = factor(supplement, levels = c("placebo", "glucose")))
-
-saveRDS(tot.volh, "./data/data-gen/training/vol.clean.RDS")
-
-## Baseline analysis - comparison of the two legs
-# A baseline analysis comparing training volume at baseline sessions between the two legs via a paired t.test, and providing a summary of mean training
-# volume and sd
-
-base.vol <- tot.volh %>%
-  filter(time == "baseline") %>%
-  select(subject, time, supplement, tot.volume) %>%
-  group_by(supplement) %>%
-  pivot_wider(names_from = supplement,
-              values_from = tot.volume) %>%
-  print()
-
-vol.ttest <- t.test(base.vol$glucose, base.vol$placebo, paired = TRUE)
-
-vol.summary <- tot.volh %>%
-  filter(time == "baseline") %>%
-  select(subject, time, supplement, tot.volume) %>%
-  group_by(supplement) %>%
-  mutate(m = mean(tot.volume),
-         s = sd(tot.volume)) %>%
-  print()
 
 ## Absolute data - summarising mean and SD for barplot
 # Mean and SD are calculated from absolute (kg) total volume, creating a basis for a barplot. 
 
-vol.exp <- tot.volh %>%
+vol.exp <- vol.clean %>%
   select(subject, supplement, time, tot.volume) %>% 
   group_by(supplement, time) %>%
   summarise(mean.vol = mean(tot.volume),
@@ -92,7 +56,7 @@ saveRDS(totvol.barplot, "./data/data-gen/training/totvol.barplot.RDS")
 # Then, mutate() is used to calculate change scores, where each timepoint is log-transformed and compared to baseline. baseline = baseline - mean(baseline,
 # na.rm = TRUE) mean centers the baseline values. Subject, supplement, baseline and change scores are then selected and pivoted for modeling.
 
-change_dat <- tot.volh %>%
+change_dat <- vol.clean %>%
   dplyr::select(subject, time, tot.volume, supplement) %>%
   group_by(subject, time, supplement) %>%
   summarise(tot.volume = mean(tot.volume, na.rm = TRUE)) %>%
@@ -116,7 +80,7 @@ change_dat <- tot.volh %>%
 
 saveRDS(change_dat, "./data/data-gen/training/vol.change.RDS")
 
-change_ldat <- tot.volh %>%
+change_ldat <- vol.clean %>%
   dplyr::select(subject, time, tot.volume, supplement) %>%
   group_by(subject, time, supplement) %>%
   summarise(tot.volume = mean(tot.volume, na.rm = TRUE)) %>%

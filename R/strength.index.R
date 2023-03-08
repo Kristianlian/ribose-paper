@@ -65,8 +65,13 @@ strength.index <- humac.clean2 %>%
   summarise(strength = mean(strength.i))
 
 saveRDS(strength.index, "./data/data-gen/humac/str.index.RDS")
+
+acute.index <- strength.index %>%
+  filter(time %in% c("test4", "test5", "test6", "test7")) 
+
 ### Change analysis
 
+# Full data set
 str.change <- strength.index %>%
   pivot_wider(names_from = time,
               values_from = strength) %>%
@@ -103,9 +108,40 @@ str.lchange <- strength.index %>%
 
 saveRDS(str.lchange, "./data/data-gen/humac/str.lchange.RDS")
 
+## Acute change: Post session 5 -> 23hrs post session 6
+
+astr.change <- acute.index %>%
+  pivot_wider(names_from = time,
+              values_from = strength) %>%
+  mutate(change.2 = test5 - test4,
+         change.3 = test6 - test4,
+         change.4 = test7 - test4,
+         baseline = test4 - mean(test4, na.rm = TRUE)) %>%
+  select(subject, supplement, baseline, change.2:change.4) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = c(change.2:change.4)) %>%
+  print()
+
+saveRDS(astr.change, "./data/data-gen/humac/astr.change.RDS")
 
 
-## Change model
+astr.lchange <- acute.index %>%
+  pivot_wider(names_from = time,
+              values_from = strength) %>%
+  mutate(change.2 = log(test5) - log(test4),
+         change.3 = log(test6) - log(test4),
+         change.4 = log(test7) - log(test4),
+         baseline = test4 - mean(test4, na.rm = TRUE)) %>%
+  select(subject, supplement, baseline, change.2:change.4) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = c(change.2:change.4)) %>%
+  print()
+
+saveRDS(astr.lchange, "./data/data-gen/humac/astr.lchange.RDS")
+
+### Change model full data
 
 m.str <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
                          data = str.change)
@@ -121,13 +157,30 @@ summary(m.lstr)
 emm.str <- confint(emmeans(m.str, specs = ~"supplement|time")) %>%
   data.frame() 
 
-emm.str <- confint(emmeans(m.lstr, specs = ~"supplement|time")) %>%
+lemm.str <- confint(emmeans(m.lstr, specs = ~"supplement|time")) %>%
   data.frame() 
 
 saveRDS(emm.str, "./data/data-gen/humac/emm.str.RDS")
 
 
+### Change model acute
 
+m.astr <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                        data = astr.change)
+
+m.alstr <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                         data = astr.lchange)
+plot(m.astr)
+plot(m.alstr)
+
+summary(m.astr)
+summary(m.alstr)
+
+emm.astr <- confint(emmeans(m.astr, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+lemm.astr <- confint(emmeans(m.alstr, specs = ~"supplement|time")) %>%
+  data.frame() 
 
   
   
