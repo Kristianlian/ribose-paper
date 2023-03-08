@@ -11,9 +11,8 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
 ```{r packages}
-library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr);library(nlme); library(pbkrtest);library(ggpubr); library(lmer)
+library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr);library(nlme); library(pbkrtest);library(ggpubr); library(nlme)
 ```
-
 
 ## Results
 
@@ -214,16 +213,16 @@ propr.emm <- confint(emmeans(propr.mod, specs = ~"supplement|time")) %>%
 
 ```
 
-At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque (Tab 1) or total session volume (Tab 2). Further, on pairwise consecutive days, there were no significant differences in mean macro nutrient (calories, carbohydrate, fat or protein) intake. 
+At baseline, there were no significant differences between legs allocated to training with glucose or placebo in muscle mass, isometric or isokinetic peak torque (Tab 1). Total session volume (Tab 2) increased significantly from session 4 to session 6 compared to session 1 (*p* < 0.05), with no differences between exercising with glucose or placebo (*p* > 0.05). On pairwise consecutive days there were no significant differences in mean ingestion of protein, fat, carbohydrate or total calories (*p* > 0.05). 
 
 ###### **Table 1:**  Baseline descriptives of legs allocated to RT with glucose or RT. LM = Lean mass, Strength = strength index, calculated from isometric and isokinetic peak torque, Iso 0 PT = Isometric (0 d/s) peak torque, Iso 60 PT = Isokinetic peak torque at 60 d/s, Iso 240 PT = Isokinetic peak torque at 240 d/s.
-![](figures/desctab.png)
-Glucose ingestion before and after RT led to significant increases in plasma levels of glucose and c-peptide before, during and after the session, compared to RT with placebo, (Fig 1B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`], Fig 1C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]), measured during the sixth RT session. At 2hrs post-exercise, RT with glucose led to significantly lower plasma glucose levels compared to RT with placebo (1B, 270min: -8 ± 4% [*p* = `r p.270`]. 
+![](figures/tab1.png)
+Glucose ingestion before and after RT led to significant increases in plasma levels of glucose (Fig 1B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`]) and c-peptide (Fig 1C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]) before, during and after the session, compared to no change in placebo (*p* > 0.05). At 2hrs post-exercise, RT with glucose led to significantly lower plasma glucose levels compared to RT with placebo (1B, 270min: -8 ± 4% [*p* = `r p.270`]. 
 
 ######**Table 2:** Mean total session volume and mean change in total session volume from session 1 to session 6. 
-![](figures/voltab.png)
-There were no significant differences in change of skeletal muscle strength, at time points post 2 RT sessions, post 4 RT sessions, 30min after 6th session, 2hrs after 6th session and 23hrs after 6th session (Fig 1D, *p* > 0.05). After 5 RT sessions (Fig 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength 7% more than glucose (*p* = `r pdiff.c4`).
+![](figures/tab2.png)
 
+After 5 RT sessions (Fig 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength 7% more than glucose (Fig 1D, *p* = `r pdiff.c4`). At the remaining time points, there were no significant differences between exercising with glucose and placebo (*p* > 0.05). While both RT with glucose and placebo led to significantly reduced strength post fifth session compared to baseline (*p* < 0.05), there were no significant differences in strength at baseline and 23hrs post sixth RT session (Fig 1D, Baseline and 23h post 6RT).
 
 ###### **Figure 1:** A) An overview of the experimental design with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days involving familiarization. Between days -7 and -1, participants were familiarized to the RT exercises via 1RM leg press and knee extension testing, and to the strength tests via Humac Norm dynamometer (days -7 and -5). Before baseline testing, the participants were randomly allocated to exercise one leg with GLU (glucose) and the other with PLA (placebo), in a unilateral, alternating fashion. Further, non-dominant/dominant + GLU/PLA, and onset with GLU or PLA was also randomized, i.e. the figure illustrates an example where the participant was randomized to start RT with GLU. Biopsies were taken from m. vastus lateralis at baseline (Day 1 leg 1, Day 2 leg 2), and after five RT sessions (Day 11 leg 1, Day 12 leg 2). Blood for measurement of plasma glucose and -c-peptide was sampled at baseline (Day 1), and during post testing (Day 11 leg 1, Day 12 leg 2), via finger draws and venous blood samples. Skeletal muscle strength was measured as peak torque in unilateral isometric and isokinetic (at 60 and 240 d/s) knee extension before, multiple times during, and after five and six session. A total of three participants dropped out of the intervention, either due to reported muscular discomforts of heavy RT, or sickness in their family. B and C) Changes in plasma glucose (B, mmol/L) and c-peptide levels (C, pmol/L). Glucose levels in blood was measured via finger draws 120 (-120), 90 (-90), and 30min (-30) before RT, immediately before RT (0), during RT (15), immediately after RT (30) and 2hrs after RT (120). C-peptide levels were measured simultaneously to these finger draws, except for 90min before and during RT. D) Changes in muscular strength measured as isometric and isokinetic peak torque (60 and 240 d/s) via Humac Norm Dynamometer, conducted at baseline (A: Day -1), after two and four RT sessions (A: Day 4 and 8 leg 1, Day 5 and 9 leg 2), after five RT sessions/before the 6th session (Day 11 leg 1, Day 12 leg 2), as well as 30min, 2hrs and 23hrs after the 6th RT session (A: Day 11/12 leg 1, Day 12/13 leg 2). The index was calculated by normalizing peak torque values to the highest peak torque value at each respective speed, and then summarized and used in change score calculations. Values are presented as changes in estimated marginal means ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
 
@@ -253,8 +252,8 @@ trna.emm <- confint(emmeans(trna.lmod, specs = ~"supplement")) %>%
 
 # For inline reporting
 trcoef <- coef(summary(trna.lmod))
-trdiff <- round(trcoef[3,1], 2)
-trdiffp <- round(trcoef[3,5], 2)
+trdiff <- round(trcoef[3,1], 3)
+trdiffp <- round(trcoef[3,5], 3)
 trdiffse <- round(trcoef[3,2], 2)
 
 ```
@@ -361,7 +360,7 @@ rr47diffse <- round(rr47coef[3,2], 3)
 
 ```
 
-Resistance training with glucose did not induce a higher accumulation of total RNA (fig 2A, *p* = `r trdiffp`) or rRNA  (fig 2B, 47S: *p* = `r rr47diffp`, 18S: *p* = `r rr18diffp`, 28S: *p* = `r rr28diffp`, 5.8S: *p* = `r rr58diffp`, 5S: *p* = `r rr5diffp`) compared to RT with placebo, measured as mean change from baseline to post. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of the 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, where only RT with placebo increased significantly from baseline to post (fig 45, *p* = `r rr47tdiffp`).
+Resistance training with glucose did not induce a higher accumulation of total RNA (fig 2A, *p* = `r trdiffp`) or rRNA  (fig 2B, 47S: *p* = `r rr47diffp`, 18S: *p* = `r rr18diffp`, 28S: *p* = `r rr28diffp`, 5.8S: *p* = `r rr58diffp`, 5S: *p* = `r rr5diffp`) compared to RT with placebo. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of the 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, where only RT with placebo increased significantly from baseline to post (fig 45, *p* = `r rr47tdiffp`).
 
 ###### **Figure 2:** Changes in total RNA and ribosomal RNA. A) Total RNA, B) 47S pre-rRNA, 18S rRNA, 28S rRNA, 5.8S rRNA, 5S rRNA. Baseline = Day 1 leg 1/ Day 2 leg 2, Post = Day 11 leg 1, Day 12 leg 2. Total RNA and rRNA were analyzed in duplicates, with two duplicates per biopsy (two muscle tissue pieces per time point), and normalized to ng x mg wet muscle weight for total RNA and external reference gene (Lambda) for rRNA. Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated and transformed to the log-scale before modelling, then reverse-transformed for figure illustration. Values are estimated marginal means fold change per leg per supplement ± 95% CI. Glucose n = 13, placebo n = 13.
 
@@ -512,8 +511,7 @@ ubf.rdy <- west.dat %>%  # One data frame without outliers
          outlier == "in") %>%
   select(-target) %>%
   group_by(subject, time, supplement) %>%
-  summarise(mean.sign = mean(norm.sign, na.rm = TRUE)) %>%
-  print()
+  summarise(mean.sign = mean(norm.sign, na.rm = TRUE)) 
 
 
 rna.rdy <- rna.dat %>%
@@ -521,8 +519,7 @@ rna.rdy <- rna.dat %>%
   filter(outlier == "in") %>%
   mutate(subject = as.character(subject)) %>%
   group_by(subject, time, supplement) %>%
-  summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) %>%
-  print()
+  summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) 
 
 ## Correlation analysis
 
@@ -530,8 +527,7 @@ joined.dat <- ubf.rdy %>%
   right_join(rna.rdy) %>%
   #filter(supplement != "GLUCOSE") %>%
   
-  mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE )/sd(mean.sign, na.rm = TRUE))) %>%
-  print()
+  mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE )/sd(mean.sign, na.rm = TRUE))) 
 
 
 library(nlme)
@@ -559,22 +555,4 @@ corrp <- round(corrcoef[2,5], 3)
 Levels of c-Myc increased 51% more after RT with placebo compared to RT with glucose, a significant difference (Fig 3A: *p* = `r cdiff`). Levels of UBF and rpS6 increased 42 and 33% more in placebo compared to glucose, however, this was not a significant difference (Fig 3A: UBF: *p* = `r udiff`, rpS6: *p* = `r rpdiff`). The increase in both RT with glucose and placebo for all measured proteins was significant at post compared to baseline (*p* < 0.05). Further, there was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a 13% increase in total RNA (*p* = `r corrp`).
 
 ###### **Figure 3:** Changes in levels of protein. A) Mean UBF, c-Myc and rpS6 (AU, arbitrary units) at baseline and post + representative western blots of the respective proteins. Baseline = Day 1 leg 1, Day 2 leg 2, post = Day 11 leg 1, Day 12 leg 2. GLU = glucose, PLA = placebo. Protein samples were analyzed in two duplicates per biopsy per time point, loaded on separate gels in an inverted order, e.g. from gel 3 to 6, as shown by the duplicates (1 and 2). Change in protein levels were calculated as log-fold change scores normalized by pools (pool of all protein samples per gel). Mean log-change scores of the duplicates were calculated before modelling and reverse-transformed for figure illustration. Values are estimated marginal means fold change per leg per supplement ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13. B) Representative total protein stain blot. C) Linear relationship between total RNA (ng x mg) and UBF levels (SD units), with time added as a covariate. Total RNA was normalized by wet muscle weight, and UBF was normalized by pools per gel, and total protein per lane factor. Values are presented as log-transformed means.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
