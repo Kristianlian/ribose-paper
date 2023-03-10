@@ -71,24 +71,24 @@ joined.dat %>%
 
 
 ## pre-post values correlation
-ggscatter(joined.dat, x = "mean.sign", y = "mean.rna", 
-          add = "reg.line", conf.int = TRUE, 
-          cor.coef = TRUE, cor.method = "pearson",
-          xlab = "UBF", ylab = "Total RNA")
-sprintf("%.5f", 3.7e-06)
-
-
-stp.ubf <- shapiro.test(joined.dat$mean.sign) 
-sprintf("%.5f", 1.667e-05)
-shapiro.test(joined.dat$mean.rna) 
-
-ggqqplot(joined.dat$mean.sign, ylab = "mean.sign")
-ggqqplot(joined.dat$mean.rna, ylab = "mean.rna")
-
-correlation <- cor.test(joined.dat$mean.sign, joined.dat$mean.rna, 
-                method = "pearson")
-correlation
-
-corr.p <- sprintf("%.5f", 3.694e-05)
-corr.p
+#ggscatter(joined.dat, x = "mean.sign", y = "mean.rna", 
+#          add = "reg.line", conf.int = TRUE, 
+#          cor.coef = TRUE, cor.method = "pearson",
+#          xlab = "UBF", ylab = "Total RNA")
+#sprintf("%.5f", 3.7e-06)
+#
+#
+#stp.ubf <- shapiro.test(joined.dat$mean.sign) 
+#sprintf("%.5f", 1.667e-05)
+#shapiro.test(joined.dat$mean.rna) 
+#
+#ggqqplot(joined.dat$mean.sign, ylab = "mean.sign")
+#ggqqplot(joined.dat$mean.rna, ylab = "mean.rna")
+#
+#correlation <- cor.test(joined.dat$mean.sign, joined.dat$mean.rna, 
+#                method = "pearson")
+#correlation
+#
+#corr.p <- sprintf("%.5f", 3.694e-05)
+#corr.p
 

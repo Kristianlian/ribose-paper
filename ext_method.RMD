@@ -13,7 +13,132 @@ Notes for extended methods supplementary
 
 - Primer sequence table?
 - Antiboy table?
+- Power calculation + rational?
+- Normalization of total protein, qpcr values and protein signals
 - UBF/RNA correlation: Make a new model to see if data point affects the current model
+
+Mean-centered baseline values were used to correct for regression to the mean, which potentially occurs when the same participants
+are repeatedly tested. Regression to the mean entails that scores close to the upper or lower limit of a participants potential score would be replaced with a score closer to the mean, e.g. high baseline values are shifted downwards while low baseline values are shifted upwards, creating a negative association between initial values and change. Estimated marginal means were calculated from the linear model, enabling acquisition of least-square means, showing the means for all involved groups adjusted to means of other potential factors in the model.
+
+## Code/formulas for quantitative analyses
+Total RNA: 
+- Data import and prepping
+ - Packages: tidyverse, readxl, nlme
+ - Script: totrna.cleanup.R
+ - Raw data = protein concentration and 260/280 ratio from excel sheet "RNA_raw"
+ - Checked for outliers via mutate(resid = resid/sd(resid), outlier = if_else(resid < -2,      "out", "in"))
+  - This code first calculates the samples residuals, then creates a variable called "outlier", containing "in" and "out".
+    Further, it marks samples with "out" if the residuals are greater than 2, and "in" if residuals are lesser than 2. Thus, 
+    we can choose to filter out participants marked with out
+    
+- Change score calculation
+ - Packages: tidyverse
+ - Script: totrna.analysis.R
+ - Before change score calculation, total RNA is normalized by wet muscle weight
+  - Approach: mean RNA / mean weight = rna.weight. Then, mean rna.weight is used to calculate change scores
+ - Cleaned up data was used to calculated the change score from pre to post
+  - Visual inspection of the residuals resulted in log-transforming the data, to control for heteroscedasticity
+  - Calculation: change = log(post)-log(pre), pre = pre - mean(pre, na.rm = TRUE).
+   - pre = pre - mean(pre, na.rm = TRUE): this code subtracts the mean rna concentration at pre from each subjects mean,
+     so we can mean-center the baseline values to control for regression to the mean
+     
+- Analysis:
+ - Packages: tidyverse, lme4, nlme, emmeans, readxl
+ - Script: totrna.analysis.R
+ - Model: lmerTest::lmer(change ~ pre + supplement + (1|subject), data = change_dat)
+  - In this model, change is added as the response, with pre (baseline values) and supplement (treatment, glucose/placebo) as         explanatory factors
+  - (1|subject) creates an intercept for each participant? why?
+ - Emmeans: estimated marginal means, allows calculation of least square means - why?
+ 
+rRNA
+- Data import and prepping
+ - Packages: qpcr, qpcrpal, parallell, tidyverse
+ - Script: qpcr.import.R
+ - Imports raw fluorescence data and models amplification curves with a best-fit sigmoidal model using the qPCR package
+ - Estimates primer efficiency and cq-values
+ 
+- Change score calculation
+ - Packages: tidyverse
+ - Script: qpcr.analysis.R
+ - Before change score calculation, qpcr-values are normalized by wet muscle weight and external reference gene (Lambda)
+  - ..
+- Analysis
+ - Analyses were done with the same approach and model as for total RNA, with normalize cq-values per target 
+  - 47S, 18S, 28S, 5.8S and 5S
+  
+Protein
+- Data import and prepping
+ - Packages: tidyverse, readxl
+ - Script: western.import.R, western.cleanup.R
+ - Normalization:
+  - We wanted to normalize signal data to total protein per gel and pools, to be able to        compare gels and protein samples from with varying amount of total protein
+  - First, we quantified mean gray from within and between the lanes of each gel in ...         (software).
+  - Mean gray within lanes were categorized as total protein, mean gray between lanes were      categorized as background and summarised per gel
+  - Then we subtracted background from total protein, creating the total protein per lane       (tpl) factor
+  - To make this factor comparable across gels, we divided it by the maximal tpl per gel        (tpl = tpl/max(tpl))
+  - We also did this for the mean protein signal (signal = signal/max(signal))
+  - Then, we divided signal by tpl, creating the norm.sign factor (norm.sign = signal/tpl).
+  - norm.sign was lastly divided by mean signal from the pooled samples (norm.sign =            norm.sign/pool), resulting in protein signals comparable across different gels and with     varying amount of protein sample (ng/ul)
+ - Clean up
+  - Quantified western data was cleaned up the same way as total RNA, with marking samples 
+    above and below 2 residuals
+- Analysis
+ - The model used for the protein data was from the lme4 package
+ - model: lme(log(norm.sign) ~ time + supplement + time:supplement, 
+          random = list(subject = ~ 1),
+          data = filter(prot.dat, target == "rps6"))
+  - Here, norm.sign (i.e. normalized mean protein signal) is the response, while time           (baseline and post) + supplement (treatment) and time: supplement are the explanatory       factor/terms
+  - the model uses a two-sided linear formula to described the fixed effects (og(norm.sign)     ~ time + supplement + time:supplement)
+   - This entails describing whether there are differences between pre and post (time),          between treatments (supplement), and both?
+   - random effects (random = list(subject = ~ 1))?
+   - Why did we use a different model?
+  
+UBF/Total RNA
+- Data prepping
+- Packages: tidyverse, ggpubr
+- Scripts: ubf_rna.R
+ - For this analysis, we used cleaned up data from total RNA and western blot analyses
+ - UBF was filtered out from the clean western data
+ - mean.ubf and mean.rna were summarised in their respective data frames, then joined for 
+   the model
+  - Further, we calculated the SD units of ubf to model with total rna, because ...
+   - calculation: mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE )/sd(mean.sign,      na.rm = TRUE)))
+- Analysis
+ - this model was built with the nlme package
+ - model: lme(mean.rna ~ mean.sign + time , 
+              random = list(subject = ~ 1), 
+              data = joined.dat, 
+              na.action = na.omit)
+ - Here the mean.rna is the response, with the terms being mean.sign and time
+   we added time as a covariate here, since both levels of ubf and total rna are expected
+   to vary with time
+ - random effect (random = list(subject = ~ 1)) - why ?
+ 
+Strenght index
+- Data import and cleanup
+ - Strength index was calculated with peak torque values from all humac tests
+  - I.e. baseline -> post session 60, all speeds
+  - To manage this, we first calculated an index for each test speed (0, 60 and 240 d/s), by     by grouping peak torque values by time and supplement, and diving it by the maximum peak     torqu.
+  - Then, we summarised the peak torque indexes by subject, time and supplement and gathered     all the values under the variable "strenght index".
+  - This way, we can compare peak torque values from different movement speeds, as the index     puts them on a comparable scale
+- Change score calculations
+ - change score was done similarly to total RNA, across multiple time points
+- Analysis
+ - To account for the multiple time points, the model was changed accordingly
+ - Model: lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                         data = str.change)
+ - Why do we add the zero?
+ - In this model, we have both baseline and time as covariates, to account for the multiple    time points
+ 
+Plasma glucose and c-peptide
+- Data import and prepping
+ - Data was imported and prepped in the same way as previously described data,
+   by summarising means at each time point
+- Change score calculation
+ - change scores was calculated in the same way as previously described
+- Analysis
+ - The same model as strength index
+
 
 
 

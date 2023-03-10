@@ -69,26 +69,6 @@ rna_dat2 %>%
 
 saveRDS(rna_dat2, "./data/data-gen/rna/rna.dat.RDS")
 
-## Baseline analysis: calculation of mean and SD of baseline values, t-test on baseline values
-
-base.rna <- rna_dat2 %>%
-  filter(time == "pre") %>%
-  select(subject, time, supplement, RNA) %>%
-  group_by(subject, supplement) %>%
-  summarise(m = mean(RNA)) %>%
-  pivot_wider(names_from = supplement,
-              values_from = m) %>%
-  print()
-
-rna.ttest <- t.test(base.rna$GLUCOSE, base.rna$PLACEBO, paired = TRUE)
-
-rna.sum <- rna_dat2 %>%
-  filter(time == "pre") %>%
-  select(subject, time, supplement, RNA) %>%
-  group_by(supplement) %>%
-  summarise(m = mean(RNA),
-            s = sd(RNA)) %>%
-  print()
 
 # Log-fold change score calculation: We are interested in if the change in GLUCOSE is different from change in 
 # PLACEBO. 

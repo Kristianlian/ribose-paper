@@ -22,20 +22,6 @@ library(dplyr); library(tidyverse); library(tidyr); library(nlme); library(lme4)
 
 ins.dat2 <- readRDS("./data/data-gen/glucose/cpep.clean.RDS")
 
-
-## Baseline analysis
-# Comparing pre measurements to post day baseline
-
-base.ins <- ins.dat2 %>%
-  filter(time %in% c("pre", "baseline")) %>%
-  select(subject, time, supplement, c.pep) %>%
-  group_by(supplement) %>%
-  pivot_wider(names_from = time, 
-              values_from = c.pep) %>%
-  print()
-
-ins.ttest <- t.test(base.ins$pre, base.ins$baseline, paired = TRUE)
-  
 ## Change data
 
 ins.change <- ins.dat2 %>%

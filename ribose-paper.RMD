@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
 ```{r packages}
-library(tidyverse);library(readxl);library(lme4);library(emmeans);library(dplyr);library(cowplot);library(knitr);library(broom);library(rmarkdown);library(tinytex);library(tidyr);library(arsenal);library(magrittr);library(dabestr);library(nlme); library(pbkrtest)
+library(tidyverse);library(lme4);library(emmeans);library(cowplot);library(tinytex);library(nlme)
 ```
 
 
@@ -37,151 +37,187 @@ The purpose of this investigation was to test the hypothesis that glucose supple
 
 ### Materials and methods
 
-All participants were informed about the potential discomforts and risks associated with the study and gave their informed consent before study enrollment. The study was approved by the regional ethical committee (REK, ID nr. 153628), pre-registered at clinicaltrials.gov (Identifier: NCT04545190), and conducted according to the Helsinki declaration.
+All participants gave their informed consent prior to study enrollment. The study was approved by the regional ethical committee (REK, ID nr. 153628), pre-registered at clinicaltrials.gov (Identifier: NCT04545190), and conducted according to the Helsinki declaration.
 
 ### Participants
 
-Sixteen healthy male and female participants (20-33yrs, Table 1) were recruited to the study through social media advertisement and word of mouth. The eligibility criteria were non-smokers and moderately trained (i.e. 2-8 RT sessions per 14 days for the last six months). Exclusion criteria were previous injury leading to impaired strength, inability to perform resistance training, symptoms and a medical record of metabolic disorders including hyperglycemia, i.e. fasting venous plasma glucose ≥6.1 mmol/L and/or 2-hour glucose tolerance ≥7.8 mmol/L, and/or HbA1c >42 mmol/mol. Of the sixteen participants that commenced the intervention, three participants dropped out. One due to sickness and inability to resume, two participants experienced muscular discomfort connected to heavy resistance training. Baseline characteristics (Tab 1) were measured using DXA (Prodigy Advance PA+302047, Lunar, San Francisco, CA, USA) on Day -1, the last day preceding the RT intervention.
-
-###### **Table 1:**  Baseline characteristics. Age = mean age in years, Height = mean height in cm, Weight and Lean mass = mean in kg, Iso 60/240 = mean unilateral isokinetic knee extension peak torque in Nm at 60 d/s and 240 d/s, Isom = mean unilateral isometric knee extension peak torque in Nm.
-
-![](figures/tab1.png)
+Sixteen healthy male and female participants (20-33yrs, Table 1) were recruited to the study through social media advertisement and word of mouth. The eligibility criteria were non-smokers and moderately trained (i.e. 2-8 RT sessions per 14 days for the last six months). Exclusion criteria were previous injury leading to impaired strength, inability to perform resistance exercise training, symptoms and a medical record of metabolic disorders including hyperglycemia, i.e. fasting venous plasma glucose ≥6.1 mmol/L and/or 2-hour glucose tolerance ≥7.8 mmol/L, and/or HbA1c >42 mmol/mol. Of the sixteen participants that commenced the intervention, three participants dropped out. One due to sickness and inability to resume, two participants experienced muscular discomfort connected to heavy resistance training. Lean mass (Tab 1) was measured using DXA (Prodigy Advance PA+302047, Lunar, San Francisco, CA, USA) on Day -1, the last day preceding the RT intervention.
 
 ### Experimental design
 
-The study was designed as a 12-day double-blinded randomized controlled trial, with a unilateral RT protocol (Fig 2). Participants were randomized to commence with either glucose (GLU, 30g per bolus) or placebo (PLAC, 0g per bolus), and either dominant or non-dominant leg (Fig 1), alternating RT and supplement from one day to the other (Fig 2). Investigators were blinded as the supplement randomization was disclosed only to personnel not involved in any other aspect of the study. THe participants were blinded via diluting boluses of glucose (30g glucose) (Glucosum monohydricum, Merck KGaA, Darmstadt, Germany) and placebo (~0.3g Stevia rebaudiana extract) (Steviosa, Soma Nordic AS, Oslo, Norway) in 300ml Fun Light juice/saft (Orkla, Oslo, Norway). A blinded taste test revealed that the participants were not able to disclose the contents of the provided boluses (30g GLU vs. 0g GLU). To ensure equal conditions during training sessions, participants exercised and tested at the same time of day, +/- 1hr (check this) with the same trainer, and recorded and repeated their daily macro nutrient intake on pairwise consecutive days (Tab 4).
+The study was designed as a 12-day double-blinded randomized controlled trial, with a alternating unilateral RT protocol (Fig 1A). Participants were randomly allocated to exercise either their dominant or non-dominant leg with glucose or placebo before and after RT, and whether they started RT with glucose or placebo. Thus, participants exercised every day, alternating between e.g., one leg + glucose and the other leg + placebo (1A). One person was exclusively responsible for the randomization code and supplement distribution, blinding both investigators and participants in regard to which leg exercised with glucose and placebo. Glucose (Glucosum monohydricum, Merck KGaA, Darmstadt, Germany) and placebo (Steviosa, Soma Nordic AS, Oslo, Norway) was masked by mixing with 300ml Fun Light juice/saft (Orkla, Oslo, Norway). A blinded taste test revealed that the participants were not able to disclose the contents of the provided boluses (30g glucosum monohydricum vs. ~0.3g Stevia rebaudiana extract). To ensure equal conditions during training sessions, participants exercised and tested at the same time of day, +/- 1hr (check this) with the same supervisor, in addition to recording and repeating their daily macro nutrient intake (protein, fat, carbohydrate) and total calories on pairwise consecutive days.
 
-```{r DXA}
-# Script: DXA
-
-# Data handling
-table.dxa <- read_excel("./data/dxa/ribose_dxa.xlsx") %>%
-        select(sex, subject, age, height, weight, leanmasskg, fatmasskg, ffmg) %>%
-        #make grams into kg
-        mutate(ffkg = ffmg/1000) %>%
-        select(sex, age, height, weight, leanmasskg, fatmasskg, ffkg) %>%
-  mutate(bmi = (weight) / (height^2) * 10000)
-
-dxa.table <- table.dxa %>%
-        pivot_longer(names_to = "variable",
-                     values_to = "values", col= age:bmi) %>%
-        select(sex, variable, values) %>%
-        group_by(sex, variable) %>%
-        summarise(m = mean(values, na.rm = TRUE),
-                  s= sd(values, na.rm = TRUE)) %>%
-        mutate(stat = paste0(round(m, 1), " (", round(s, 1), ")")) %>%
-        select(sex, variable, stat) %>%
-        pivot_wider(names_from = sex,
-                    values_from = stat) %>%
-                mutate(variable = if_else(variable %in% c("age"),
-                                          "Age (yrs)",
-                                          if_else(variable %in% c("fatmasskg"),
-                                                  "Fat mass (kg)",
-                                                  if_else(variable %in% c("ffkg"),
-                                                          "Fat free mass (kg)",
-                                                          if_else(variable %in% c("height"),
-                                                                  "Height (cm)",
-                                                                  if_else(variable %in% c("leanmasskg"),
-                                                                          "Lean body mass (kg)",
-                                                                          if_else(variable %in% c("weight"),
-                                                                                  "Body weight (kg)",
-                                                                                  if_else(variable %in% c("bmi"),
-                                                                                          "BMI", "")
-                                                                                  )))))))
-
-
-dxa.table %>%
-        kable(col.names = c("Variable", "Female (n=7)", "Male (n=9)"))
-
-```
-
-```{r dxa per leg}
-# Script: DXA
-
-# Subject 104, 110 and 111 dropped out and is therefore excluded from the table
-
-#Load dxa data
-dxaleg <-  read_excel("./data/dxa/ribose_dxaprleg.xlsx") %>%
-        select(subject, sex, leg, leanmassg, fatmassg, totalmasskg) %>%
-        #make grams into kg
-        mutate(leanmass = leanmassg/1000,
-               fatmass = fatmassg/1000)%>%
-        select(subject, sex, leg, leanmass, fatmass, totalmasskg) 
-
-# Between groups analysis 
-dxa.stat <- dxaleg %>%
-        select(subject, leg, leanmass, fatmass, totalmasskg) 
-
-# Lean mass between legs, within subject 
-leanmass.lm <- lmer(leanmass ~ leg + leg:subject + (1|subject), data = dxa.stat)
-lm.plot <- plot(leanmass.lm)
-lm.sum <- summary(leanmass.lm)
-lm.confint <- emmeans(leanmass.lm, specs = ~ "leg")
-
-# Fat mass between legs, within subject
-fat.lm <- lmer(fatmass ~ leg + leg:subject +(1|subject), data = dxa.stat)
-fat.plot <- plot(fat.lm)
-fat.sum <- summary(fat.lm)
-fat.confint <- emmeans(fat.lm, specs = ~ "leg")
-
-# Total mass between legs, within subject
-total.lm <- lmer(totalmasskg ~leg + leg:subject + (1|subject), data = dxa.stat)
-totlm.plot <- plot(total.lm)
-totlm.sum <- summary(total.lm)
-supsup <- emmeans(total.lm, specs = ~ "leg") 
-
-# Table of leanmass, fatmass and total mass in kg pr. leg
-dxalegtable <- dxaleg %>%
-        select(leg, leanmass, fatmass, totalmasskg) %>%
-        pivot_longer(names_to = "variable",
-                     values_to = "values", col= leanmass:totalmasskg) %>%
-        group_by(leg, variable) %>%
-        summarise(m = mean(values, na.rm = TRUE),
-                  s= sd(values, na.rm = TRUE)) %>%
-        mutate(stat = paste0(round(m, 1), " (", round(s, 1), ")")) %>%
-        select(leg, variable, stat) %>%
-        pivot_wider(names_from = leg,
-                    values_from = stat) 
-
-# Markdown table
-dxalegtable %>%
-        kable(col.names = c("Variable", "Left leg", "Right leg"))
-
-```
-
-Six RT sessions were conducted with glucose and six with placebo, allowing a within-subjects analysis of the effects of glucose ingestion. Data from the first five RT sessions was used to investigate main outcome measures (total RNA, rRNA and protein), whereas data from the sixth RT session was used to explore secondary outcomes (muscular recovery, plasma glucose levels). Participants were asked to refrain from resistance- or high-intensity training of the legs from Day -7 and onwards, until completion of the intervention and post-testing, to ensure the reliability of pre-intervention strength data and minimal interference from other training sources. If participants did conduct exercise training outside of the prescribed protocol, they were asked to ensure equal loading on pairwise consecutive days.
+Six RT sessions were conducted with glucose and six with placebo, allowing a within-subjects analysis of the effects of glucose ingestion before and after RT. Data from the first five RT sessions was used to investigate main outcome measures (total RNA, rRNA and protein) and leg muscle strength, whereas data from the sixth RT session was used to explore secondary outcomes (muscular recovery, plasma glucose levels). Participants were asked to avoid  resistance- or high-intensity training of the legs from Day -7 (Fig 1A) and onwards, until completion of the intervention and post-testing, to ensure the reliability of pre-intervention strength data and minimal interference from other training sources. If participants did conduct exercise training outside of the prescribed protocol, they were asked to ensure equal loading on pairwise consecutive days.
 
 ### Dietary intervention
 
-The dietary intervention spanned the whole day, divided into three periods: I) From awakening until two hours after RT, II) from 2.5 hours after RT until 2200hrs, and III) from 2200hrs until awakening. During period I, participants ingested protein and glucose/placebo only. Glucose/placebo was ingested at three time points in period I: 30 minutes before RT (0830hrs, 30g vs 0g glucose), immediately before RT (0900hrs, 30g vs. 0g glucose), and immediately after RT (~0930hrs, 30g vs. 0g glucose). Protein was ingested 2hrs before RT (0700hrs, 25g) and immediately after RT (~0930hrs, 25g). In the afternoon (1800hrs-1900hrs, period II) participants ingested glucose or placebo (3x30g vs. 3x0g glucose) opposite to the supplement they received during RT, to ensure a balanced daily intake of glucose. Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications. The self-chosen diet was repeated on pairwise consecutive days (i.e. on days 1-2, 3-4, etc.), to ensure similar premises for resistance training responses between the two legs. During period III (2200-0700hrs), participants remained in an overnight fasted state. The daily onset of the dietary intervention (i.e., first ingestion of PRO supplement) varied between participants, from 0600hrs to 0900hrs to allow multiple participants to complete the protocol simultaneously. The protein supplement was ingested as 25g Whey Protein Isolate boluses (Proteinfabrikken, Stokke, Norway), diluted in 150ml of water. During sessions, participants were free to ingest water ad libitum.
+The dietary intervention spanned the whole day, divided into three periods: I) From awakening until 2.5 hours after RT, II) from 2.5 hours after RT until 2200hrs, and III) from 2200hrs until awakening. During period I, participants ingested protein and glucose/placebo only. Glucose/placebo was ingested at three time points in period I: 30 minutes before RT (0830hrs, 30g vs 0g glucose), immediately before RT (0900hrs, 30g vs. 0g glucose), and immediately after RT (~0930hrs, 30g vs. 0g glucose). Protein was ingested 2hrs before RT (0700hrs, 25g) and immediately after RT (~0930hrs, 25g). In the afternoon (1800hrs-1900hrs, period II) participants ingested glucose or placebo (3x30g vs. 3x0g glucose) opposite to the supplement they received during RT, to ensure a balanced daily intake of glucose. Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications. The self-chosen diet was repeated on pairwise consecutive days (i.e. on days 1-2, 3-4, etc.), to ensure similar premises for resistance training responses between treatments. During period III (2200-0700hrs), participants remained in an overnight fasted state. The daily onset of the dietary intervention (i.e., first ingestion of PRO supplement) varied between participants, from 0600hrs to 0900hrs to allow multiple participants to complete the protocol simultaneously. The protein supplement was ingested as 25g Whey Protein Isolate boluses (Proteinfabrikken, Stokke, Norway), diluted in 150ml of water. During sessions, participants were free to ingest water ad libitum.
 
 ### Assessment of muscular strength
 
-Strength tests (Fig 2) were performed prior to (Days -7 and -5, and -1, both legs) and during the intervention (Days 4 and 8 leg 1, 5 and 9 leg two), after session 5 and after finalization of the intervention (Day 11/12 leg 1 and 12/13 leg 2) (Fig 1). Maximal isometric and isokinetic knee extension torque were measured with a Humac Norm Dynamometer (CSMi, Stoughton, Massechusetts, USA). Individual positions were recorded and standardized from pre-intervention tests (days -7 and -5). Isokinetic peak torque was measured at speeds of 60- and 240 d/s, 2x3 repetitions each, with the first set of each exercise as a sub-maximal warm-up. Isometric peak torque was measured at knee-angle 60, for a maximum of 10 seconds and two repetition per test. The highest peak torque values were carried forwards to the final analyses. During days 4, 5, 8 and 9, humac tests were conducted one hour before RT with the leg performing RT the previous day. During days 11 and 12, humac tests were performed at four time points: I) 45min before RT, II) 30min after the last RT session, III) 2hrs after the last RT session, and IV) 23hrs after the last RT session. Test I at day 12/13 included testing of both legs, representing 23hrs post RT session test of one leg and pre-session 6 test of the other leg.
+Strength tests were performed prior to (Days -7 and -5, and -1, both legs) and during the intervention (Days 4 and 8 leg 1, 5 and 9 leg two), after session 5 and after finalization of the intervention (Day 11/12 leg 1 and 12/13 leg 2) (Fig 1A). Maximal isometric and isokinetic knee extension torque were measured with a Humac Norm Dynamometer (CSMi, Stoughton, Massechusetts, USA). Individual positions were recorded and standardized from pre-intervention tests (days -7 and -5). Isokinetic peak torque was measured at speeds of 60- and 240 d/s, 2x3 repetitions each, with the first set of each exercise as a sub-maximal warm-up. Isometric peak torque was measured at knee-angle 60, for a maximum of 10 seconds and two repetition per test. The highest peak torque values were used in the final analyses. During days 4, 5, 8 and 9 (Fig 1D, day 4 and 5 = Post 2RT, day 8 and 9 = Post 4RT), humac tests were conducted one hour before RT with the leg performing RT the previous day. During days 11 and 12, humac tests were performed at four time points: I) 45min before RT (1D, Post 5RT), II) 30min after the last RT session (1D, 30 min post 6RT), III) 2hrs after the last RT session (1D, 2h post 6RT), and IV) 23hrs after the last RT session (1D, 23h post 6RT). Test I at day 12/13 included testing of both legs, representing 23hrs post RT session test of one leg and post session 5 test of the other leg.
 
-Assessment of unilateral one repetition maximum (1RM) leg press and knee extension was conducted at pre-intervention testing (days -7 and -5, Fig 1). The participants performed a general warm-up with 10min cycling on an indoor exercise bicycle and a specific warm-up (1x10, 1x6 and 1x3 repetitions, 2min breaks) before each of the tests. Between specific warm-up sets as well as between each subsequent 1RM attempt, the participants were given 3min breaks. All positions were controlled and recorded at pre-intervention testing and repeated for the RT sessions. Maximal leg press strength was defined as the maximal load lifted in a controlled fashion, with a knee angle of 45 degrees (start), within a 2.5kg range. Attempts, where participants did not reach 45 degrees during the eccentric phase, were not approved. Maximal knee extension testing followed the same specific warm-up and pause protocol and was defined as maximal load lifted in a controlled fashion, reaching full extension of the knee joint, within a 1.25kg range. Attempts with exaggerated hip movement or beneath full extension were not approved.
+Assessment of unilateral one repetition maximum (1RM) leg press and knee extension was conducted at pre-intervention testing during familiariztion (days -7 and -5, Fig 1D). The participants performed a general warm-up with 10min cycling on an indoor exercise bicycle. In addition, a protocol consisting of 1x10, 1x6 and 1x3 repetitions, was used as spesific warm-up before each of the tests. All positions were controlled and recorded at the first 1RM test and repeated for the RT sessions. Maximal leg press strength was defined as the maximal load lifted in a controlled fashion, with a knee angle of 45 degrees (start), within a 2.5kg range. Attempts, where participants did not reach 45 degrees during the eccentric phase, were not approved. Maximal knee extension testing followed the same specific warm-up and pause protocol and was defined as maximal load lifted in a controlled fashion, reaching full extension of the knee joint, within a 1.25kg range. Attempts with exaggerated hip movement or beneath full extension were not approved. Two minute breaks were given during specific warm-up, 3min breaks were given between 1RM attempts.
 
 
 ### Resistance training protocol
 
-Resistance training consisted of three sets of each unilateral leg presses and knee extensions, with an intensity of 10 repetition maximum (10RM). As a general warm-up, the participants cycled on an indoor exercise bicycle for 5-10min. In addition, before the respective exercises, two 10-repetition warm-up sets were completed at ~50% and ~70% of 10RM. Rest time between working sets was 2min, and progressive loading was used to ensure adequate exercise stimulation throughout the intervention. For safety and standardization purposes, all sessions were monitored by trained personnel. To further ensure equal exercise premises for the two legs, each participant was accompanied by the same trainer in each session. If this was not possible throughout the intervention, each participant had the same trainer on pairwise consecutive days as a minimum. The rate of perceived exertion (RPE, 0–10-point scale) was logged before every session, and the session score was logged 15min after each session. Lastly, training volume (i.e., load and repetitions) was logged for every session.
+Resistance training consisted of three sets of unilateral leg presses and three sets of knee extensions, with an intensity of 10 repetition maximum (10RM). As a general warm-up, the participants cycled on an indoor exercise bicycle for 5-10min. In addition, before the respective exercises, two 10-repetition warm-up sets were completed at ~50% and ~70% of 10RM. Breaks between working sets was 2min, and progressive loading was used to ensure adequate exercise stimulation throughout the intervention. For safety and standardization purposes, all sessions were monitored by trained personnel. To further ensure equal exercise premises for the two legs, each participant was accompanied by the same trainer in each session. If this was not possible throughout the intervention, each participant had the same trainer on pairwise consecutive days as a minimum. The rate of perceived exertion (RPE, 0–10-point scale) was logged before every session, and the session score was logged 15min after each session. Lastly, training volume (i.e., load and repetitions) was logged for every session.
 
 ### Sampling of muscle tissue and blood
 
-Muscle biopsies were sampled from m. vastus lateralis using well-established procedures [@hammarstrom.etal_2020]. Muscle biopsy sampling was performed under local anaesthesia (Xylocaine, 10mg ml-1 with adrenaline 5μg ml−1, AstraZeneca AS, Oslo, Norway) using a 12-14-gauge needle (Universal Plus, Mermaid Medical AS, Stenløse, Denmark), operated with a spring-loaded biopsy gun. After the biopsy sampling, muscle tissue was divided in two aliquots for determination of total RNA/expression of rRNA and two aliquots for protein analyses, snap frozen in isopentane (-80°C) and stored at -80°C until further analyses. Muscle biopsies were sampled at four time points (Fig 2): I/II) Pre-intervention (2hrs before training, time point T1 = pre RT#1 leg, T2 = pre RT#2 leg), and III/IV) before the sixth RT session from RT#1 leg (2hrs before training, T3) and before the sixth RT session from RT#2 leg (2hrs before training, T4). At each time point, two samples were taken from the same incision. To standardize this procedure, all individual participants had biopsies taken at the same time of day, in an overnight fasted state.
+Muscle biopsies were sampled from m. vastus lateralis using well-established procedures [@hammarstrom.etal_2020]. Briefly, muscle biopsy sampling was performed under local anaesthesia (Xylocaine, 10mg ml-1 with adrenaline 5μg ml−1, AstraZeneca AS, Oslo, Norway) using a 12-14-gauge needle (Universal Plus, Mermaid Medical AS, Stenløse, Denmark), operated with a spring-loaded biopsy gun. After the biopsy sampling, muscle tissue was divided in two aliquots for determination of total RNA/expression of rRNA and two aliquots for protein content measurement, snap frozen in isopentane (-80°C) and stored at -80°C until further analyses. Muscle biopsies were sampled at four time points: I/II) Pre-intervention (Fig 1A, 2hrs before training, Day 1 = leg 1, Day 2 = leg 2), and III/IV) after fifth RT session (1A, Day 11 = leg 1, Day 12 = leg 2), two hours before sixth RT session. At each time point, two samples were taken from the same incision. To standardize this procedure, all individual participants had biopsies taken at the same time of day, in an overnight fasted state.
 
-To measure blood glucose levels with and without glucose ingestion/training, blood was collected by means of finger draws on days with biopsy sampling. One finger draw was taken at T1 (pre-test, Fig 2) to serve as a baseline. At T3 and T4 (post-test, Fig 2), finger draws were collected at 7 time points: I) prior to protein ingestion (0700hrs) II) 45 minutes after protein ingestion (0745hrs) III) 1.5hrs after protein ingestion (0800hrs, i.e., immediately before GLU/PLAC intake), IIII) 2hrs after protein ingestion (0900hrs, i.e., immediately before training), IV) in the middle of RT (~0915hrs), V) immediately after training (~0930hrs), and VI) 2hrs after completion of training (~1130hrs). Finger draws were analysed with in-house equipment (BIOSEN C-Line, EKF diagnostic GmbH, Barleben). Venous blood samples were collected from the antecubital vein, coinciding with the finger draws except in the middle of the RT session, to analyse endocrine variables.
+To measure blood glucose levels with and without glucose ingestion/training, blood was collected by means of finger draws on days with biopsy sampling. One finger draw was taken at day 1 (Fig 1A) to serve as a baseline. At day 11 and 12 (Fig 1A), finger draws were collected at 7 time points: I) Immediately prior to protein ingestion (0700hrs) II) 45 minutes after protein ingestion (0745hrs) III) 1.5hrs after protein ingestion (0800hrs, i.e., immediately before GLU/PLAC intake), IIII) 2hrs after protein ingestion (0900hrs, i.e., immediately before training), IV) in the middle of RT (~0915hrs), V) immediately after training (~0930hrs), and VI) 2hrs after completion of training (~1130hrs). Finger draws were analysed with in-house equipment (BIOSEN C-Line, EKF diagnostic GmbH, Barleben). Venous blood samples were collected from the antecubital vein, coinciding with the finger draws except 45min after protein ingestion and in the middle of the RT session, to analyse endocrine variables.
 
 ### Total RNA extraction and quantitative real-time reverse transcription polymerase chain reaction
 
-Two muscle biopsy samples were taken for total RNA extraction per leg per time point, and total RNA was extracted in two duplicates per muscle biopsy. Thus, we had two duplicates per leg per time point, giving a total of eight RNA samples per participant. Total RNA was extracted using TRIzol according to the manufacturer’s protocol. An exogenous RNA control (λ polyA External Standard Kit, Takara Bio Inc., Shiga, Japan) was added at a fixed amount (0.04 ng ml-1 of Trizol reagent) to enable analysis of target gene expression per unit tissue weight (ELLEFSEN2008,2014). Briefly, muscle tissue was homogenized in TRIzol using 0.5mm RNase-free Zirconium beads (~50 ul) (Next Advanced, Averill Park, NY, USA) and a bullet blender (bb). Chloroform (Sigma-Aldrich, Missouri, USA) was used for phase-separation, and an RNA pellet was precipitated with isopropanol (VWR International, Pennsylvania, USA). For assessment of RNA content and -purity 5µl RNA, from the RNA stock, was eluted in TE-buffer (1:2), for assessment via spectrophotometry. All samples had a 260nm to 280nm ratio > 1.9. The RNA stock was stored at -80°C until further analyses. RNA was reverse transcribed using Super Script IV Reverse Transcriptase (Invitrogen), according to the manufacturer’s instructions. Briefly, 1µl 10 mM dNTP mix, 0.5µl anchored oligo-dT, 0.5µl random hexamer primers (Thermo Scientific), a maximum of 9µl template RNA and 2 µl nuclease-free water were mixed, vortexed and briefly spun down. Samples were then heated at 65°C for 5 minutes, followed by at least 1-minute incubation on ice. For the next step, 4µl 5x SSIV Buffer, 1µl 100 mM DTT, 1 µl RNase OUT, and Super Script IV Reverse Transcriptase (Invitrogen) were mixed, vortexed and briefly spun down and added to the samples. Samples were incubated for 10 minutes at 23°C, 10 minutes at 50-55°C and 10 minutes at 80°C. All samples were reverse transcribed and diluted to 1:50 before quantitative real-time polymerase chain reaction (qPCR). Lambda was used as an external reference gene, added in the RNA extraction (2µl per extraction). qPCR reactions were run on a fast-cycling real-time detection system (Applied Biosystems 7500 fast Real-Time PCR Systems, Life Technologies AS), with a total volume of 10 µl, containing 2 µl of cDNA, gene-specific primers (0.5 µM final concentration) and a commercial master mix (2X SYBR Select Master Mix, Applied Biosystems, Life Technologies AS) (Hammarström et al. 2020). qPCR reactions consisted of 40 cycles (3 s 95°C denaturing and 30 s 60°C annealing) (Hammarström et al. 2020). Raw fluorescence data were exported from the platform-specific software and amplification curves were modelled with a best-fit sigmoidal model using the qPCR package (Ritz & Spiess, 2008) written for R (Hammarström et al. 2020; Team 2018). For an overview of primers, see Table 2.
+Two muscle biopsy samples were taken for total RNA extraction per leg per time point, and total RNA was extracted in two duplicates per muscle biopsy. Thus, we had two duplicates per leg per time point, a total of eight RNA samples per participant. Total RNA was extracted using TRIzol according to the manufacturer’s protocol. An exogenous RNA control (λ polyA External Standard Kit, Takara Bio Inc., Shiga, Japan) was added at a fixed amount (0.04 ng ml-1 of Trizol reagent) to enable analysis of target gene expression per unit tissue weight (ELLEFSEN2008,2014). Briefly, muscle tissue was homogenized in TRIzol using 0.5mm RNase-free Zirconium beads (~50 ul) (Next Advanced, Averill Park, NY, USA) and a bullet blender (bb). Chloroform (Sigma-Aldrich, Missouri, USA) was used for phase-separation, and an RNA pellet was precipitated with isopropanol (VWR International, Pennsylvania, USA). For assessment of RNA content and -purity 5µl RNA, from the RNA stock, was eluted in TE-buffer (1:2), for assessment via spectrophotometry. All samples had a 260nm to 280nm ratio > 1.9. The RNA stock was stored at -80°C until further analyses. RNA was reverse transcribed using Super Script IV Reverse Transcriptase (Invitrogen), according to the manufacturer’s instructions. Briefly, 1µl 10 mM dNTP mix, 0.5µl anchored oligo-dT, 0.5µl random hexamer primers (Thermo Scientific), a maximum of 9µl template RNA and 2 µl nuclease-free water were mixed, vortexed and briefly spun down. Samples were then heated at 65°C for 5 minutes, followed by at least 1-minute incubation on ice. For the next step, 4µl 5x SSIV Buffer, 1µl 100 mM DTT, 1 µl RNase OUT, and Super Script IV Reverse Transcriptase (Invitrogen) were mixed, vortexed and briefly spun down and added to the samples. Samples were incubated for 10 minutes at 23°C, 10 minutes at 50-55°C and 10 minutes at 80°C. All samples were reverse transcribed and diluted to 1:50 before quantitative real-time polymerase chain reaction (qPCR). Lambda was used as an external reference gene, added in the RNA extraction (2µl per extraction). qPCR reactions were run on a fast-cycling real-time detection system (Applied Biosystems 7500 fast Real-Time PCR Systems, Life Technologies AS), with a total volume of 10 µl, containing 2 µl of cDNA, gene-specific primers (0.5 µM final concentration) and a commercial master mix (2X SYBR Select Master Mix, Applied Biosystems, Life Technologies AS) (Hammarström et al. 2020). qPCR reactions consisted of 40 cycles (3 s 95°C denaturing and 30 s 60°C annealing) (Hammarström et al. 2020). Raw fluorescence data were exported from the platform-specific software and amplification curves were modelled with a best-fit sigmoidal model using the qPCR package (Ritz & Spiess, 2008) written for R (Hammarström et al. 2020; Team 2018).
 
 ### Protein extraction and immunoblotting
 
 Total protein was extracted using the Minute Total Protein Extraction Kit for Muscles (Invent Biotechnology), according to the manufacturer’s protocol, optimised for our lab. Wet muscle was freeze-dried for 24hrs and dissected before extraction. The tissue was homogenized with a plastic rod in 80mg protein extraction powder (Invent Biotechnology) and 100ul iced cell lysis buffer (Denaturing Buffer, Invent Biotechnology), and centrifuged at top speed for 1 min. The supernatant was aliquoted into 2x25ul tubes to run samples in duplicates, and total protein concentrations were determined in a 1:10 dilution (Pierce Detergent Compatible Bradford Assay Reagent, Thermo Fisher Scientific, Oslo, Norway). The protein samples were diluted to 20.25 µg µl−1 total protein with lysis buffer and 4X Laemmli sample buffer (Bio-Rad Laboratories AB, Oslo, Norway) containing 2-mercaptoethanol. Twenty microlitres from each protein sample were pooled as a normalisation factor for gel separation. All protein samples were incubated at 95°C and stored at -20°C until further analysis. The protein samples (20.25µg total protein) were separated at 250V for 50min using 4-20% Tris-Glycine gels (Thermo Fisher Scientific), then transferred to PVDF membranes with wet transfer at 300mA for 3hrs. Both gel electrophoresis and protein transfer were performed at 4°C. Following the wet transfer, membranes were stained with a MemCode reversible total protein stain (MANUFACTURER) and then blocked for 1hr at room temp with a blocking buffer of Tris-buffered saline (TBS; 20 mM Tris, 150 mM NaCl) with 5% non-fat dry milk and 0.1% Tween-20. Primary and secondary antibodies were purchased from Santa Cruz Biotechnology (Texas, USA) UBF:(UBF-9, sc-13125), rpS6:(Ribosomal protein S6 C-8, sc-74459), and Thermo Fisher Scientific () c-Myc:(c-Myc 9E10), goat anti-mouse for c-Myc (goat anti-mouse IgG1 (y1) horseradish peroxidase conjugate), and anti-mouse (anti-mouse IgG1 horseradish peroxidase conjugate). Antibodies were diluted in a 5% non-fat dry milk blocking buffer (TBS, 5% non-fat dry milk, 0.1% Tween-20). Membranes were incubated overnight with primary antibodies, and for 1hr with secondary antibodies. Between blocking and primary antibody staining, membranes were washed 1x5min, between primary and secondary staining, and after secondary staining, membranes were washed 3x5 with TBS-Tween (TBS; 20mM Tris, 150mM NaCl, 0.1% Tween). Following the last TBS-T wash, membranes were incubated 1x5min with enhanced chemiluminescent substrate (ECL, SuperSignal West Femto Maximum Sensitivity Substrate, Thermo Fisher Scientific). Membrane blocking, secondary antibody incubation, washing and ECL incubation were performed at room temp, on a tipping board. Primary antibody incubation was performed at 4°C on a tipping board. Chemiluminescence signals were quantified using Image Studio Lite (LI-COR Biotechnology, Lincoln, NE, USA), and total protein content was quantified using ImageJ (RUEDENETAL2017), whereas total protein content was defined as mean grey value of the whole well with between-well values subtracted as background. 
 
+### Data handling and statistical analysis
+
+A priori power calculations showed that 20 participants would grant a statistical power of 80% (= 0.05), with an expected drop out of 20%. This power calculation was based on an assumption that the effects of glucose ingestion on ribosome biogenesis may equate to the effects of increasing RT volume from low to moderate (HAMMARSTROM20). <!-- maybe include the power calculation + reason in extended methods? -->. Raw data was imported an analyzed in R via R studios (SOURCE). Legs were categorized as either glucose or placebo in accordance with the randomization. Before quantitative analyses, total RNA was normalized by wet muscle weight, qPCR values were normalized by wet muscle weight and an external reference gene (Lambda), while quantified protein signals from western blot were normalized by pool signals and total protein signal per gel <!-- add explanations of normalization to extended methods -->. Total RNA and qPCR values were analyzed by comparing post to pre log-fold change score differences. This was achieved by modelling change as response with baseline and supplement (glucose/placebo) as explanatory factors, and mean-centered baseline values as a covariate in a linear mixed effects model, then calculating the estimated marginal means <!-- add explanation of model in extended methods-->. Plasma glucose and c-peptide, training volume, and the strength index were analyzed by multiple time-point log-fold change score comparisons, using the same linear mixed effects model with time added as explanatory factor <!-- add explanation of model in extended methods-->. The linear mixed effects model was designed with the lmer function of the lme4 package (BATES14) in R studios, using the lmerTest function to procure p-values. The relationship between 
+Log-transformation and mean-centering baseline values was done to control for heteroscedasticity and regression to the mean, respectively. Log-transformed values were reverse-transformed for figure illustration. Values are presented as mean change + 95% CL unless otherwise stated, alpha-levels was set to α = 0.05. 
+
+
 
 ## Results
+
+```{r nutrition model}
+# Scripts
+# - nut.change.R
+
+# Data
+pro.change <- readRDS("./data/data-gen/nutrition/pro.change.RDS")
+fat.change <- readRDS("./data/data-gen/nutrition/fat.change.RDS")
+cho.change <- readRDS("./data/data-gen/nutrition/cho.change.RDS")
+cal.change <- readRDS("./data/data-gen/nutrition/cal.change.RDS")
+propr.change <- readRDS("./data/data-gen/nutrition/propr.change.RDS")
+
+## Models
+# Protein
+pro.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = pro.change)
+
+pro.res <- plot(pro.mod)
+pro.sum <- summary(pro.mod)
+
+
+# Fat
+fat.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = fat.change)
+
+fat.res <- plot(fat.mod)
+fat.sum <- summary(fat.mod)
+
+
+# Carbohydrates
+cho.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = cho.change)
+
+cho.res <- plot(cho.mod)
+cho.sum <- summary(cho.mod)
+
+
+# Calories
+cal.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = cal.change)
+
+cal.res <- plot(cal.mod)
+cal.sum <- summary(cal.mod)
+
+
+# Protein/kg
+propr.mod <- lmerTest::lmer(change ~ 0 + d1 + time + supplement:time + (1|subject),
+                     data = propr.change)
+
+propr.res <- plot(propr.mod)
+propr.sum <- summary(propr.mod)
+
+## Emmeans
+
+# Protein
+protein.emm <- confint(emmeans(pro.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# Fat
+fat.emm <- confint(emmeans(fat.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# Carbohydrates
+cho.emm <- confint(emmeans(cho.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# Calories
+cal.emm <- confint(emmeans(cal.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# Protein/kg
+propr.emm <- confint(emmeans(propr.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+
+```
+
+```{r volume model}
+## Scripts
+# - volume.cleanup.R
+# - volume.analysis.R
+
+## Data
+vol.change <- readRDS("./data/data-gen/training/vol.change.RDS") # Untransformed data
+vol.lchange <- readRDS("./data/data-gen/training/vol.lchange.RDS") # Log-transformed data
+
+## Models
+
+# Untransformed 
+vol.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = vol.change)
+vol.res <- plot(vol.mod)
+vol.sum <- summary(vol.mod)
+
+# Log-transformed
+vol.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                     data = vol.lchange)
+
+vol.lres <- plot(vol.lmod)
+vol.lsum <- summary(vol.lmod)
+
+## Emmeans
+
+# Untransformed
+vol.emm <- confint(emmeans(vol.mod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+# Log-transformed
+vol.lemm <- confint(emmeans(vol.lmod, specs = ~"supplement|time")) %>%
+  data.frame()
+
+## For inline plotting
+
+# Sessions compared to baseline
+volcoef <- coef(summary(vol.mod))
+pvol.s2 <- round(volcoef[2,5], 4)
+pvol.s3 <- round(volcoef[3,5], 4)
+pvol.s4 <- round(volcoef[4,5], 4)
+pvol.s5 <- round(volcoef[5,5], 3)
+pvol.s6 <- round(volcoef[6,5], 5)
+
+# Glucose compared to plac
+pvol.c2 <- round(volcoef[7,5], 3) 
+pvol.c3 <- round(volcoef[8,5], 3) 
+pvol.c4 <- round(volcoef[9,5], 3) 
+pvol.c5 <- round(volcoef[10,5], 3) 
+pvol.c6 <- round(volcoef[11,5], 3) 
+
+
+```
+
+There were no difference in mean change of total training session volume between exercising with placebo or glucose, with an increase of 18 and 16% from session 1 to session 6, respectively (Tab 2; Mean change, 2: *p* = `r pvol.c2`, 3: *p* = `r pvol.c3`, 4: *p* = `r pvol.c4`, 5: *p* = `r pvol.c5`, 6: *p* = `r pvol.c6`). Both exercising with glucose and placebo led to significant increases in mean total training session volume at session four, five and six, compared to session 1 (Tab 2; Mean change, 2: *p* = `r pvol.s2`, 3: *p* = `r pvol.s3`, 4: *p* = `r pvol.s4`, 5: *p* = `r pvol.s5`, 6: *p* = `r pvol.s6`). In regard to the dietary intervention, there were no difference in mean macro nutrient intake (protein, fat, carbohydrates) or total calorie intake between glucose and placebo on pairwise consecutive days (*p* > 0.05). 
 
 ```{r glucose data + model}
 ## Scripts:
@@ -266,67 +302,105 @@ cpp.270 <- round(cpcoef[8,5], 2)
 
 ```
 
+Glucose ingestion before and after RT led to significant increases in plasma levels of glucose by 38% immediately before RT (Fig 1B, 0 min: *p* = `r p.120`), by 31% during RT (1B, 15 min: *p* = `r p.135`) and by 32% immediately after RT (1B, 30 min: *p* = `r p.150`), compared to placebo ingestion before and after RT. Two hours after the session, RT with glucose measured 8% lower plasma glucose levels compared to RT with placebo (1B, 270min: *p* = `r p.270`). Similarly, levels of c-peptide increased significantly more in exercises with glucose compared to placebo, by 95% immediately before (Fig 1C, 0 min: *p* = `r cpp.120`) and 87% after RT (1C, 30 min: *p* = `r cpp.150`). 
 
-At baseline, there were no significant differences between training with glucose or placebo in muscle mass, isometric or isokinetic peak torque, total session volume, training intensity, total RNA content, or rRNA expression (Tab 3). Further, on pairwise consecutive days, there were no significant differences in mean macro nutrient (calories, carbohydrate, fat or protein) ingestion (Tab 4), or mean change in macro nutrient ingestion (Fig 3). Resistance training with glucose led to significant increases in blood levels glucose and c-peptide compared to RT with placebo, before, during and after the session (Fig 4B, 120min: 38 ± 4% [*p* = `r p.120`], 135min: 31 ± 4% [*p* = `r p.135`], 150min: 32 ± 4% [*p* = `r p.150`], Fig 4C, 120min: 95 ± 10% [*p* = `r cpp.120`], 150min: 87 ± 10% [*p* = `r cpp.150`]), measured during the final RT session. At 2hrs post-exercise, RT with glucose led to significantly lower blood glucose levels compared to RT with placebo, with a tendancy of the same in c-peptide levels (4B, 270min: -8 ± 4% [*p* = `r p.270`] and 4C, 270min: -7 ± 10 [*p* `r cpp.270`]).
+```{r strength model}
+## Scripts:
+# - Strength.index.R
 
-###### **Table 3**: Baseline characteristics of the intervention legs, organized per supplement. Variables: Iso 60 = isokinetic 60 d/s, Iso 240 = isokinetic 240 d/s, training intensity = load/rm*100. Nm = newton meters, kg = kilograms, %1RM = percentage of 1 repetition maximum, ng/mg = nanogram per milligram wet muscle tissue, nf.expr = expression normalized by weight and external reference gene (Lambda). Ribosomal RNA data are presented as log transformed. Glucose n = 13, placebo n = 13.
+## Data
+# Full data - baseline -> 23h post 6RT
+str.change <- readRDS("./data/data-gen/humac/str.change.RDS") # Untransfromed data
+str.lchange <- readRDS("./data/data-gen/humac/str.lchange.RDS") # Log-transfromed data
 
-![](figures/table3.png)
+# Acute data - Post 5RT -> 23h post 6RT
+astr.change <- readRDS("./data/data-gen/humac/astr.change.RDS") # Untransfromed data
+astr.lchange <- readRDS("./data/data-gen/humac/astr.lchange.RDS") # Log-transfromed data
 
-###### **Table 4:** Daily mean dietary intake of macro nutrients during each training day per supplement leg. G = glucose, P = placebo. Training day 1-training day 12 are combined pairwise to day 1-6: Day 1 = training day 1/2, Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12. Values are mean ± standard deviation. P = difference between glucose and placebo. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac = 11.
 
-```{r nutrition table}
-## Scripts
-# - nut.table.R
-# - nut.analysis.R
-# - dxa.R
+## Linear mixed effects model full data
 
-# Data
-nuttable <- readRDS("./data/data-gen/dxa/nuttable.RDS") 
+# Untransformed model
+str.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                         data = str.change)
+str.res <- plot(str.mod)
+str.sum <- summary(str.mod)
 
-nuttable %>%
-  kable(col.names = c("Time", "Suppl.", "Kcal", "CHO (g)", "Fat (g)", "PRO (g)", "PRO (g/kg)"))
+# Log-transformed model
+str.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                        data = str.lchange)
+str.lres <- plot(str.lmod)
+str.lsum <- summary(str.lmod)
+
+## Emmeans full data
+# Untransformed
+str.emm <- confint(emmeans(str.mod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+# Log-transformed
+str.lemm <- confint(emmeans(str.lmod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+## Linear mixed effects model acute
+# Untransformed
+astr.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                        data = astr.change)
+
+astr.res <- plot(astr.mod)
+astr.sum <- summary(astr.mod)
+
+# Log-transformed
+astr.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+                         data = astr.lchange)
+
+astr.lres <- plot(astr.lmod)
+astr.lsum <- summary(astr.lmod)
+
+## Emmeans acute data
+astr.emm <- confint(emmeans(astr.mod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+astr.lmod <- confint(emmeans(astr.lmod, specs = ~"supplement|time")) %>%
+  data.frame() 
+
+
+## For inline plotting full data
+strcoef <- coef(summary(str.mod))
+
+# Time points compared to baseline (full data)
+pc2 <- round(strcoef[2,5], 3)
+pc3 <- round(strcoef[3,5], 3)
+pscient.c4 <- round(strcoef[4,5], 40)
+pc4 <- sprintf("%.5f", 7.886277e-06)
+pc5 <- round(strcoef[5,5], 3)
+pc6 <- round(strcoef[6,5], 3)
+pc7 <- round(strcoef[7,5], 5)
+
+
+# Glucose compared to placebo (full data)
+pdiff.c2 <- round(strcoef[8,5], 3)
+pdiff.c3 <- round(strcoef[9,5], 3)
+pdiff.c4 <- round(strcoef[10,5], 3)
+pdiff.c5 <- round(strcoef[11,5], 3)
+pdiff.c6 <- round(strcoef[12,5], 3)
+pdiff.c7 <- round(strcoef[13,5], 3)
+
+## For inline plotting acute data
+astrcoef <- coef(summary(astr.mod))
+apc2 <- round(astrcoef[2,5], 3)
+apc3 <- round(astrcoef[3,5], 3)
+apc4 <- round(astrcoef[4,5], 3)
+
+
 
 
 ```
 
-```{r nutrition fig}
-# Associated scripts:
-# - nut.datahand.R
-# - nut.change.R
-# - nut.change.figs.R
-
-nut.fig <- readRDS("./data/data-gen/nutrition/nut.fig.RDS")
-nut.fig
-
-```
-###### **Figure 3:** Mean changes in macro nutrient intake from day to day. Day 1 = training day 1/2(T1/T2), Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12(T3/T4). Values are mean change in grams/calories ± 95% CL. 
-
-![](figures/day.timeline.png)
-
-```{r glucose + c-peptide fig}
-## Scripts
-# - gluc.fig.R
-# - cpep.figs.R
-
-# Separate figures
-pos <- position_dodge(width = 0.2)
-
-gluc.fig <- readRDS("./data/data-gen/glucose/gluc.fig.RDS")
-
-cpep.fig <- readRDS("./data/data-gen/glucose/cpep.fig.RDS")
-
-# Joined figure
-plot_grid(gluc.fig,
-          cpep.fig,
-          ncol = 1, nrow = 2)
-
-
-```
-
-###### **Figure 4:** A) Time line for training day 6 (combination of pairwise training day 11 and 12). Biopsy = muscle biopsy taken pre supplementation, PRO = protein supplementation, Humac = strength test (isometric knee extension, isokinetic knee extension 60 and 240 d/s), GLU/PLAC = glucose/placebo supplementation, RT = resistance training. Minutes: -120 = 2hrs prior to RT, -90 = 90min prior to RT, -30 = 30min prior to RT, 0 = onset of RT, 15 = 15min following onset of RT, between leg press and knee extension, 30 = 30min post onset of RT, 120 = 2hrs following onset of RT. B) Mean mmol/L change in blood glucose levels per supplement group during training day 6. Time-points: 0, 45, 90, 120, 135, 150 and 270min post protein ingestion, respectively. C) Mean change in pmol/L of c-peptide in blood per supplement group during training day 6. Values are presented as estimated marginal means of mmol/L and pmol/L change ± 95% CI. *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
+After 5 RT sessions (Fig 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength 7% more than glucose (1D, *p* = `r pdiff.c4`). At the remaining time points, there were no significant differences in mean change between exercising with glucose and placebo (1D, Post 2RT: *p* = `r pdiff.c2`, Post 4RT: *p* = `r pdiff.c3`, 30min post 6RT: *p* = `r pdiff.c5`, 2h post 6RT: *p* = `r pdiff.c6`, 23h post 6RT: *p* = `r pdiff.c7`). Both RT with glucose and placebo led to significantly reduced strength post fifth session compared to baseline, by 11 and 18% respectively (1D, Post 5RT: *p* = `r pc4`). Comparisons of the acute data gathered from post fifth session until and including 23hrs post sixth session showed a significant mean increase in strength of 5-9% after RT with glucose and placebo 30min after sixth RT session (1D, 30min post 6RT: *p* = `r apc2`) and two hours after sixth RT session (1D, 2h post 6RT: *p* = `r apc3`). Twenty-three hours after the last RT, strength was unchanged compared to after fifth RT session (23h post 6RT: *p* = `r apc4`).
 
 ### Markers of ribosome biogenesis
+
+#### Total RNA and ribosomal RNA
 
 ```{r total RNA model}
 ## Scripts
@@ -350,8 +424,8 @@ trna.emm <- confint(emmeans(trna.lmod, specs = ~"supplement")) %>%
 
 # For inline reporting
 trcoef <- coef(summary(trna.lmod))
-trdiff <- round(trcoef[3,1], 2)
-trdiffp <- round(trcoef[3,5], 2)
+trdiff <- round(trcoef[3,1], 3)
+trdiffp <- round(trcoef[3,5], 3)
 trdiffse <- round(trcoef[3,2], 2)
 
 ```
@@ -458,498 +532,197 @@ rr47diffse <- round(rr47coef[3,2], 3)
 
 ```
 
-Resistance training with glucose did not induce a higher accumulation of total RNA (fig 5A, *p* = `r trdiffp`), or rRNA  (fig 5B, *p* > 0.05), compared to RT with placebo, measured as mean change from baseline to post. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, with only placebo reaching significantly higher levels at post compared to baseline (fig 45, *p* = `r rr47tdiffp`).
+Resistance training with glucose did not induce a higher accumulation of total RNA (fig 2A, *p* = `r trdiffp`) or rRNA  (fig 2B, 47S: *p* = `r rr47diffp`, 18S: *p* = `r rr18diffp`, 28S: *p* = `r rr28diffp`, 5.8S: *p* = `r rr58diffp`, 5S: *p* = `r rr5diffp`) compared to RT with placebo. From baseline to post-intervention, there was a mean increase in levels of total RNA by 26 and 22% after RT with glucose and placebo, respectively (*p* < 0.05, compared to baseline). A robust accumulation was also observed in ribosomal RNA expression in both RT with glucose and placebo, with mean increases between 34-43% (GLU) and 33-41% (PLAC) (*p* < 0.05, compared to baseline) in the four rRNA’s. The expression of the 47S pre-rRNA increased by 37 and 59% with glucose and placebo respectively, where only RT with placebo increased significantly from baseline to post (fig 45, *p* = `r rr47tdiffp`).
 
-```{r RNA figures}
-# Get figures
-totrna.fig <- readRDS("./data/data-gen/rna/totrna.fig.RDS")
-totrna.fig
-
-plot.18 <- readRDS("./data/data-gen/rna/plot.18.RDS")
-plot.28 <- readRDS("./data/data-gen/rna/plot.28.RDS")
-plot.5.8 <- readRDS("./data/data-gen/rna/plot.5.8.RDS")
-plot.5 <- readRDS("./data/data-gen/rna/plot.5.RDS")
-plot.47 <- readRDS("./data/data-gen/rna/plot.47.RDS")
-
-
-# Joined rRNA
-library(cowplot)
-
-legend <- get_legend(plot.47 + theme(legend.box.margin = margin(0, 0, 0,12)))
-
-plot_grid(plot.18 + theme(legend.position = "none"),
-          plot.28 + theme(legend.position = "none"), 
-          plot.5.8 + theme(legend.position = "none"),
-          plot.5 + theme(legend.position = "none"), 
-          plot.47 + theme(legend.position = "none"),
-          legend,
-          ncol = 2, nrow = 3)
-
-```
-
-###### **Figure 5:** A) Changes in Total RNA, B) Changes in ribosomal RNA. Baseline = Training day 1/2, Post = Training day 11/12. Both total RNA and rRNA were analyzed with duplicates, with two duplicates per biopsy (two biopsies per time point). Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg/supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
+#### Protein
 
 ```{r western modelling}
 ## Script: 
 # - western.import.R
-# - western.change.R
+# - western.cleanup.R
+# - western.analysis.R
 
 # Data
-
-prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS") # cleaned up and quantified western data
-prot.out <- readRDS("./data/data-gen/protein/protein_complete.RDS") # Cleaned up and quantified western data, checked for outliers
-prot.change <- readRDS("./data/data-gen/protein/prot.change.RDS") # change-score data
+prot.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") # from the script: western.cleanup.R
 
 
-# By target
+### Modelling target signal per supplement 
+# These models try to explain the normalised signal by time, supplement and time+supplement (?). The random = list command creates an individual 
+# intercept for the included (e.g., subject, gel.sample). 
 
-cmyc <- prot.change %>%
-  filter(target == "cmyc") 
+## c-Myc model
 
-ubf <- prot.change %>%
-  filter(target == "ubf") 
+# Untransformed
+cmyc.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
+                random = list(subject = ~ 1),
+                data = filter(prot.dat, target == "cmyc"))
 
-rps6 <- prot.change %>%
-  filter(target == "rps6") 
+cmyc.sum <- summary(cmyc.mod)
+cmyc.res <- plot(cmyc.mod, resid(., type = "p") ~ fitted(.))
 
-# c-Myc change
 
-m1 <- lme(change ~ pre + supplement,
-            random = list(subject = ~ 1),
-            data = cmyc) # same model as in "western import", but with change scores of norm.sign
 
-#plot(m1)
+# Log-transformed
+cmyc.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
+                 random = list(subject = ~ 1),
+                 data = filter(prot.dat, target == "cmyc"))
 
-sum.m1 <- summary(m1)
+cmyc.lsum <- summary(cmyc.lmod)
+cmyc.lres <- plot(cmyc.lmod, resid(., type = "p") ~ fitted(.))
 
-cmyc.emm <- emmeans(m1, specs = ~"supplement") %>%
-  data.frame
 
-saveRDS(cmyc.emm, "./data/data-gen/protein/cmyc.change.RDS")
 
-# UBF change
 
-m2 <- lme(change ~ pre + supplement,
-            random = list(subject = ~ 1),
-            data = ubf) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
+## UBF model
+# Untransformed
+ubf.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
+               random = list(subject = ~ 1),
+               data = filter(prot.dat, target == "ubf"))
 
-#plot(m2)
 
-sum.m2 <- summary(m2)
+ubf.sum <- summary(ubf.mod)
+ubf.res <- plot(ubf.mod, resid(., type = "p") ~ fitted(.))
 
-ubf.emm <- emmeans(m2, specs = ~"supplement") %>%
+# Log-transformed
+ubf.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
+                random = list(subject = ~ 1),
+                data = filter(prot.dat, target == "ubf"))
+
+
+ubf.lsum <- summary(ubf.lmod)
+ubf.lres <- plot(ubf.lmod, resid(., type = "p") ~ fitted(.))
+
+
+# RPS6 model
+# Untransformed
+rps6.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
+                 random = list(subject = ~ 1),
+                 data = filter(prot.dat, target == "rps6"))
+
+rps6.sum <- summary(rps6.mod)
+rps6.res <- plot(rps6.mod, resid(., type = "p") ~ fitted(.))
+
+
+# Log-transformed
+rps6.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
+          random = list(subject = ~ 1),
+          data = filter(prot.dat, target == "rps6"))
+
+rps6.lsum <- summary(rps6.lmod)
+rps6.lres <- plot(rps6.lmod, resid(., type = "p") ~ fitted(.))
+
+
+### Getting emmeans from the models
+
+## c-Myc emmeans
+# Untransformed
+cmyc.emm <- emmeans(cmyc.mod, specs = ~ time|supplement) %>%
   data.frame()
 
-saveRDS(ubf.emm, "./data/data-gen/protein/ubf.change.RDS")
-
-# rps6 change
-
-m3 <- lme(change ~ pre + supplement,
-            random = list(subject = ~ 1),
-            data = rps6) # same model as in "western import", but with change (i.e., change in norm.sign) instead of norm.sign
-
-#plot(m3)
-
-sum.m3 <- summary(m3)
-
-rps6.emm <- emmeans(m3, specs = ~"supplement") %>%
+# Log-transformed
+cmyc.lemm <- emmeans(cmyc.lmod, specs = ~ time|supplement) %>%
   data.frame()
 
-saveRDS(rps6.emm, "./data/data-gen/protein/rps6.change.RDS")
+
+
+## UBF emmeans
+# Untransformed
+ubf.emm <- emmeans(ubf.mod, specs = ~ time|supplement) %>%
+  data.frame()
+
+# Log-transformed
+ubf.lemm <- emmeans(ubf.lmod, specs = ~ time|supplement) %>%
+  data.frame()
+
+
+
+## RPS6
+# Untransformed
+rps6.emm <- emmeans(rps6.mod, specs = ~ time|supplement) %>%
+  data.frame()
+
+# Log-transformed
+rps6.lemm <- emmeans(rps6.lmod, specs = ~ time|supplement) %>%
+  data.frame()
+
 
 
 ### For inline reporting
 ## Diff cmyc
-ccoef <- coef(summary(m1))
-cdiff <- round(ccoef[3,5], 3)
-cdiffse <- round(ccoef[3,2], 3)
+
+ccoef <- coef(summary(cmyc.lmod))
+cdiff <- round(ccoef[4,5], 3)
+cpla <- round(ccoef[2,5], 20)
 
 ## Diff UBF
-ucoef <- coef(summary(m2))
-udiff <- round(ucoef[3,5], 3)
-udiffse <- round(ucoef[3,2], 3)
+ucoef <- coef(summary(ubf.lmod))
+udiff <- round(ucoef[4,5], 3)
 
 ## Diff rps6
-rpcoef <- coef(summary(m3))
-rpdiff <- round(rpcoef[3,5], 3)
-rpdiffse <- round(rpcoef[3,2], 3)
+rpcoef <- coef(summary(rps6.lmod))
+rpdiff <- round(rpcoef[4,5], 3)
 
 ```
 
-```{r western fig}
-# Data
+```{r correlation model}
+# Data 
+west.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") # Quantified and cleaned western data,
+                                                               # (outliers marked) normalised by pool
 
-cmyc <- readRDS("./data/data-gen/protein/cmyc.change.RDS")
-
-ubf <- readRDS("./data/data-gen/protein/ubf.change.RDS")
-
-rps6 <- readRDS("./data/data-gen/protein/rps6.change.RDS")
-
-
-## cmyc fig
-
-cmyc.plot <- cmyc %>%
-  mutate(time = "post") %>%
-  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
-  mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  #annotate("text", x = "Post", y = 2.1, label = "p = 0.585", size = 3) +
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                width = 0.1,
-                position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
-  labs(x = "", y = "c-Myc signal \n(fold change)\n", fill = "") +
-  theme_classic()
+rna.dat <- readRDS("./data/data-gen/rna/rna.dat.RDS") # Quantified and cleaned (outliers marked), 
+                                                      # total RNA data, normalised by wet muscle weight
 
 
-ubf.plot <- ubf %>%
-  mutate(time = "post") %>%
-  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
-  mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  #annotate("text", x = "Post", y = 2.1, label = "p = 0.585", size = 3) +
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                width = 0.1,
-                position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
-  labs(x = "", y = "UBF signal \n(fold change)\n", fill = "") +
-  theme_classic()
+## Prepare data frames for joining
 
-rps6.plot <- rps6 %>%
-  mutate(time = "post") %>%
-  add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
-  mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
-  ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
-  annotate("text", x = "Post", y = 1.9, label = "p = ", size = 3) +
-  geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                width = 0.1,
-                position = position_dodge(width = 0.2)) +
-  geom_line(position = position_dodge(width = 0.2)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(width = 0.2)) +
-  labs(x = "", y = "rps6 signal \n(fold change)\n", fill = "") +
-  theme_classic()
+ubf.rdy <- west.dat %>%  # One data frame without outliers
+  select(subject, time, outlier, supplement, target, norm.sign) %>%
+  filter(target == "ubf",
+         outlier == "in") %>%
+  select(-target) %>%
+  group_by(subject, time, supplement) %>%
+  summarise(mean.sign = mean(norm.sign, na.rm = TRUE)) 
 
 
-# Cowplot for gathering figures
+rna.rdy <- rna.dat %>%
+  select(subject, time, outlier, supplement, RNA.weight) %>%
+  filter(outlier == "in") %>%
+  mutate(subject = as.character(subject)) %>%
+  group_by(subject, time, supplement) %>%
+  summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) 
 
-legend <- get_legend(rps6.plot + theme(legend.box.margin = margin(0, 0, 0,12)))
+## Correlation analysis
+
+joined.dat <- ubf.rdy %>%
+  right_join(rna.rdy) %>%
+  #filter(supplement != "GLUCOSE") %>%
+  
+  mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE )/sd(mean.sign, na.rm = TRUE))) 
 
 
-prot.joined <- plot_grid(cmyc.plot + theme(legend.position = "none"),
-                         ubf.plot + theme(legend.position = "none"), 
-                         rps6.plot + theme(legend.position = "none"),
-                         legend,
-                         ncol = 2, nrow = 2)
+library(nlme)
 
-prot.joined
+corr.mod <- lme(mean.rna ~ mean.sign + time , 
+         random = list(subject = ~ 1), 
+          data = joined.dat, 
+         na.action = na.omit)
 
-saveRDS(prot.joined, "./data/data-gen/rna/prot.joined.RDS")
+corr.sum <- summary(corr.mod)
+corr.res <- plot(corr.mod)
 
+corr.lmod <- lme(log(mean.rna) ~ log(mean.sign) + time , 
+         random = list(subject = ~ 1), 
+          data = joined.dat, 
+         na.action = na.omit)
+
+corr.lsum <- summary(corr.lmod)
+corr.lres <- plot(corr.lmod)
+
+corrcoef <- coef(summary(corr.mod))
+corrp <- round(corrcoef[2,5], 3)
 ```
 
-###### **Figure 5:** A) Changes in c-Myc levels, B) changes in UBF levels, C) changes in rps6 levels. Baseline = Training day 1/2, post = Training day 11/12. Four samples were analysed per participant (GLU pre-post, PLAC pre-post), in duplicates, a total of 104 protein samples. Duplicate samples were loaded on separate gels. In addition, 3-4 pools were added to each well. c-Myc, UBF and rps6 signals were then calculated as log-fold change score, normalised by gel pools. Mean change scores of the duplicates were calculated before modelling and transformed to the log-scale. Values are estimated marginal means fold change per leg/supplement ± 95% CI. p = between groups statistic, glucose compared to placebo. Glucose n = 13, placebo n = 13.
-
-### Resistance training and strength testing
-
-```{r training data model}
-## Scripts
-# - volume.change.R
-# - ss.analysis.R
-# - ss.cleanup.R
-# - trainint.analysis.R
-# - trainint.cleanup.R
-
-# Log-transformed data
-vol.lchange <- readRDS("./data/data-gen/training/vol.lchange.RDS")
-ss.lchange <- readRDS("./data/data-gen/training/ss.lchange.RDS")
-int.lchange <- readRDS("./data/data-gen/training/int.lchange.RDS")
-
-
-### Training volume
-# Fold-change model
-vol.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = vol.lchange)
-vol.lres <- plot(vol.lmod)
-vol.lsum <- summary(vol.lmod)
-
-# Fold-change estimated means
-vol.lemm <- confint(emmeans(vol.lmod, specs = ~"supplement|time")) %>%
-        data.frame()
-
-### Session score (RPE)
-# Model
-ss.lmod <- lmerTest::lmer(change ~ baseline + time + supplement:time + (1|subject),
-                     data = ss.lchange)
-ss.lres <- plot(ss.lmod)
-ss.lsum <- summary(ss.lmod)
-
-# Session score emmeans
-ss.lemm <- confint(emmeans(ss.lmod, specs = ~"supplement|time")) %>%
-        data.frame()
-
-### Training intensity
-int.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = int.lchange)
-int.lres <- plot(int.lmod)
-int.lsum <- summary(int.lmod)
-
-# Emmeans
-int.lemm <- confint(emmeans(int.lmod, specs = ~"supplement|time")) %>%
-        data.frame() 
-
-### For inline reporting
-
-## Training volume
-# Diff 4
-vcoef <- coef(summary(vol.lmod))
-vdiff.4 <- round(vcoef[9,1], 3)
-vdiffp.4 <- round(vcoef[9,5], 3)
-vdiffse.4 <- round(vcoef[9,2], 3)
-# Diff 5
-vdiff.5 <- round(vcoef[10,1], 3)
-vdiffp.5 <- round(vcoef[10,5], 3)
-vdiffse.5 <- round(vcoef[10,2], 3)
-# Diff 6
-vdiff.6 <- round(vcoef[11,1], 3)
-vdiffp.6 <- round(vcoef[11,5], 3)
-vdiffse.6 <- round(vcoef[11,2], 3)
-## RPE
-scoef <- coef(summary(ss.lmod))
-sdiffp <- round(scoef[11, 5], 3)
-sdiffse <- round(scoef[11, 2], 3)
-
-## Training intensity
-
-# Diff time 2
-icoef <- coef(summary(int.lmod))
-idiff2 <- round(icoef[7,1], 3)
-idiffp2 <- round(icoef[7,5], 3)
-idiffse2 <- round(icoef[7,2], 3)
-# Diff time 3
-idiff3 <- round(icoef[8,1], 3)
-idiffp3 <- round(icoef[8,5], 3)
-idiffse3 <- round(icoef[8,2], 3)
-# Diff time 4
-idiff4 <- round(icoef[9,1], 3)
-idiffp4 <- round(icoef[9,5], 3)
-idiffse4 <- round(icoef[9,2], 3)
-# Diff time 5
-idiff5 <- round(icoef[10,1], 3)
-idiffp5 <- round(icoef[10,5], 3)
-idiffse5 <- round(icoef[10,2], 3)
-# Diff time 6
-idiff6 <- round(icoef[11,1], 3)
-idiffp6 <- round(icoef[11,5], 3)
-idiffse6 <- round(icoef[11,2], 3)
-```
-
-```{r humac post 5th model}
-## Scripts
-# - humac.cleanup.R
-# - humac.main.analysis.R - this is data gathered at baseline, during the intervention, and after session 5
-
-# Log-transformed data
-
-isom.lchange <- readRDS("./data/data-gen/humac/isom.lchange.RDS")
-iso60.lchange <- readRDS("./data/data-gen/humac/isok60.lchange.RDS")
-iso240.lchange <- readRDS("./data/data-gen/humac/isok240.lchange.RDS")
-
-# Isometric
-isom.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = isom.lchange)
-isom.lres <- plot(isom.lmod)
-isom.lsum <- summary(isom.lmod)
-
-# Isok.60
-iso60.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = iso60.lchange)
-iso60.lres <- plot(iso60.lmod)
-iso60.lsum <- summary(iso60.lmod)
-
-# Isok.240
-iso240.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = iso240.lchange)
-iso240.lres <- plot(iso240.lmod)
-iso240.lsum <- summary(iso240.lmod)
-
-## Emmeans
-# Isometric
-isom.lemm <- confint(emmeans(isom.lmod, specs = ~"supplement|time")) %>%
-        data.frame()
-
-# Isok.60
-iso60.lemm <- confint(emmeans(iso60.lmod, specs = ~"supplement|time")) %>%
-        data.frame()
-
-# Isok.240
-iso240.lemm <- confint(emmeans(iso240.lmod, specs = ~"supplement|time")) %>%
-        data.frame()
-
-# For reporting
-# Isom diff
-isom5coef <- coef(summary(isom.lmod))
-isom5diffp <- round(isom5coef[7, 5], 3)
-isom5diffse <- round(isom5coef[7, 2], 3)
-
-# Isok 60 diff
-isok605coef <- coef(summary(iso60.lmod))
-isok605diffp <- round(isok605coef[7, 5], 3)
-isok605diffse <- round(isok605coef[7, 2], 3)
-
-# Isok 260
-isok2405coef <- coef(summary(iso240.lmod))
-isok2405diffp <- round(isok2405coef[7, 5], 3)
-isok2405diffse <- round(isok2405coef[7, 2], 3)
-
-```
-
-```{r post 6th model}
-## Scripts
-# - humac.acute.analysis.R - this is data gatherede before and after one RT session (sixth session)
-# - humac.cleanup.R
-
-# Data
-isom.lchange.ac <- readRDS("./data/data-gen/humac/isom.lchange.ac.RDS")
-iso60.lchange.ac <- readRDS("./data/data-gen/humac/iso60.lchange.ac.RDS")
-iso240.lchange.ac <- readRDS("./data/data-gen/humac/iso240.lchange.ac.RDS")
-
-# Isometric
-isomac.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = isom.lchange.ac)
-isomac.lres <- plot(isomac.lmod)
-isomac.lsum <- summary(isomac.lmod)
-
-# Isok.60
-iso60ac.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = iso60.lchange.ac)
-iso60ac.lres <- plot(iso60ac.lmod)
-iso60ac.lsum <- summary(iso60ac.lmod)
-
-# Isok.240
-iso240ac.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
-                     data = iso240.lchange.ac)
-iso240ac.lres <- plot(iso240ac.lmod)
-iso240ac.lsum <- summary(iso240ac.lmod)
-
-# Emmeans
-# Isometric
-isomac.lemm <- confint(emmeans(isomac.lmod, specs = ~"supplement|time")) %>%
-        data.frame() 
-
-# Isok.60
-iso60ac.lemm <- confint(emmeans(iso60ac.lmod, specs = ~"supplement|time")) %>%
-        data.frame()
-
-# Isok.240
-iso240.lemm <- confint(emmeans(iso240ac.lmod, specs = ~"supplement|time")) %>%
-        data.frame()
-
-## For inline reporting
-# Isom diff
-isomcoef <- coef(summary(isomac.lmod))
-isomdiffp <- round(isomcoef[7, 5], 3)
-isomdiffse <- round(isomcoef[7, 2], 3)
-
-# Isok 60 diff
-isok60coef <- coef(summary(iso60ac.lmod))
-isok60diffp <- round(isok60coef[7, 5], 3)
-isok60diffse <- round(isok60coef[7, 2], 3)
-
-# Isok 240 diff
-isok240coef <- coef(summary(iso240ac.lmod))
-isok240diffp <- round(isok240coef[7, 5], 3)
-isok240diffse <- round(isok240coef[7, 2], 3)
-
-```
-
-There were no significant differences in mean change of total session volume, training intensity or RPE between exercise training with glucose and placebo at any of the time points (fig 6, *p* > 0.05). We did observe interactions between time and changes, where total session training volume increased from 13-18% compared to baseline. These increases in training volume were accompanied by changes ranging from 5-18% in training intensity and 2-13% in RPE (Tab 5). The maximal isometric knee extension force (OR TORQUE?) and isokinetic knee extension peak torque at 240 d/s showed no differences between exercise training with glucose and placebo after five RT sessions (Fig 7A, *p* > 0.05). There was a significant difference in mean change from pre to post-fifth RT session, where exercise training with glucose led to a 9% less decrease in peak torque at 60 d/s compared to placebo (Fig 7A, *p* = `r isok605diffp`). There was no difference between glucose and placebo in mean change from baseline to after the sixth RT session (Fig 7B, *p* > 0.05).
-
-![](figures/legend.PNG)
-
-```{r training dat fig}
-### Get figures
-
-# Volume
-totvol.barplot <- readRDS("./data/data-gen/training/totvol.barplot.RDS")
-totvolfold.plot <- readRDS("./data/data-gen/training/totvolfold.plot.RDS")
-
-# Training intensity
-tot.barplot <- readRDS("./data/data-gen/training/tot.barplot.RDS")
-totalint.plot <- readRDS("./data/data-gen/training/trainint.plot.RDS")
-
-# Join figures
-plot_grid(totvol.barplot + theme(legend.position = "none"),
-          totvolfold.plot + theme(legend.position = "none"),
-          tot.barplot + theme(legend.position = "none"),
-          totalint.plot + theme(legend.position = "none"),
-          ncol = 2,
-          nrow = 2,
-          align = "h")
-
-```
-
-###### **Figure 6:** Training volume and training intensity from baseline until resistance exercise session 6 (training day 11 and 12). Baseline = Training day 1/2, Session 2 = Training day 3/4, Session 3 = Training day 5/6, Session 4 = Training day 7/8, Session 5 = Training day 9/10, Session 6 = Training day 11/12. A) Changes in total session volume per leg, values are mean kg ± standard deviation. B) Fold change in total session volume per leg, values are estimated marginal means fold change ± 95% CI. C) Changes in training intensity per leg calculated as %1RM, values are mean % ± standard deviation. D) Fold change in training intensity per leg, values are estimated marginal means fold change ± 95% CI. † = *p* < 0.05 in both glucose and placebo, compared to baseline. p = NS = no significant difference between legs at any of the time points. Glucose n = 13, placebo n = 13. 
-
-###### **Table 5:** RPE changes through training days. Training days are presented as combined pairwise consecutive, linked to their respective sessions. Session 1 = Training day 1/2, Session 2 = Training day 3/4, Session 3 = Training day 5/6, Session 4 = Training day 7/8, Session 5 = Training day 9/10, Session 6 = Training day 11/12. Values are presented as mean ± standard deviation. Glucose n = 13, placebo n = 13.
-
-```{r RPE table}
-## Scripts
-# - ss.cleanup.R
-# - ss.absolute.R
-
-# Data
-ss.abs <- readRDS("./data/data-gen/training/ss.abs.RDS")
-
-# Table
-ss.abs %>%
-  kable(col.names = c("Supplement", "Baseline", "Session 2", "Session 3", "Session 4", "Session 5",
-                            "Session 6"))
-
-```
-
-![](figures/legend2.PNG)
-
-```{r humac figs}
-## Post 5th RE session
-# Figures
-pos <- position_dodge(width = 0.2)
-isom5.plot <- readRDS("./data/data-gen/humac/isom.main.fig.RDS")
-isok605.plot <- readRDS("./data/data-gen/humac/isok60.main.fig.RDS")
-isok2405.plot <- readRDS("./data/data-gen/humac/isok240.main.fig.RDS")
-
-legend <- get_legend(isom5.plot + theme(legend.box.margin = margin(0, 0, 0, 12)))
-
-plot_grid(isom5.plot + theme(legend.position = "none"), 
-          isok605.plot + theme(legend.position = "none"), 
-          isok2405.plot + theme(legend.position = "none"),
-          nrow = 3,
-          align = "v")
-
-## Post 6th RE session
-
-# Figures
-
-pos <- position_dodge(width = 0.2)
-
-isom.plot <- readRDS("./data/data-gen/humac/isom.ac.plot.RDS")
-isok60.plot <- readRDS("./data/data-gen/humac/isok60.ac.plot.RDS")
-isok240.plot <- readRDS("./data/data-gen/humac/isok240.ac.plot.RDS")
-
-legend <- get_legend(isom.plot + theme(legend.box.margin = margin(0, 0, 0, 12)))
-
-plot_grid(isom.plot + theme(legend.position = "none"), 
-          isok60.plot + theme(legend.position = "none"), 
-          isok240.plot + theme(legend.position = "none"),
-          nrow = 3,
-          align = "v")
-
-```
-
-The mean change in peak torque at all three velocities change little from baseline until session 4 in both glucose and placebo (+4-7% change), decreasing at pre-session 6 (9-18% change, Fig 6A). Post session 6 (Fig 6B) showed a slight reduction in isometric peak torque 30min after session completion (2-4% change), slowly regaining at 2hrs (+3% change) and 23hrs (+3-6% change), in both glucose and placebo compared to baseline. Isokinetic peak torque at 60 d/s and 240 d/s showed no reduction in mean peak torque from baseline until 23hrs following RT,  in both glucose and placebo (+0,1-11%). There was an effect of time in peak torque at 23hrs post-RT at 60 d/s (Fig 6B), where exercise training with placebo led to a 5% increase in peak torque compared to baseline, however, there was no significant difference compared to exercise training with glucose. 
-
-###### **Figure 7:** Peak torque changes in maximal isometric knee extension and maximal isokinetic knee extension at 60 and 240 d/s, respectively. A) Humac tests during the intervention, Baseline = Day -1 (prior to intervention), Session 2 = prior to training, training Day 4/5, Session 4 = prior training, training Day 8/9, Session 6 = prior to training 11/12. B) Baseline = prior to training, training day 11/12, 30min = 30 min after RT, 2hr = 2hrs after RT, 23hr = 23hrs after RT. Values are change in estimated marginal means of newton meters (Nm) ± 95% CI. * = *p* < 0.05 between groups. *p* = NS = no significant difference between legs at any of the time points. Glucose n = 13, placebo n = 13.
+Levels of c-Myc increased by 51% more after RT with placebo compared to RT with glucose, a significant difference (Fig 3A: *p* = `r cdiff`). Levels of UBF and rpS6 increased by 42 and 33% more in placebo compared to glucose, however, this was not a significant difference (Fig 3A: UBF: *p* = `r udiff`, rpS6: *p* = `r rpdiff`). The increase in both RT with glucose and placebo for all measured proteins was significant at post compared to baseline (*p* < 0.05). Further, we found a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a 13% increase in total RNA (*p* = `r corrp`).
 
 ## Discussion
 
@@ -976,11 +749,21 @@ Despite being a thoroughly standardised design, a limitation may be posed throug
 In conclusion, resistance exercise training combined with glucose ingestion does not acutely augment ribosome biogenesis following 2 weeks of moderate-volume resistance training in moderately trained young male and female adults. Neither does it acutely affect muscular performance in isometric and isokinetic knee extension peak torque, nor enhance post resistance training recovery within 24hrs. 
 
 
-## Disadvantages due to Covid-19
+## References
 
-Due to restrictions regarding social distancing and lock downs, caused by the Covid-19 pandemic, we were not able to recruit and include as many participants as we planned to the study. <!-- Is this necessary to include at all? -->
+<div id="refs"></div>
 
+## Figure/table text
 
+ **Table 1:**  Baseline characteristics. Age = mean age in years, Height = mean height in cm, Weight and Lean mass = mean in kg, Iso 60/240 = mean unilateral isokinetic knee extension peak torque in Nm at 60 d/s and 240 d/s, Isom = mean unilateral isometric knee extension peak torque in Nm.
+
+**Table 2:** Mean total session volume and mean change in total session volume from session 1 to session 6.
+
+**Figure 1:** A) An overview of the experimental design with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days involving familiarization. Between days -7 and -1, participants were familiarized to the RT exercises via 1RM leg press and knee extension testing, and to the strength tests via Humac Norm dynamometer (days -7 and -5). Before baseline testing, the participants were randomly allocated to exercise one leg with GLU (glucose) and the other with PLA (placebo), in a unilateral, alternating fashion. Further, non-dominant/dominant + GLU/PLA, and onset with GLU or PLA was also randomized, i.e. the figure illustrates an example where the participant was randomized to start RT with GLU. Biopsies were taken from m. vastus lateralis at baseline (Day 1 leg 1, Day 2 leg 2), and after five RT sessions (Day 11 leg 1, Day 12 leg 2). Blood for measurement of plasma glucose and -c-peptide was sampled at baseline (Day 1), and during post testing (Day 11 leg 1, Day 12 leg 2), via finger draws and venous blood samples. Skeletal muscle strength was measured as peak torque in unilateral isometric and isokinetic (at 60 and 240 d/s) knee extension before, multiple times during, and after five and six session. A total of three participants dropped out of the intervention, either due to reported muscular discomforts of heavy RT, or sickness in their family. B and C) Changes in plasma glucose (B, mmol/L) and c-peptide levels (C, pmol/L). Glucose levels in blood was measured via finger draws 120 (-120), 90 (-90), and 30min (-30) before RT, immediately before RT (0), during RT (15), immediately after RT (30) and 2hrs after RT (120). C-peptide levels were measured simultaneously to these finger draws, except for 90min before and during RT. D) Changes in muscular strength measured as isometric and isokinetic peak torque (60 and 240 d/s) via Humac Norm Dynamometer, conducted at baseline (A: Day -1), after two and four RT sessions (A: Day 4 and 8 leg 1, Day 5 and 9 leg 2), after five RT sessions/before the 6th session (Day 11 leg 1, Day 12 leg 2), as well as 30min, 2hrs and 23hrs after the 6th RT session (A: Day 11/12 leg 1, Day 12/13 leg 2). The index was calculated by normalizing peak torque values to the highest peak torque value at each respective speed, and then summarized and used in change score calculations. Values are presented as changes in estimated marginal means ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
+
+**Figure 2:** Changes in total RNA and ribosomal RNA. A) Total RNA, B) 47S pre-rRNA, 18S rRNA, 28S rRNA, 5.8S rRNA, 5S rRNA. Baseline = Day 1 leg 1/ Day 2 leg 2, Post = Day 11 leg 1, Day 12 leg 2. Total RNA and rRNA were analyzed in duplicates, with two duplicates per biopsy (two muscle tissue pieces per time point), and normalized to ng x mg wet muscle weight for total RNA and external reference gene (Lambda) for rRNA. Total RNA and rRNA changes were calculated as log-fold change score per mg wet muscle weight. Mean change scores of the duplicates were calculated and transformed to the log-scale before modelling, then reverse-transformed for figure illustration. Values are estimated marginal means fold change per leg per supplement ± 95% CI. Glucose n = 13, placebo n = 13.
+
+**Figure 3:** Changes in levels of protein. A) Mean UBF, c-Myc and rpS6 (AU, arbitrary units) at baseline and post + representative western blots of the respective proteins. Baseline = Day 1 leg 1, Day 2 leg 2, post = Day 11 leg 1, Day 12 leg 2. GLU = glucose, PLA = placebo. Protein samples were analyzed in two duplicates per biopsy per time point, loaded on separate gels in an inverted order, e.g. from gel 3 to 6, as shown by the duplicates (1 and 2). Change in protein levels were calculated as log-fold change scores normalized by pools (pool of all protein samples per gel). Mean log-change scores of the duplicates were calculated before modelling and reverse-transformed for figure illustration. Values are estimated marginal means fold change per leg per supplement ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13. B) Representative total protein stain blot. C) Linear relationship between total RNA (ng x mg) and UBF levels (SD units), with time added as a covariate. Total RNA was normalized by wet muscle weight, and UBF was normalized by pools per gel, and total protein per lane factor. Values are presented as log-transformed means.
 
 
 
