@@ -17,10 +17,27 @@ Notes for extended methods supplementary
 - Normalization of total protein, qpcr values and protein signals
 - UBF/RNA correlation: Make a new model to see if data point affects the current model
 
+## Wet lab analyses
+
+### RNA extraction
+
+### cDNA synthesis and qPCR
+
+### Protein extraction
+
+### Western Blot
+
+## Statistical analyses
+
+We chose to log-transform all data to be reported, as visual inspection showed clear signs of heteroscedasticity in multiple data sets. Therefore, we made the decision to do the same for all data sets, which was to log-transform the data prior to modelling, and then reverse-transform the data that was visualized in figures. The exception was the data used in figure 1B, 1C and 1D, where we used absolute changes rather than relative changes obtained by reverse-transforming from the log scale. This is because using the absolute data here arguably represents the data in a more comprehensible way, compared to i.e., total RNA or protein signalling, which is less commonly known. As for the strength index, it was already put on a different scale by compiling the index. 
+
+Further, we mean-centered the baseline values in each model to account for regression to the mean. This was simply achieved by subtracting the mean baseline value from the baseline value of each measurement. As such, differences at baseline, e.g. by extremely high or low values does not violate the assumption of equal variance, and the we can interpret the models with more certainty. 
+
 Mean-centered baseline values were used to correct for regression to the mean, which potentially occurs when the same participants
 are repeatedly tested. Regression to the mean entails that scores close to the upper or lower limit of a participants potential score would be replaced with a score closer to the mean, e.g. high baseline values are shifted downwards while low baseline values are shifted upwards, creating a negative association between initial values and change. Estimated marginal means were calculated from the linear model, enabling acquisition of least-square means, showing the means for all involved groups adjusted to means of other potential factors in the model.
 
-## Code/formulas for quantitative analyses
+
+
 Total RNA: 
 - Data import and prepping
  - Packages: tidyverse, readxl, nlme
