@@ -721,7 +721,7 @@ corrcoef <- coef(summary(corr.mod))
 corrp <- round(corrcoef[2,5], 3)
 ```
 
-Levels of c-Myc increased by 51% more after RT with placebo compared to RT with glucose, a significant difference (Fig 3A: *p* = `r cdiff`). Levels of UBF and rpS6 increased by 42 and 33% more in placebo compared to glucose, however, this was not a significant difference (Fig 3A: UBF: *p* = `r udiff`, rpS6: *p* = `r rpdiff`). The increase in both RT with glucose and placebo for all measured proteins was significant at post compared to baseline (*p* < 0.05). Further, we found a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a 13% increase in total RNA (*p* = `r corrp`).
+Levels of c-Myc increased by 42% more after RT with placebo compared to RT with glucose, a significant difference (Fig 3A: *p* = `r cdiff`). Levels of UBF and rpS6 increased by 19 and 23% more in placebo compared to glucose, however, this was not a significant difference (Fig 3A: UBF: *p* = `r udiff`, rpS6: *p* = `r rpdiff`). The increase in both RT with glucose and placebo for all measured proteins was significant at post compared to baseline (*p* < 0.05). Further, we found a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a 13% increase in total RNA (*p* = `r corrp`).
 
 ## Discussion
 

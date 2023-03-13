@@ -122,7 +122,7 @@ ubf.emm %>%
   geom_line() + 
   geom_point(shape= 21) 
 
-saveRDS(ubf.lemm, "./data/data-gen/protein/ubf.emm.RDS")
+saveRDS(ubf.emm, "./data/data-gen/protein/ubf.emm.RDS")
 
 # Log-transformed
 ubf.lemm <- emmeans(ubf.lmod, specs = ~ time|supplement) %>%

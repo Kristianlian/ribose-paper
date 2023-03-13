@@ -163,6 +163,8 @@ lemm.str <- confint(emmeans(m.lstr, specs = ~"supplement|time")) %>%
 saveRDS(emm.str, "./data/data-gen/humac/emm.str.RDS")
 
 
+
+
 ### Change model acute
 
 m.astr <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
@@ -179,8 +181,12 @@ summary(m.alstr)
 emm.astr <- confint(emmeans(m.astr, specs = ~"supplement|time")) %>%
   data.frame() 
 
+saveRDS(emm.astr, "./data/data-gen/humac/emm.astr.RDS")
+
 lemm.astr <- confint(emmeans(m.alstr, specs = ~"supplement|time")) %>%
   data.frame() 
+
+saveRDS(lemm.astr, "./data/data-gen/humac/lemm.astr.RDS")
 
   
   

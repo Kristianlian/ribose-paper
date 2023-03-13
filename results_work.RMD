@@ -155,7 +155,7 @@ astr.lsum <- summary(astr.lmod)
 astr.emm <- confint(emmeans(astr.mod, specs = ~"supplement|time")) %>%
   data.frame() 
 
-astr.lmod <- confint(emmeans(astr.lmod, specs = ~"supplement|time")) %>%
+astr.lemm <- confint(emmeans(astr.lmod, specs = ~"supplement|time")) %>%
   data.frame() 
 
 
@@ -322,7 +322,7 @@ pvol.c6 <- round(volcoef[11,5], 3)
 ```
 
 
-There were no difference in mean change of total training session volume between exercising with placebo or glucose, with an increase of 18 and 16% from session 1 to session 6, respectively (Tab 2; Mean change, 2: *p* = `r pvol.c2`, 3: *p* = `r pvol.c3`, 4: *p* = `r pvol.c4`, 5: *p* = `r pvol.c5`, 6: *p* = `r pvol.c6`). Both exercising with glucose and placebo led to significant increases in mean total training session volume at session four, five and six, compared to session 1 (Tab 2; Mean change, 2: *p* = `r pvol.s2`, 3: *p* = `r pvol.s3`, 4: *p* = `r pvol.s4`, 5: *p* = `r pvol.s5`, 6: *p* = `r pvol.s6`). In regard to the dietary intervention, there were no difference in mean macro nutrient intake (protein, fat, carbohydrates) or total calorie intake between glucose and placebo on pairwise consecutive days (*p* > 0.05). 
+There was no difference in mean change of total training session volume between exercising with placebo or glucose, with an increase of 18 and 16% from session 1 to session 6, respectively (Tab 2; Mean change, 2: *p* = `r pvol.c2`, 3: *p* = `r pvol.c3`, 4: *p* = `r pvol.c4`, 5: *p* = `r pvol.c5`, 6: *p* = `r pvol.c6`). Both exercising with glucose and placebo led to significant increases in mean total training session volume at session four, five and six, compared to session 1 (Tab 2; Mean change, 2: *p* = `r pvol.s2`, 3: *p* = `r pvol.s3`, 4: *p* = `r pvol.s4`, 5: *p* = `r pvol.s5`, 6: *p* = `r pvol.s6`). In regard to the dietary intervention, there were no difference in mean macro nutrient intake (protein, fat, carbohydrates) or total calorie intake between glucose and placebo on pairwise consecutive days (*p* > 0.05). 
 
 Glucose ingestion before and after RT led to significant increases in plasma levels of glucose by 38% immediately before RT (Fig 1B, 0 min: *p* = `r p.120`), by 31% during RT (1B, 15 min: *p* = `r p.135`) and by 32% immediately after RT (1B, 30 min: *p* = `r p.150`), compared to placebo ingestion before and after RT. Two hours after the session, RT with glucose measured 8% lower plasma glucose levels compared to RT with placebo (1B, 270min: *p* = `r p.270`). Similarly, levels of c-peptide increased significantly more in exercises with glucose compared to placebo, by 95% immediately before (Fig 1C, 0 min: *p* = `r cpp.120`) and 87% after RT (1C, 30 min: *p* = `r cpp.150`). 
 
@@ -466,7 +466,7 @@ Resistance training with glucose did not induce a higher accumulation of total R
 
 #### Protein
 
-```{r western modelling}
+```{r western model}
 ## Script: 
 # - western.import.R
 # - western.cleanup.R
