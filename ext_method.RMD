@@ -39,7 +39,7 @@ RNA normalization:
  4. RNA.weight = RNA / weight
  - weight = biopsy weight
 
-Weight and RNA was summarised, then we devided RNA by mean centered weight. Thus, we could compare total RNA results analyzed on different nanoDrop plates.
+Weight and RNA was summarised, RNA was devided by mean centered weight. Thus, we could compare total RNA results analyzed on different nanoDrop plates.
 
 rRNA normalization: 
  1. Lambda expression was first calculated and stored in the data.frame "nf"
@@ -47,9 +47,11 @@ rRNA normalization:
  3. Joined the lambda and target expression data.frames
  4. nf.w = expr / weight
  5. nf.w = nf.w / max(nf.w)
- 6. nf.expr = log(expr / nf.w), nf.w = scale(nf.w)
+ 6. nf.expr = log(expr / nf.w), nf.w = scale(nf.w) ?
  - expr = target expression 
  - weight = biopsy weight
+ 
+To accurately measure changes in expression of rRNA, we added a fixed amount of Lambda to each total RNA sample during RNA extraction. Lambda expression and target (47S, 18S, 28S, 5.8S, 5S) were calculated in separate data frames, and then joined for normalization. In each data frame, we first created a normalization factor for weight (nf.w), a result of expression divided by weight. To make the nf.w comparable across the qPCR plates, we put it on a scale through the code nf.w = nf.w /max/(nf.w). This code divides the mean nf.w by the highest observed value in the variable nf.w. 
  
 Protein normalization:
  1. tpl = tp - bg
@@ -63,8 +65,7 @@ Protein normalization:
  - bg = background (mean gray pixels between lanes)
  - signal = pixels per band
  
-To create the tpl normalization factor, we measured the mean gray both within (tp) and between (bg) the lanes of each total protein stain blot with the 
-
+To create the tpl normalization factor, we measured the mean gray both within (tp) and between (bg) the lanes of each total protein stain blot with the ImageJ software. So, each lane and each space between lanes got a "mean gray" value. Subtracting background from total protein (tpl = tp-bg), and then using the resulting value divided by the maximum observed total protein in a lane per gel (tpl = tpl/max(tpl)), gave us a value normalized between gels. In addition, to account for variations in loading and unequal size in muscle tissue samples, we also normalized antibody signal by pools. The pools were mixes of total protein sample, 20ul from each sample, loaded into three lanes per gel. So, after normalizing signal to tpl (norm.sign = signal / tpl), we summarized the average signal from the pools (pool = mean(pool)), and divided the tpl normalized signal by average pool signal (norm.sign = norm.sign / pool).
 
 
 
