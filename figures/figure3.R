@@ -111,7 +111,7 @@ rps6.plot <- rps6 %>%
   geom_line(position = position_dodge(width = 0.2), lty = 2) +
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = colors[c(4,1)],
-                    labels = c("Glucose", "Placebo")) +
+                    labels = c("Placebo", "Glucose")) +
   labs(x = "Time", y = "rpS6 AU", fill = "Supplement") +
   theme(axis.title = element_text(size = htextsize),
         axis.title.x = element_blank(),
