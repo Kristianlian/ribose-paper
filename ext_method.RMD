@@ -20,7 +20,112 @@ We gathered muscle tissue from both legs at pre and post intervention, taking tw
 
 ### Total RNA and rRNA
 
-###### **Tab 1:** Primer sequence and performance. Average cycle thresholds (Ct) and primer efficiencies were calculated from all qPCR reactions. 
+#### Extraction of RNA from muscle tissue (protocol)
+
+##### Materials
+
+For extraction of RNA and protein per sample:
+
+1.5 ml Eppendorf tube with 0.5 mm RNase-free Zirconium beads (~50 ul) Keep out DNA RNAse contaminations (Eppendorf safe-lock for use in bullet blender.
+1.5 ml tube for RNA precipitation
+1.5 ml tube for RNA quantification (1:5 dilution, add 20 ul of DEPC-water)
+1.5 ml tubes for Protein precipitation
+1.5 ml tubes for Soluble protein fraction
+1.5 ml tubes for protein quantification (1:10 dilution, add 36 ul of ddH2O)
+
+##### Solutions and chemicals
+
+Trizol (Life-technologies)
+Chloroform
+Isopropanol
+External reference gene (e.g. Takara lambda)
+100% EtOH
+95% EtOH
+75% EtOH (kept on -20)
+
+##### Homogenization and phase separation
+
+1. Add 1 sample volume of beads and 300 ul Trizol to eppendorf 1.5 ml tubes. Keep on ice. OPTIONAL: If external reference gene is used, add 1 unit to every extraction with Trizol in first step. Lambda (0.04 ng/ul, 2 ul per extraction)
+2. Add frozen muscle samples (protocol optimized for 5-25 ug of wet weight muscle sample) without thawing and put tubes in Bullet blender
+3. Run Bullet Blender (BB) for 1 min at speed 10, put samples on ice for 1 min. Run samples for 1 min at speed 12. Check samples, if not dissolved run until fully homogenized.
+4. Add Trizol (700 ul) to total volume 1000 ul, run samples in BB for 1 min speed 3.
+5. Incubate @ RT for 5 min
+6. Add 200 ul chloroform, shake 15 sec, incubate for 2-3 min.
+7. Spin 12000g, 15min, 4°C
+8. Pipette 450 ul of the aqueous phase to a new tube. Be careful not to disrupt the interphase or organic phase. Add 500 ul of isopropanol to precipitate RNA, incubate over night at -20°C or 10 min at room temp and continue with RNA extraction.
+9. Completely remove the remaining aqueous phase, either store remaining phases at -20°C until protein extraction or continue right away
+
+##### Extraction
+
+Precipitation and wash
+
+1. Spin the isopropanol/water phase 12000g, 10min, 4°C. A pellet should form, decant supernatant, spin briefly and remove remaining liquids.
+2. Add 1000 ul 75% EtOH (-20°C) @ RT, vortex gently. Spin 7500g, 5min, 4°C.
+3. Repeat step 2 two more times.
+4. Remove all EtOH, air dry the pellet up to 10 min with tubes upside-down. Do not over-dry!
+
+Suspension
+1. Add 20-40 ul of 1x DEPC-treated water (55°C), incubate at 55°C for 10min.
+2. Aliquot:
+ 5 ul to 20 ul TE buffer for Nanodrop/Qubit2
+ x ul in stock solution
+3. Store RNA stock solution @ -80°C.
+
+#### cDNA synthesis using Superscript IV and general qPCR
+
+##### cDNA
+
+##### Materials
+
+Heating block or thermal-cycler capable of 65, 50-55 and 80°C
+RNase-free tubes, pipette tips
+Superscript IV kit (SSIV Buffer, SSIV Reverese transcriptase, 100 nM DTT)
+Oligo dT and/or Random Hexamer primers
+10 mM dNTP mix
+Total-RNA or mRNA
+
+1. Combine the following components per reaction (consider creating a master mix from component a and b if you are running many samples, master mix 1):
+ 25 μM Oligo dT and 25 μM Random Hexamers - 0.5 μl Oligo dT (art nr. AB-1247) + 0.5 μl Random hexamers (SO142) per reaction
+ 10 mM dNTP mix (10 mM each) - 1 μl per reaction
+ Template RNA (0.1-5000 ng total-RNA) - up to 11 μl per reaction
+ Nuclease-free water - Add to total volume 13 μl per reaction
+ 
+2. Mix all components, vortex and briefly spin down.
+3. Heat the mix 5 min at 65°C followed by at least 1 min incubation on ice.
+4. Bring the 5x SSIV buffer to room-temp. Vortex and spin briefly.
+5. Combine the following into master-mix 2:
+ 5x SSIV Buffer - 4 μl per reaction
+ 100 mM DTT - 1 μl per reaction
+ RNase OUT - 1 μl per reaction
+ Super Script reverse transcriptase - 1 μl per reaction
+
+6. Vortex and briefly spin the components of master mix 2, add master-mix 2 to the reaction tube.
+7. Incubate the reaction tube at 23°C 10 min.
+8. Incubate the reaction mix at 50-55 °C 10 min followed by 10 min at 80°C
+9. Dilute the cDNA to desired concentration (e.g. 1:25)
+
+##### qPCR
+
+##### Materials
+
+QuantStudio 5 real-time PCR machine
+A qPCR reaction plate
+Nuclease-free water and pipette tips
+SYBR-green Master mix
+
+1. Combine master-mix:
+ Sybre-green 2X master-mix - 5 μl per reaction
+ Primermix, Forward and Reverse 5 μM each - 1 μl per reaction
+ H2O - 2 μl per reaction
+
+2. Load the plate with primer-specific master-mix
+3. Add 2 μl cDNA sample
+
+### Protein
+
+#### Extraction
+
+###### **Table 3:** Primer sequence and performance. Average cycle thresholds (Ct) and primer efficiencies were calculated from all qPCR reactions. 
 
 ![](figures/archive/Primer.sequences.PNG)
 
