@@ -123,7 +123,115 @@ SYBR-green Master mix
 
 ### Protein
 
-#### Extraction
+##### Total Protein Extraction via Minute Total Protein Extraction Kit for Muscles (Invent Biotechnology)
+
+Manufacturers protocol:
+1. Weight out 20-30 mg tissue (fresh/frozen) and cut it with a sharp blade or a pair of scissors into 
+small pieces (1 X 1 mm or smaller). Place tissue pieces in a filter cartridge with collection tube. 
+
+2. Add 50 to 80 mg protein extraction powder on top of the tissue followed by addition of  75 ul 
+lysis buffer (Denaturing Buffer). 
+
+3. Immediately grind the tissue with the plastic rod provided against the surface of the filter with 
+moderate twisting force for 2-3 min. Add another 25ul lysis buffer (Denaturing buffer) to the filter and continue to 
+grind for about 30 seconds to 1 min. The plastic rods are reusable after cleaning.
+
+4. Centrifuge the tube at top speed in a microcentrifuge for 1 min. Remove and discard the filter. 
+Transfer the supernatant to a fresh tube (this is extracted total protein). The white-grey pellet in 
+the bottom of collection tube is passing through protein extraction powder that should be 
+discarded. 
+
+##### Measurement of total protein concentration
+Keep samples and ladder on ice as much as possible, minimize time off ice. 
+1. Total protein samples from extraction are diluted 1:10 to a final volume of 40 ul (i.e. 4 units sample and 36 units water). 
+2. Use a 96 well plate, and pipette 3 wells per ladder (A-I) and sample (10ul). 
+3. After all ladders and samples have been added to the wells, pipette 250ul Bradford into each well.
+4. Run the plate using SkanIt software to examine the total protein concentration. (Fill in the running set-up and plate layout here)
+
+##### Gel electrophoresis
+Preparation
+
+1. Dilute with denaturing buffer to a protein concentration of i.e. 3ug/ul (depending on measured total protein concentration). Standardize the start volume of the samples, i.e. to 50ul, then use C1V1 = C2V2 formula. Transfer 50ul total protein to a fresh tube, add dilution volume. Make sure to note the dilution volume of each sample, you will use it later on.
+2. Mix the loading buffer equal to 1/4 of the total sample volume (add startvolume and dilution volume from step 1, divide this by three = loading buffer volume). This should be fresh, mix it on the same day, see solutions. Add up the total volum of loading buffer needed and mix it under a vent.
+3. Add loading buffer to the samples, vortex briefly.
+4. Pool 20ul from each sample (or lower if necessary) into a fresh "pooling" tube.
+5. Incubate the samples and pool tube at 95 C for 5min. Lids may pop open during or after incubation, pay attention and close them if they do.
+6. Let the samples cool down briefly, store them at -20 C until loading.
+7. Prepare running buffer (solutions). This must be cold, prepare it the day prior to electrophoresis and store it at 4 C fridge.
+
+Setup:
+
+1. Unpack the gel, and make sure to flush it using water (blue tap/ddH2O). If you are running multiple gels, make sure to mark each gel (note something on the plastic case around the gel). 
+2. Remove the sticker from the gels, and insert the gels into the electrophoresis chamber. Keep on ice. 
+3. Fill up the main electrophoresis chamber and the small chamber on the gels surrounding plastic (with a green plastic placeholder) with running buffer, approximately 1L in total. Keep on ice.
+4. Carefully remove the green placeholder from each gel (use tweezers), then flush each well with running buffer from. Keep on ice.
+
+Loading:
+
+1. Make sure to draw or note which samples go into which wells. Always add Ladder in the first well (5ul, Precision plus Protein Dual Color standards), and the middle or last (3ul). Calculate loading volume. Our goal is to load as close as possible to 20.25 ug protein, i.e. divide 20.25 by standardised concentration (the concentration with loading buffer). If you diluted by three, the concentration will be down to 2.25 after adding loading buffer: 20.25/2.25 = 9. Therefore we load the gel with 9 ul sample per well in this case. Keep on ice.
+2. When all samples and ladders are added to the wells, fill the remaining running buffer into the small chamber where the wells are located. Do this carefully, and do not fill it on top of the wells or close to them. Keep on ice.
+
+Electrophoresis:
+1. Set the voltage to 250, constant, and mA to 500.
+2. Duration is set to 50min. Keep the electrophoresis unit on ice.
+
+##### Wet transfer
+
+Preperation
+1. Transfer buffer should be made prior to the transfer, and should be cold. 
+2. PVDF membran is cut from the blue scroll (8.5cm high, 14cm broad). DO NOT touch the white membrane. Cut of the top left corner. If you are transfering multiple membranes, mark them. 
+3. Soak foam pads in ddH2O and squeese out all bubbles.
+4. Incubate the membran for 5min in MeOH (make sure MeOH is discarded in designated bottle after). 
+5. Incubate membran 5-15min in cold transfer buffer.
+6. Remove the smallest plastic cover of the gel, and flush the gel with ddH2O, then put the gel in transfer buffer for approx 30sec.
+7. Soak filter paper in transfer buffer.
+
+Kit/Sandwich assembly
+1. Place a magnetic stirrer in the bottom of the Criterion Blotter tank, make sure it has room to spin.
+2. Place the Criterion Blotter tank in an ice tub to keep temperature low.
+3. Fill the tank to 50% of total fill volume with transfer buffer.
+4. Place iceblock in the back of the tank (designated area)
+5. Putt the sandwhich in its tray, pour transfer buffer over it, enoug to submerge it and the next components, then add the bottom foam pad
+6. Take 1 filter paper in one hand and place the gel on it
+7. While holding the filter with the gel on, place the membrane on top of the gel
+8. Put the filter/gel/membrane down on the bottom foam pad, with the filter side facing the foam pad
+9. Carefully use a roller to remove air bubbles, while holding the membrane down with two fingers
+10. Place the last filter paper on the membran, then carefully roll again
+11. Place the last foam pad on top, carefully roll again
+12. Put the sandwich in the Criterion Blotter, make sure red side faces the red electrode, and that the magnetic stirrer still can move. 
+13. Add remaining transfer buffer to the tank, fill it up to the marked level. Place the ice tub, with the blotter, upon a magnetic stirring plate and start stirring to maintain even buffer temperature and ion concetration during the transfer.
+
+Transfer
+1. Connect PowerPac HC power supply to Criterion Blotter.
+2. Set PowerPac to 400mA, constant A, 1t 45min, at 4 degrees celsius (ice).
+
+MemCode Staining
+NB: Keep the PVDF membrane side that was facing the Gel during transfer up at all times, and do not let the membrane dry!
+1. Wash the membran with water (ddH2O)
+2. Add MemCode Sensitizer. Carefully shake for 2min with the shaker. Sensitizer is reusable for a couple attempts
+3. Add MemCode Stain. Carefully shake for 1min with the shaker. Stain is reusable for a couple attempts
+4. Rinse the membrane 3 times with water (ddH2O).
+6. Wash with Destain/Methanol solution (1:1) on shaker for 5min.
+7. Manual capture in G:Box - make sure the black plate is removed, light is on and image is sharp
+8. Slice the membrane into desired strips using scalpel and a ruler
+9. Rinse 5 times with water (ddH2O)
+10. Wash with eraser/methanol solution (1:1) on a shaker for 10-20min
+11. Rinse 5 times with water (ddH2O)
+
+Antibody staining
+1. Block the membrane for 1h at roomtemp or 4C over night with "blocking buffer" (5% non-fat dry milk, see solutions)
+2. Wash once with TBS-T, 5min, on a tipping board
+3. Incubate membrane with suitable dilution of primary antibody. It is recommended to incubate at 4C over night. On a tipping board. Can be done using a polystyrene (isopor) box and ice to keep the temperature low.
+4. Wash the membrane 3 times with TBS-T, 5min per wash, on a tipping board. 
+5. Incubate membrane with recommended dilution of secondary antibodies in blocking buffer at roomtemp for 1h. On a tipping board
+6. Wash the membrane 3-5 times (5 times may yield nicer blots) with TBS-T, 5min per wash, on a tipping board. 
+7. Mix just sufficient ECL and incubate the membrane for 5min on a tipping board. 8ml should suffice if you have sliced the membrane in smaller strips
+8. Either store the membrane in TBS-T or proceed with visualisation. If you store it in TBST, make sure to incubate once more in ECL.
+
+Quantification with G:Box and Genesys
+1. Ready the G:Box and Genesys on the computer, use ECL protocol. 
+3. Sandwich the membrane between two pieces of transparency film, and use the roll to remove any airbubbles. Make sure you do not get any liquid on the black plate 
+3. Place the membrane within the G:Box and initiate protocol. Should not have to click anything but next, until "Capture". Make sure the membranes position is good, as close to centre as possible.
 
 ###### **Table 3:** Primer sequence and performance. Average cycle thresholds (Ct) and primer efficiencies were calculated from all qPCR reactions. 
 
