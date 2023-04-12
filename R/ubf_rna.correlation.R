@@ -56,6 +56,8 @@ m <- lme(mean.rna ~ mean.sign + time ,
           data = joined.dat, 
          na.action = na.omit)
 
+saveRDS(m, "./data/data-gen/protein/correlation.model.RDS")
+
 summary(m)
 
 coef(summary(m))

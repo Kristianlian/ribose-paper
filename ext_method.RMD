@@ -11,9 +11,6 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 Notes for extended methods supplementary
 
-- Antiboy table?
-- Power calculation + rational?
-
 ## Wet lab analyses
 
 We gathered muscle tissue from both legs at pre and post intervention, taking two samples from the same incision. Each piece of muscle tissue was split in two, i.e. we had two samples for RNA analyses and two samples for protein analyses. We analyzed the samples in duplicates, i.e. we had two samples per time point per leg, a total of eight samples per analysis. <!-- check if there is more tissue left --> These samples were then randomly labelled with participant number and a number between 1-8, to blind the investigators conducting the laboratory analyses.
@@ -237,6 +234,86 @@ Quantification with G:Box and Genesys
 
 ![](figures/archive/Primer.sequences.PNG)
 
+
+## Total protein blots
+
+### Blot/Gel 1 & 4
+
+Gel 1 overview:
+
+* Ladder loaded in well 1 and 25.
+* Pools loaded in well 6, 12 and 20.
+* Well 2-5 = sample 1.1-1.4 (participant 101).
+* Well 7-10 = sample 2.1-2.4. (participant 102).
+* Well 11 + 13-15 = sample 3.1-3.4 (participant 103).
+* Well 16-19 = sample 5.1-5.4 (participant 105).
+* Well 21-24 = sample 6.1-6.4 (participant 106).
+
+![](figures/archive/total_protein_gel1.PNG)
+
+Gel 4 overview:
+
+* Ladder loaded in well 1 and 26.
+* Pools loaded in well 2, 7, 15 and 21.
+* Well 3-6 = sample 6.4-6.1 (participant 106).
+* Well 8-11 = sample 5.4-5.1 (participant 105).
+* Well 12-14 + 16 = sample 3.4-3.1 (participant 103).
+* Well 17-20 = sample 2.4-2.1 (participant 102).
+* Well 22-25 = sample 1.4-1.1 (participant 101).
+
+![](figures/archive/total_protein_gel4.PNG)
+
+
+Blot/Gel 2 & 5
+
+Gel 2 overview
+
+* Ladder loaded in well 1 and 26.
+* Pools loaded in well 6, 11, 19 and 25.
+* Well 2-5 = sample 7.1-7.4 (participant 107).
+* Well 7-10 = sample 8.1-8.4 (participant 108).
+* Well 12-15 = sample 9.1-9.4 (participant 109).
+* Well 16-18 + 20 = sample 12.1-12.4 (participant 112).
+* Well 21-24 = sample 13.1-13.4 (participant 113).
+
+![](figures/archive/total_protein_gel2.PNG)
+
+Gel 5 overview
+
+* Ladder loaded in well 1 and 26.
+* Pools loaded in well 2, 8, 16 and 21.
+* Well 3-6 = sample 13.4-13.1 (participant 113).
+* Well 7 + 9-11 = sample 12.4-12.1 (participant 112).
+* Well 12-15 = sample 9.4-9.1 (participant 109).
+* Well 17-20 = sample 8.4-8.1 (participant 108).
+* Well 22-25 = sample 7.4-7.1 (participant 107).
+
+![](figures/archive/total_protein_gel5.PNG)
+
+
+Blot/Gel 3 & 6
+
+Gel 3 overview
+
+* Ladder loaded in well 1 and 17.
+* Pools loaded in well 2, 7 and 13.
+* Well 3-6 = sample 14.1-14.4 (participant 114).
+* Well 8-11 = sample 15.1-15.4 (participant 115).
+* Well 12 + 14-16 = sample 16.1-16.4 (participant 116).
+
+![](figures/archive/total_protein_gel3.PNG)
+
+Gel 6 overview
+
+* Ladder loaded in well 1 and 17.
+* Pools loaded in well 5, 11 and 16.
+* Well 2-4 + 6 = sample 16.4-16.1 (participant 116).
+* Well 7-10 = sample 15.4-15.1 (participant 115).
+* Well 12-15 = sample 14.4-14.1 (participant 114).
+
+![](figures/archive/total_protein_gel6.PNG)
+
+
 ## Statistical analyses
 
 We chose to log-transformed all data, as visual inspection showed clear signs of heteroscedasticity in some of the data sets. Thus, data was log-transformed prior to modelling with the function log(), and then reverse-transformed for figure illustration via the function exp(). Exceptions to this was the data used in figure 1 (B, C and D). In figure 1B and -C, the illustrated data are absolute changes in plasma glucose and c-peptide, as this demonstrated quite well the change that occured, and arguably, is quite more understandable compared to arbitrary units, such as the protein signal data. For figure 1D, we had already made in index of strength combining isometric and isokinetic peak torque, meaning the data was already put on a different scale than the original absolute change in peak torque.
@@ -246,39 +323,83 @@ Further, we mean-centered the baseline values in each model to account for regre
 To enable cross nano Drop, qPCR plate and gel comparisons from the wet lab analyses, we normalized RNA and protein data. Total RNA was normalized to wet muscle weight, rRNA was normalized to wet muscle weight and the external reference gene Lambda, while protein data was normalized both to the total protein lane factor and to pools of all protein samples.
 
 RNA normalization: 
+
  1. weight = mean(weight) 
  2. RNA = mean(RNA)
  3. weight.mc = weight/mean(weight)
  4. RNA.weight = RNA / weight
- - weight = biopsy weight
+    + weight = biopsy weight
 
 Weight and RNA was summarised, RNA was devided by mean centered weight. Thus, we could compare total RNA results analyzed on different nanoDrop plates.
 
 rRNA normalization: 
+
  1. Lambda expression was first calculated and stored in the data.frame "nf"
  2. Calculation of target expression
  3. Joined the lambda and target expression data.frames
  4. nf.w = expr / weight
  5. nf.w = nf.w / max(nf.w)
  6. nf.expr = log(expr / nf.w), nf.w = scale(nf.w) ?
- - expr = target expression 
- - weight = biopsy weight
+    + expr = target expression 
+    + weight = biopsy weight
  
 To accurately measure changes in expression of rRNA, we added a fixed amount of Lambda to each total RNA sample during RNA extraction. Lambda expression and target (47S, 18S, 28S, 5.8S, 5S) were calculated in separate data frames, and then joined for normalization. In each data frame, we first created a normalization factor for weight (nf.w), a result of expression divided by weight. To make the nf.w comparable across the qPCR plates, we put it on a scale through the code nf.w = nf.w /max/(nf.w). This code divides the mean nf.w by the highest observed value in the variable nf.w. 
  
 Protein normalization:
+
  1. tpl = tp - bg
  2. tpl = tpl/max(tpl)
  3. signal = signal / max(signal)
  4. norm.sign = signal / tpl
  5. pool = mean(pool)
  6. norm.sign = norm.sign / pool
- - tpl = total protein per lane
- - tp = total protein (mean gray pixels in lanes)
- - bg = background (mean gray pixels between lanes)
- - signal = pixels per band
+    + tpl = total protein per lane
+    + tp = total protein (mean gray pixels in lanes)
+    + bg = background (mean gray pixels between lanes)
+    + signal = pixels per band
  
 To create the tpl normalization factor, we measured the mean gray both within (tp) and between (bg) the lanes of each total protein stain blot with the ImageJ software. So, each lane and each space between lanes got a "mean gray" value. Subtracting background from total protein (tpl = tp-bg), and then using the resulting value divided by the maximum observed total protein in a lane per gel (tpl = tpl/max(tpl)), gave us a value normalized between gels. In addition, to account for variations in loading and unequal size in muscle tissue samples, we also normalized antibody signal by pools. The pools were mixes of total protein sample, 20ul from each sample, loaded into three lanes per gel. So, after normalizing signal to tpl (norm.sign = signal / tpl), we summarized the average signal from the pools (pool = mean(pool)), and divided the tpl normalized signal by average pool signal (norm.sign = norm.sign / pool).
+
+### Statistical models
+
+RNA
+
+```{r total RNA model}
+totalrna.model <- readRDS("./data/data-gen/rna/totalrna.model.RDS")
+
+totalrna.model
+
+```
+
+Protein
+
+```{r protein model}
+protein.model <- readRDS("./data/data-gen/protein/protein.model.RDS")
+
+protein.model
+
+```
+
+Protein/RNA correlation
+
+```{r correlation model}
+correlation.model <- readRDS("./data/data-gen/protein/correlation.model.RDS")
+
+correlation.model
+
+```
+
+
+Strength, plasma glucose & c-peptide, nutrition and volume
+
+```{r strength, plasma, nutrition and volume model}
+strength.model <- readRDS("./data/data-gen/humac/strength.model.RDS")
+
+strength.model
+
+```
+
+
 
 
 

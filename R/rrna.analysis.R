@@ -186,6 +186,8 @@ ttest.47 <- t.test(base.47$GLUCOSE, base.47$PLACEBO, paired = TRUE)
 m1 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
                      data = change.18)
 
+saveRDS(m1, "./data/data-gen/rna/rrna.model.RDS")
+
 plot(m1)
 
 summary(m1)
@@ -200,7 +202,7 @@ summary(m2)
 
 # 5.8S
 m3 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = change.5.8)
+                     data = change.58)
 
 plot(m3)
 

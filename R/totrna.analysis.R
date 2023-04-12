@@ -97,6 +97,8 @@ saveRDS(change_dat, "./data/data-gen/rna/totrna.change.RDS")
 m1 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
                      data = change_dat)
 
+saveRDS(m1, "./data/data-gen/rna/totalrna.model.RDS")
+
 plot(m1)
 
 summary(m1)

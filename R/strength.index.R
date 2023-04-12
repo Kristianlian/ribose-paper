@@ -146,6 +146,8 @@ saveRDS(astr.lchange, "./data/data-gen/humac/astr.lchange.RDS")
 m.str <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
                          data = str.change)
 
+saveRDS(m.str, "./data/data-gen/humac/strength.model.RDS")
+
 m.lstr <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
                         data = str.lchange)
 plot(m.str)

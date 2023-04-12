@@ -53,6 +53,7 @@ ubf.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement,
                 random = list(subject = ~ 1),
                 data = filter(prot.dat, target == "ubf"))
 
+saveRDS(ubf.lmod, ("./data/data-gen/protein/protein.model.RDS"))
 
 summary(ubf.lmod)
 plot(ubf.lmod, resid(., type = "p") ~ fitted(.))
