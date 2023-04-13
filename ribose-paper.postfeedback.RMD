@@ -8,12 +8,6 @@ output:
     reference_docx: resources/reference-template-02.docx
 editor_options: 
   chunk_output_type: console
-knit: (function(input, ...) {
-    rmarkdown::render(
-      input,
-      output_dir = "../output"
-    )
-  })
 ---
 
 ```{r setup, include=FALSE}

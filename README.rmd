@@ -6,6 +6,7 @@ output: github_document
 
 # Ribose-paper
 
+
 ## Authors
 
 Kristian Lian
@@ -22,6 +23,9 @@ Håvard Hamarsland
 <img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>,
 Chidimma Phoebe Echebiri,
 Sara Christine Moen,
+
+## Abstract
+
 
 
 ## Repository organization
