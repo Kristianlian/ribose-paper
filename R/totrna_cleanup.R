@@ -9,7 +9,7 @@
 ##
 ##-------------------------------------
 ## Notes:
-# Filter technical outliers by model log(rna) ~ muscle weight.
+# Filter outliers by model log(rna) ~ muscle weight.
 # Set threshold for filtering by adjusting threshold for standardized
 # residuals. A sensible threshold is 3 sd's from the modelled relationship
 # between RNA and muscle weight, taking training status into account.
@@ -24,7 +24,6 @@
 library(tidyverse); library(readxl); library(nlme)
 
 # A data frame with technical outliers
-
 
 outlier_tech <- data.frame(subject = 
                              c(101,
@@ -78,8 +77,7 @@ dat <- read_excel("./data/rna/RNA_raw.xlsx") %>%
 
 # Plot RNA vs. weight
 dat %>%
-  ggplot(aes(log(weight), log(RNA_tot), color = trained, 
-             shape = technical)) + geom_point()
+  ggplot(aes(log(weight), log(RNA_tot), color = trained)) + geom_point() + geom_smooth(method = "lm")
 
 
 # Model RNA to weight relationship using a linear model.
@@ -87,12 +85,6 @@ dat %>%
 
 m <- lm(log(RNA_tot) ~ log(weight) + trained,
         data = dat)
-
-
-m <- lme(log(RNA_tot) ~ log(weight) + trained,
-         random = list(subject = ~ 1,
-                       biopsy = ~ 1),
-         data = dat)
 
 
 summary(m)
@@ -104,7 +96,7 @@ dat$resid <- resid(m)
 # Plot the effect of outlier detection
 dat %>%
   mutate(resid = resid/sd(resid), 
-         outlier = if_else(resid < -2, "out", "in")) %>%
+         outlier = if_else(abs(resid) > 3, "out", "in")) %>%
   ggplot(aes(weight, log(RNA_tot), color = outlier)) +
   geom_point() +
   geom_smooth(method = "lm", aes(color = NULL))
@@ -112,7 +104,7 @@ dat %>%
 # Check the effect of outlier detection on included samples
 dat %>%
   mutate(resid = resid/sd(resid), 
-         outlier = if_else(resid < -2, "out", "in")) %>%
+         outlier = if_else(abs(resid) > 3, "out", "in")) %>%
   filter(outlier == "in") %>%
   group_by(subject) %>%
   summarise(n = n()/32)
@@ -121,7 +113,7 @@ dat %>%
 
 dat_complete <- dat %>%
   mutate(resid = resid/sd(resid), 
-         outlier = if_else(resid < -2, "out", "in")) %>%
+         outlier = if_else(abs(resid) > 2, "out", "in")) %>%
   print()
 
 
