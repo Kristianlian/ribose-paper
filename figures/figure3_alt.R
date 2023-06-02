@@ -14,6 +14,9 @@ library(nlme); library(ggtext)
 prot_models <- readRDS("./data/data-gen/protein/protein_lmer_models.RDS")
 
 
+prot_models <- prot_models$prot_models
+
+
 cmyc <- readRDS("./data/data-gen/protein/cmyc.lemm.RDS")
 
 ubf <- readRDS("./data/data-gen/protein/ubf.lemm.RDS")
@@ -58,9 +61,6 @@ plot_theme <- theme(panel.grid.major = element_blank(),
 
 ## cmyc fig
 
-model <- prot_models$cmyc
-
-
 comp_plot <- function(model, method = "Wald") {
   
   ## Plot settings 
@@ -87,7 +87,7 @@ comp_plot <- function(model, method = "Wald") {
   
   ## Plot raw fold changes
   raw_fold <- model@frame %>%
-    pivot_wider(names_from = time, values_from = 'log(norm.sign)', values_fn = mean) %>%
+    pivot_wider(names_from = time, values_from = 'ln.norm.sign', values_fn = mean) %>%
   mutate(change = post - pre) %>%
     group_by(subject, supplement) %>%
     summarise(change = exp(mean(change))) 

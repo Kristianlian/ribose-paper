@@ -6,7 +6,8 @@
 # Author: KL/DH
 #
 # Packages
-library(tidyverse); library(nlme); library(emmeans); library(lme4)
+library(tidyverse); library(emmeans); library(lme4); library(buildmer)
+
 #
 # Data # from the script: western.cleanup.R
 prot.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") %>%
@@ -17,33 +18,77 @@ prot.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") %>%
 # Western data is analyzed as "maximal" random effects models  
 #
 
-m.cmyc.lmer <- lmer(log(norm.sign) ~ time * supplement + 
-                     (supplement*time|subject),
-                    
-              data = filter(prot.dat, target == "cmyc"))
-
-model <- m.cmyc.lmer
-summary(m.cmyc.lmer)
 
 
-### Updates model with new data ###
-m.rps6 <- update(m.cmyc.lmer, data = filter(prot.dat, target == "rps6"))
-m.ubf <- update(m.cmyc.lmer, data = filter(prot.dat, target == "ubf"))
+targets <- prot.dat %>%
+  ungroup() %>% 
+  distinct(target) %>%
+  pull(target)
 
 
 
-# Check assumptions
+
+coefs <- list()
+fold_change <- list()
+models_final <- list()
 
 
-check_cmyc <- mod_assume(m.cmyc.lmer) + cowplot::draw_label("c-myc", fontface = 'bold', x = 0.5, y = 1, hjust = 0.5, vjust = 1)
-check_rps6 <- mod_assume(m.rps6) + cowplot::draw_label("RPS6", fontface = 'bold', x = 0.5, y = 1, hjust = 0.5, vjust = 1)
-check_ubf <- mod_assume(m.ubf) + cowplot::draw_label("UBF", fontface = 'bold', x = 0.5, y = 1, hjust = 0.5, vjust = 1)
 
-### Save models 
+for(i in 1:length(targets)) {
+  
+  dat_target <- prot.dat %>%
+    filter(target == targets[i]) %>%
+    mutate(ln.norm.sign = log(norm.sign))
+  
+  
+  ## Using buildmer to get the maximal model
+  max_model <- buildmer(ln.norm.sign ~ time * supplement + 
+                          (time*supplement|subject),
+                        
+                        data = dat_target, 
+                        buildmerControl=buildmerControl(direction='order',
+                                                        args=list(control=lmerControl(optimizer='bobyqa')), 
+                                                        include = ~ time * supplement +  (1|subject), 
+                                                        
+                                                        ddf = "Satterthwaite"))
+  
+  
+  
+  
+  
+  ## Get within condition confidence intervals
+  models_final[[i]] <- max_model@model
+  
+  ## Convert to lmerTest model by extracting from the buildmer object
+  model <- max_model@model
+  
+  
+  names(models_final)[i] <- targets[i]
+  
+  
+  fold_change[[i]] <- confint(pairs(emmeans(model, specs = ~ time | supplement), reverse = TRUE)) %>%
+    data.frame() %>%
+    mutate(target = targets[i])
+  
+  ## Get between condition confidence intervals on change
+  
+  coefs[[i]] <- cbind(coef(summary(model)), confint(model, parm = "beta_")) %>%
+    data.frame() %>%
+    mutate(coef = row.names(.), 
+           target = targets[i]) %>%
+    data.frame(row.names = NULL) %>%
+    dplyr::select(target, coef, estimate = Estimate, se = Std..Error, 
+                  df, tval = t.value, pval = Pr...t.., lower = X2.5.., upper = X97.5..)
+  
+  
+  
+} 
 
-prot_models <- list(cmyc = m.cmyc.lmer, 
-                    ubf = m.ubf, 
-                    rps6 = m.rps6)
+
+
+prot_models <- list(prot_models = models_final, 
+                              coefs = bind_rows(coefs),
+                              fold_change = bind_rows(fold_change))
 
 saveRDS(prot_models, "./data/data-gen/protein/protein_lmer_models.RDS")
 

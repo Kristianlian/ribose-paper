@@ -124,7 +124,8 @@ coefs <- cbind(coef(summary(models_final)), confint(models_final, parm = "beta_"
 
 ## Save results
 
-saveRDS(list(fold_change = fold_change, 
+saveRDS(list(model = models_final, 
+             fold_change = fold_change, 
              coefs = coefs), "./data/data-gen/rna/tot_rna_coefs.RDS")
 
 

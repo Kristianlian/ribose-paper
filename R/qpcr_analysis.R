@@ -7,8 +7,7 @@
 ## Project: Ribose
 #
 #
-## Purpose: This script analyses the cleaned up qpcr data by change-score
-# comparisons
+## Purpose: This script analyses the cleaned up qpcr data by a maximal mixed-model
 #
 #
 ## Asscociated scripts: qpcr.import.R
@@ -18,7 +17,9 @@
 
 library(tidyverse)
 library(readxl)
-library(nlme)
+library(lmerTest)
+library(buildmer)
+
 
 # Load data
 
@@ -109,42 +110,27 @@ models_final <- list()
 
 for(i in 1:length(targets)) {
   
-  m1 <- lmerTest::lmer(nf.expr ~ time * supplement + 
+  ## Using buildmer to get the maximal model
+  max_model <- buildmer(nf.expr ~ time * supplement + 
                   (time*supplement|subject),
                 
-                data = filter(qpcr_data2, target == targets[i]))
-  
-  m2 <- lmerTest::lmer(nf.expr ~ time * supplement + 
-               (time + supplement|subject),
-             
-             data = filter(qpcr_data2, target == targets[i]))
-  
-  m3 <- lmerTest::lmer(nf.expr ~ time * supplement + 
-               (supplement|subject),
-             
-             data = filter(qpcr_data2, target == targets[i]))
-  
-  m4 <- lmerTest::lmer(nf.expr ~ time * supplement + 
-               (time|subject),
-             
-             data = filter(qpcr_data2, target == targets[i]))
-  
-  m5 <- lmerTest::lmer(nf.expr ~ time * supplement + 
-               (1|subject),
-             
-             data = filter(qpcr_data2, target == targets[i]))
+                data = filter(qpcr_data2, target == targets[i]), 
+                buildmerControl=buildmerControl(direction='order',
+                                                args=list(control=lmerControl(optimizer='bobyqa')), 
+                                                include = ~ time * supplement +  (1|subject), 
+                                                
+                                                ddf = "Satterthwaite"))
   
   
-  models <- list(m1 = m1, m2 = m2, m3 = m3, m4 = m4, m5 = m5)
   
-
   
-  ## Using the custom function 
-  model <- return_best(models)
-
+  
   ## Get within condition confidence intervals
- 
-  models_final[[i]] <- model
+  models_final[[i]] <- max_model@model
+  
+  ## Convert to lmerTest model by extracting from the buildmer object
+  model <- max_model@model
+  
 
   names(models_final)[i] <- targets[i]
   

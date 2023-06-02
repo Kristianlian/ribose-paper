@@ -3,7 +3,7 @@
 ##
 ## Title: RNA cleanup
 ## Purpose: Filter away bad RNA estimates based on RNA/weight relationship
-## Author: DH
+## Author: DH/KL
 ##
 ##
 ##
@@ -11,7 +11,7 @@
 ## Notes:
 # Filter outliers by model log(rna) ~ muscle weight.
 # Set threshold for filtering by adjusting threshold for standardized
-# residuals. A sensible threshold is 3 sd's from the modelled relationship
+# residuals. A sensible threshold is 3 sd's from the modeled relationship
 # between RNA and muscle weight, taking training status into account.
 #
 #
@@ -90,7 +90,7 @@ m <- lm(log(RNA_tot) ~ log(weight) + trained,
 summary(m)
 
 # Calculate residuals
-# Thjese are raw residuals, they are standardized below.
+# These are raw residuals, they are standardized below.
 dat$resid <- resid(m)
 
 # Plot the effect of outlier detection
@@ -113,7 +113,7 @@ dat %>%
 
 dat_complete <- dat %>%
   mutate(resid = resid/sd(resid), 
-         outlier = if_else(abs(resid) > 2, "out", "in")) %>%
+         outlier = if_else(abs(resid) > 3, "out", "in")) %>%
   print()
 
 

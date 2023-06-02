@@ -49,6 +49,12 @@ Stian Ellefsen https://orcid.org/0000-0003-0467-2018
 <div custom-style="abstract_style">
 ## Abstract
 
+**Introduction.** Muscle hypertrophy, induced by resistance training (RT), is determined by ribosomal biogenesis. Synthesis of ribosomes may augment the transcription of ribosomal RNA, as evident from in vitro studies. However, its effect on RT-induced adaptations remains unexplored.  
+**Methods.** Sixteen healthy, moderately trained individuals (male/female, n = XX/XX; age, mean (sd)),<!-- Add male/female numbers, age--> participated in a within-participant trial with unilateral resistance training performed with glucose- and placebo supplement on alternate days over six sessions per condition. Participants remained fasted overnight, receiving glucose/placebo and protein supplementation only before and after RT sessions (3 sets of 10 repetitions maximum unilateral leg press and knee extension). Micro biopsies were sampled from m. vastus lateralis pre and post the intervention, and maximal unilateral isometric and isokinetic knee extension torque were measured before, during (days 4, 5, 8, 9) and after the intervention. 
+**Results.** <!-- update statistics in this section -->RT led to robust increases in total RNA and rRNA in glucose and placebo (RNA: 26 and 22% respectively, rRNA: 33-43% and 33-41% respectively), with no differences between supplements (p > 0.05). There were no differences in content of c-Myc (*p* = 0.160), UBF (*p* = 0.154) and rpS6 (*p* = 0.386) between treatments in response to RT. A linear relationship was found between content of UBF and total RNA, where an increase of 1 SD unit in UBF equated to 6.8% increase in total RNA (*p* = 0.002). Lastly, there were no differences between supplements in maximal unilateral isometric knee extension force and isokinetic peak torque during the intervention (p > 0.05) and following the last session (p > 0.05), apart from the 60 d/s test before last RT session (p < 0.05). 
+**Conclusion.** Glucose supplement before and after RT does not augment RT-induced ribosome biogenesis, nor does it enhance muscular performance and recovery after two weeks of heavy RT in moderately trained, young individuals. 
+
+
 
 
 **Keywords: **
@@ -105,19 +111,39 @@ Muscle biopsies were sampled from m. vastus lateralis using well-established pro
 To measure blood glucose levels with and without glucose ingestion/training, capillary blood was collected from finger sticks on days with biopsy sampling. One capillary blood sample was taken on day 1 (Figure 1A) to serve as a baseline. On days 11 and 12 (Figure 1A), capillary blood samples were collected seven times: I) Immediately prior to protein ingestion (0700hrs) II) 45 minutes after protein ingestion (0745hrs) III) 1.5hrs after protein ingestion (0800hrs, i.e., immediately before GLU/PLAC intake), IV) 2hrs after protein ingestion (0900hrs, i.e., immediately before training), IV) in the middle of RT (~0915hrs), V) immediately after training (~0930hrs), and VI) 2hrs after completion of training (~1130hrs). Capillary blood samples were analysed with in-house equipment (BIOSEN C-Line, EKF diagnostic GmbH, Barleben). Venous blood samples were collected from the antecubital vein, coinciding with the capillary samples except 45min after protein ingestion and in the middle of the RT session, to analyse endocrine variables.
 
 ### Total RNA extraction and quantitative real-time reverse transcription polymerase chain reaction
+```{r totrna-extraction}
 
-Two muscle biopsy aliquots were used for total RNA extraction per leg and resulting in a total of eight RNA samples per participant. Total RNA was extracted using TRIzol with muscle tissue homogenized using 0.5mm RNase-free Zirconium beads (~50 ul; Next Advanced, Averill Park, NY, USA) and mechanical agitation (Bullet Blender, Next Advanced, Averill Park, NY, USA). Chloroform (Sigma-Aldrich, Oslo, Norway) was used for phase separation, and the RNA pellet was precipitated with isopropanol (VWR International, Oslo, Norway). To enable analysis of target gene expression per unit tissue weight [@ellefsen_improved_2008; @ellefsen_reliable_2014], an exogenous RNA control (λ polyA External Standard Kit, Takara Bio Inc., Shiga, Japan) was added at a fixed amount to each sample (0.04 ng ml^-1^ of Trizol reagent). For assessment of RNA content and purity, RNA was eluted in TE-buffer (1:2) and assessed via spectrophotometry. All samples had a 260 nm to 280 nm ratio > 1.9. The RNA stock was stored at -80°C until further analyses.
+totrna_complete <- readRDS("./data/data-gen/rna/rna_complete.RDS")
 
-Five-hundred ng of RNA was reverse transcribed using Super Script IV Reverse Transcriptase (Invitrogen, Oslo, Norway), according to the manufacturer's instructions using anchored oligo-dT and random hexamer primers (Thermo Scientific, Oslo, Norway). All samples were reverse transcribed and diluted to 1:50 before quantitative real-time polymerase chain reaction (qPCR). qPCR reactions were run over 40 cycles (3 s 95°C denaturing and 30 s 60°C annealing) on a fast-cycling real-time detection system (Applied Biosystems 7500 fast Real-Time PCR Systems, Life Technologies AS), with a total reaction volume of 10 µl consisting of 2 µl of cDNA, gene-specific primers (0.5 µM final concentration) and a commercial master mix (2X SYBR Select Master Mix, Applied Biosystems, Life Technologies AS, Oslo, Norway). Raw fluorescence data was modelled with a best-fit sigmoidal model using the qPCR package [@ritz_qpcr_2008] written for R [@hammarstrom_benefits_2020; @Rcore].
+samples_filtered <- totrna_complete %>%
+  group_by(subject, time, rep, technical, outlier) %>%
+  summarise(m = mean(RNA_tot)) %>%
+  group_by(technical, outlier) %>%
+  summarise(n = n())
+
+technical <- samples_filtered %>%
+  filter(technical == "out" & outlier == "in") %>%
+  pull(n)
+
+observed <- samples_filtered %>%
+  filter(technical == "in" & outlier == "out") %>%
+  pull(n)
+
+```
+
+Two muscle biopsy aliquots were used for total RNA extraction per leg and resulting in a total of eight RNA samples per participant. Total RNA was extracted using TRIzol with muscle tissue homogenized using 0.5mm RNase-free Zirconium beads (~50 ul; Next Advanced, Averill Park, NY, USA) and mechanical agitation (Bullet Blender, Next Advanced, Averill Park, NY, USA). Chloroform (Sigma-Aldrich, Oslo, Norway) was used for phase separation, and the RNA pellet was precipitated with isopropanol (VWR International, Oslo, Norway). To enable analysis of target gene expression per unit tissue weight [@ellefsen_improved_2008; @ellefsen_reliable_2014], an exogenous RNA control (λ polyA External Standard Kit, Takara Bio Inc., Shiga, Japan) was added at a fixed amount to each sample (0.04 ng ml^-1^ of Trizol reagent). For assessment of RNA content and purity, RNA was eluted in TE-buffer (1:2) and assessed via spectrophotometry. All samples had a 260 nm to 280 nm ratio > 1.9. The RNA stock was stored at -80°C until further analyses. Before quantitative analyses of total RNA, samples with known loss of RNA during extraction (n = `r technical`) or a deviation from the observed RNA to muscle tissue weight relationship larger than 3 $\times$ residual SD while accounting for training status (n = `r observed`) were removed from the data set. Total RNA was normalized to wet muscle weight and log transformed before statistical analyses. 
+
+Five-hundred ng of RNA was reverse transcribed using Super Script IV Reverse Transcriptase (Invitrogen, Oslo, Norway), according to the manufacturer's instructions using anchored oligo-dT and random hexamer primers (Thermo Scientific, Oslo, Norway). All samples were reverse transcribed and diluted to 1:50 before quantitative real-time polymerase chain reaction (qPCR). qPCR reactions were run over 40 cycles (3 s 95°C denaturing and 30 s 60°C annealing) on a fast-cycling real-time detection system (Applied Biosystems 7500 fast Real-Time PCR Systems, Life Technologies AS), with a total reaction volume of 10 µl consisting of 2 µl of cDNA, gene-specific primers (0.5 µM final concentration) and a commercial master mix (2X SYBR Select Master Mix, Applied Biosystems, Life Technologies AS, Oslo, Norway). Raw fluorescence data was modelled with a best-fit sigmoidal model using the qPCR package [@ritz_qpcr_2008] written for R [@hammarstrom_benefits_2020; @Rcore]. qPCR data was normalized to wet muscle weight using the external reference gene [@ellefsen_improved_2008; @ellefsen_reliable_2014] and analyzed on the log scale on a target-by-target basis. <!-- add explanations of normalization to extended methods -->
 
 ### Protein extraction and immunoblotting
 
-Total protein was extracted using the Minute Total Protein Extraction Kit for Muscles (Invent Biotechnology), according to the manufacturer’s protocol, optimised for our lab. Wet muscle was freeze-dried for 24 hrs and dissected before extraction. The tissue was homogenized with a plastic rod in 80 mg protein extraction powder (Invent Biotechnology) and 100 ul ice cold cell lysis buffer (Denaturing Buffer, Invent Biotechnology), and centrifuged at 19 000 g for 1 min. The supernatant was divided into aliquots to run samples in duplicates, and total protein concentrations were determined in a 1:10 dilution (Pierce Detergent Compatible Bradford Assay Reagent, Thermo Fisher Scientific, Oslo, Norway). The protein samples were diluted to <!-- Check this, it should be 1.5? -->20.25 µg µl^−1^ total protein with lysis buffer and 4X Laemmli sample buffer (Bio-Rad Laboratories AB, Oslo, Norway) containing 2-mercaptoethanol. All protein samples were incubated at 95°C and stored at -20°C until further analysis. The protein samples (20.25 µg total protein) were separated at 250V on 4-20% Tris-Glycine gels (Bio-Rad Laboratories) for 50 min and then transferred to PVDF membranes with wet transfer at 300 mA for 3 hrs. Both gel electrophoresis and protein transfer were performed at 4°C. Following the wet transfer, membranes were stained with a reversible total protein stain (Thermo Fisher Scientific) and then blocked for 1hr at room temp with a blocking buffer of Tris-buffered saline (TBS; 20 mM Tris, 150 mM NaCl) with 5% non-fat dry milk and 0.1% Tween-20. Primary and secondary antibodies were purchased from Santa Cruz Biotechnology (Texas, USA) UBF:(UBF-9, sc-13125), rpS6:(Ribosomal protein S6 C-8, sc-74459), and Thermo Fisher Scientific (Oslo, Norway) c-Myc:(c-Myc 9E10), goat anti-mouse for c-Myc (goat anti-mouse IgG1 (y1) horseradish peroxidase conjugate), and anti-mouse (anti-mouse IgG1 horseradish peroxidase conjugate)<!-- insert manufacturer -->. Antibodies were diluted in a 5% non-fat dry milk blocking buffer (TBS, 5% non-fat dry milk, 0.1% Tween-20). Membranes were incubated overnight with primary antibodies, and for 1 hr with secondary antibodies. Between blocking and primary antibody staining, membranes were washed 5 min, between primary and secondary staining, and after secondary staining, membranes were washed 3 x 5 min with TBS-Tween (TBS; 20mM Tris, 150mM NaCl, 0.1% Tween). Following the last TBS-T wash, membranes were incubated 5 min with enhanced chemiluminescent substrate (ECL, SuperSignal West Femto Maximum Sensitivity Substrate, Thermo Fisher Scientific). Membrane blocking, secondary antibody incubation, washing and ECL incubation were performed at room temp. Primary antibody incubation was performed at 4°C. Chemiluminescence signals were quantified using Image Studio Lite (LI-COR Biotechnology, Lincoln, NE, USA), and total protein content was quantified using ImageJ [@rueden_imagej2_2017], where total protein content was defined as mean grey value of the whole well with between-well values subtracted as background. A pooled sample was used as a control on each gel to allow for between gel comparisons.  
+Total protein was extracted using the Minute Total Protein Extraction Kit for Muscles (Invent Biotechnology), according to the manufacturer’s protocol, optimised for our lab. Wet muscle was freeze-dried for 24 hrs and dissected before extraction. The tissue was homogenized with a plastic rod in 80 mg protein extraction powder (Invent Biotechnology) and 100 ul ice cold cell lysis buffer (Denaturing Buffer, Invent Biotechnology), and centrifuged at 19 000 g for 1 min. The supernatant was divided into aliquots to run samples in duplicates, and total protein concentrations were determined in a 1:10 dilution (Pierce Detergent Compatible Bradford Assay Reagent, Thermo Fisher Scientific, Oslo, Norway). The protein samples were diluted to <!-- Check this, it should be 1.5? -->20.25 µg µl^−1^ total protein with lysis buffer and 4X Laemmli sample buffer (Bio-Rad Laboratories AB, Oslo, Norway) containing 2-mercaptoethanol. All protein samples were incubated at 95°C and stored at -20°C until further analysis. The protein samples (20.25 µg total protein) were separated at 250V on 4-20% Tris-Glycine gels (Bio-Rad Laboratories) for 50 min and then transferred to PVDF membranes with wet transfer at 300 mA for 3 hrs. Both gel electrophoresis and protein transfer were performed at 4°C. Following the wet transfer, membranes were stained with a reversible total protein stain (Thermo Fisher Scientific) and then blocked for 1hr at room temp with a blocking buffer of Tris-buffered saline (TBS; 20 mM Tris, 150 mM NaCl) with 5% non-fat dry milk and 0.1% Tween-20. Primary and secondary antibodies were purchased from Santa Cruz Biotechnology (Texas, USA): UBF, UBF F-9, sc-13125; rpS6, Ribosomal protein S6 C-8, sc-74459; and Thermo Fisher Scientific (Oslo, Norway): c-Myc, 9E10; goat anti-mouse (for c-Myc), goat anti-mouse IgG1 (y1) horseradish peroxidase conjugate; and anti-mouse (anti-mouse IgG1 horseradish peroxidase conjugate)<!-- insert manufacturer -->. Antibodies were diluted in blocking buffer to concentrations corresponding to <!-- Add final concentrations of antibodies -->. 
+Membranes were incubated overnight with primary antibodies, and for 1 hr with secondary antibodies. Between blocking and primary antibody staining, membranes were washed 5 min, between primary and secondary staining, and after secondary staining, membranes were washed 3 x 5 min with TBS-Tween (TBS; 20mM Tris, 150mM NaCl, 0.1% Tween). Following the last wash, membranes were incubated 5 min with enhanced chemiluminescent substrate (ECL, SuperSignal West Femto Maximum Sensitivity Substrate, Thermo Fisher Scientific). Membrane blocking, secondary antibody incubation, washing and ECL incubation were performed at room temp. Primary antibody incubation was performed at 4°C. Chemiluminescence signals were quantified using Image Studio Lite (LI-COR Biotechnology, Lincoln, NE, USA), and total protein content was quantified using ImageJ [@rueden_imagej2_2017], where total protein content was defined as mean grey value of the whole well with between-well values subtracted as background. A pooled sample was used as a control on each gel to allow for between gel comparisons and  quantified protein signals were subsequently normalized to the pooled control sample and total protein.  
 
 ### Statistics and data analysis
 
-A priori power calculations showed that 20 participants would grant a statistical power of 80% (alpha = 0.05), accounting for an expected dropout of 20%. This power calculation was based on an assumption that the effects of glucose ingestion on ribosome biogenesis (measured as within participant differences in total RNA) may equate to the effects of increasing RT volume from low to moderate [@hammarstrom_benefits_2020] corresponding to an effect size of d =  <!-- Add the effect size here-->. Before quantitative analyses, total RNA was normalized to wet muscle weight, qPCR values were normalized to wet muscle weight using the external reference gene (Lambda), while quantified protein signals from western blot were normalized to the pooled control sample and total protein.<!-- add explanations of normalization to extended methods -->
-Total RNA, protein and qPCR data were analyzed by comparing pre- to post-intervention log-transformed change-score differences between supplements. This was achieved by modelling change as the dependent variable with baseline-values and supplement (glucose/placebo) as independent variables in a linear mixed effects model giving each participant and leg a random intercept. Plasma glucose, c-peptide, training volume, and the strength index were analyzed by multiple time-point log-fold change score comparisons, using the same linear mixed effects model with time added as independent variable. The linear mixed effects models were fitted with the lmer function from the lme4 package using the lmerTest package to procure p-values (Satterthwaite's method for approximating degrees of freedom) [@bates_fitting_2014] or lme from the nlme package in R. Log-transformed values were expressed as fold-changes in presentations. Descriptive data are presented as mean and (SD). Inferential statistics are presented as means with 95% confidence intervals unless otherwise stated. 
+A priori power calculations showed that 20 participants would grant a statistical power of 80% (alpha = 0.05), accounting for an expected dropout of 20%. This power calculation was based on an assumption that the effects of glucose ingestion on ribosome biogenesis (measured as within participant differences in total RNA) may equate to the effects of increasing RT volume from low to moderate [@hammarstrom_benefits_2020] corresponding to an effect size of d =  <!-- Add the effect size here-->.
+Total RNA, protein and qPCR data were analyzed by mixed-effects models with fixed effects included as *supplement $\times$ time*. To decrease the risk of Type I errors, random effects were selected from step-wise elimination of terms from the most complex structure (random slopes for time and supplement and their interaction) to less complex. The most complex random effects structure that converged was chosen as the final model[@Matuschek_2017]. Plasma glucose, c-peptide, training volume, and the strength index were analyzed by multiple time-point log-fold change score comparisons, using mixed-effects model with baseline values, time and supplement, and the interaction between time and supplement as fixed effects. These data only supported a random intercept per participant. The linear mixed effects models were fitted with the lmer function from the lme4 package using the lmerTest package to procure p-values (Satterthwaite's method for approximating degrees of freedom)[@bates_fitting_2014; @lmerTest] written for R[@Rcore]. Log-transformed values were expressed as fold-changes in presentations. Descriptive data are presented as mean and (SD). Inferential statistics are presented as means with 95% confidence intervals unless otherwise stated. 
 
 ## Results
 
@@ -209,13 +235,13 @@ vol.lchange <- readRDS("./data/data-gen/training/vol.lchange.RDS") # Log-transfo
 ## Models
 
 # Untransformed 
-vol.mod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+vol.mod <- lmerTest::lmer(change ~ 0 + scale(baseline) + time + supplement:time + (1|subject),
                      data = vol.change)
 vol.res <- plot(vol.mod)
 vol.sum <- summary(vol.mod)
 
 # Log-transformed
-vol.lmod <- lmerTest::lmer(change ~ 0 + baseline + time + supplement:time + (1|subject),
+vol.lmod <- lmerTest::lmer(change ~ 0 + scale(baseline) + time + supplement:time + (1|subject),
                      data = vol.lchange)
 
 vol.lres <- plot(vol.lmod)
@@ -443,31 +469,26 @@ After 5 RT sessions (Figure 1D, Post 5RT), there was a significant difference in
 # - totrna.analysis.R
 
 
-# Data
-trna.lchange <- readRDS("./data/data-gen/rna/totrna.change.RDS")
+## Get results from totrna_analysis.R 
 
-# Create model: 
-trna.lmod <- lmerTest::lmer(change ~ pre + supplement + (1|subject) , 
-           data = trna.lchange)
+
+
+totrna_results <- readRDS("./data/data-gen/rna/tot_rna_coefs.RDS")
+
+# retrieve model
+trna.lmod <- totrna_results$model
     
-trna.lres <- plot(trna.lmod)
-trna.lsum <- summary(trna.lmod)
-
-### Get estimated means from the model
-trna.emm <- confint(emmeans(trna.lmod, specs = ~"supplement")) %>%
-    data.frame()
-
-
 ### Function for inline reporting of total RNA and rRNA data
+
 
 stat_fun_rna <- function(model) {
   
   coefs <- coef(summary(model))
   ci <- confint(model)
-  meandiff <- round(100 * (exp(coefs[3,1]) -1), 1)
-  cilower <- round(100 * (exp(ci[5,1]) -1), 1)
-  ciupper <- round(100 * (exp(ci[5,2]) -1), 1)
-  pval <- round(coefs[3,5], 3)
+  meandiff <- sprintf("%.1f", 100 * (exp(coefs[4,1]) -1))
+  cilower <- sprintf("%.1f",100 * (exp(ci[6,1]) -1))
+  ciupper <- sprintf("%.1f",100 * (exp(ci[6,2]) -1))
+  pval <- sprintf("%.3f",coefs[4,5])
   
   
   stats <- paste0(meandiff, "%, [", cilower, ", ", ciupper,"], *p* = ", pval)
@@ -485,70 +506,25 @@ total_rna_stats <- stat_fun_rna(trna.lmod)
 
 ```{r rRNA data model}
 ## Scripts
-# - qpcr-import
-# - qpcr-analysis
-# - rrna.change
-# - rrnachange.figs
+# - qpcr_import
+# - qpcr_analysis
 
-# Log-transformed data
-lchange.18 <- readRDS("./data/data-gen/rna/lchange.18.RDS")
-lchange.28 <- readRDS("./data/data-gen/rna/lchange.28.RDS")
-lchange.58 <- readRDS("./data/data-gen/rna/lchange.58.RDS")
-lchange.5 <- readRDS("./data/data-gen/rna/lchange.5.RDS")
-lchange.47 <- readRDS("./data/data-gen/rna/lchange.47.RDS")
+# Retrieve models from qpcr_analysis.R
 
-# Create model: 
-# Needs to have an intercept per participant (mixed model)
-# Control for pre values.
-
-# 18S
-lmod.18 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = lchange.18)
+rrna_analysis_results <- readRDS("./data/data-gen/rna/rrna_analysis_results.RDS")
 
 
-# 28S
-lmod.28 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = lchange.28)
+# Get estimated means from the model, these are average baseline-corrected log-fold differences 
+# at post.
 
-
-# 5.8S
-lmod.58 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = lchange.58)
-
-
-# 5S
-lmod.5 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = lchange.5)
-
-
-# 47S
-lmod.47 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-                     data = lchange.47)
-
-
-# Visual checks of models 
-
-plot(lmod.18)
-plot(lmod.28)
-plot(lmod.58)
-plot(lmod.5)
-plot(lmod.47)
-
-
-### Get estimated means from the model, these are average increase at 
-# pre = 0 (the average pre value)
-# remember that these are originally log-fold change values, transformed back using exp(emmean) etc
-
-stat_rrna <- lapply(list(lmod.18, 
-                         lmod.28, 
-                         lmod.58, 
-                         lmod.5, 
-                         lmod.47), 
+# Applying the stat_fun_rna function to models
+stat_rrna <- lapply(rrna_analysis_results$rrna_models, 
        stat_fun_rna)
+
 
 ```
 
-From baseline to post-intervention total RNA and rRNA increased on average by ~24% and ~33-43%, respectively (Figure 2). However, RT with glucose did not induce increased accumulation of total RNA (Figure 2A, mean difference `r total_rna_stats`) or rRNA  (Figure 2B; 47S, `r stat_rrna[[5]]`; 18S, `r stat_rrna[[1]]`; 28S, `r stat_rrna[[2]]`; 5.8S, `r stat_rrna[[3]]`; 5S, `r stat_rrna[[4]]`) compared to RT with placebo.
+From baseline to post-intervention total RNA and rRNA per unit muscle weight increased on average by ~24% and ~33-43%, respectively (Figure 2). However, RT with glucose did not induce increased accumulation of total RNA (Figure 2A, mean difference `r total_rna_stats`) or rRNA  (Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`) compared to RT with placebo.
 
 ##### Protein
 
@@ -558,125 +534,53 @@ From baseline to post-intervention total RNA and rRNA increased on average by ~2
 # - western.cleanup.R
 # - western.analysis.R
 
-# Data
-prot.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") # from the script: western.cleanup.R
+# Data and models
 
 
-### Modelling target signal per supplement 
-# These models try to explain the normalised signal by time, supplement and time+supplement (?). The random = list command creates an individual 
-# intercept for the included (e.g., subject, gel.sample). 
+prot_models <- readRDS("./data/data-gen/protein/protein_lmer_models.RDS")
 
-## c-Myc model
-
-# Untransformed
-cmyc.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
-                random = list(subject = ~ 1),
-                data = filter(prot.dat, target == "cmyc"))
-
-cmyc.sum <- summary(cmyc.mod)
-cmyc.res <- plot(cmyc.mod, resid(., type = "p") ~ fitted(.))
+model <- prot_models$prot_models$cmyc
 
 
+## extract estimated change
+west_estimate <- function(model, p = FALSE) {
+  
+  # Return absolute values 
+  
+  
+  if(isFALSE(p)){
+  
+  est <- round(100 * (exp(coef(summary(model))[4,1])-1),0)
+  
+  return(est)
+  }
+  
+  if(p){
+    
+   pval <- sprintf("%.3f", coef(summary(model))[4,5])
+    
+    return(pval)
+  }
+  
+  
+}
 
-# Log-transformed
-cmyc.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
-                 random = list(subject = ~ 1),
-                 data = filter(prot.dat, target == "cmyc"))
-
-cmyc.lsum <- summary(cmyc.lmod)
-cmyc.lres <- plot(cmyc.lmod, resid(., type = "p") ~ fitted(.))
-
-
-
-
-## UBF model
-# Untransformed
-ubf.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
-               random = list(subject = ~ 1),
-               data = filter(prot.dat, target == "ubf"))
-
-
-ubf.sum <- summary(ubf.mod)
-ubf.res <- plot(ubf.mod, resid(., type = "p") ~ fitted(.))
-
-# Log-transformed
-ubf.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
-                random = list(subject = ~ 1),
-                data = filter(prot.dat, target == "ubf"))
-
-
-ubf.lsum <- summary(ubf.lmod)
-ubf.lres <- plot(ubf.lmod, resid(., type = "p") ~ fitted(.))
+stat_west <- lapply(prot_models$prot_models, west_estimate)
+p_west <- unlist(lapply(prot_models$prot_models, west_estimate, p = TRUE))
 
 
-# RPS6 model
-# Untransformed
-rps6.mod <- lme(norm.sign ~ time + supplement + time:supplement, 
-                 random = list(subject = ~ 1),
-                 data = filter(prot.dat, target == "rps6"))
+### Linear relationship between UBF and Total RNA
 
-rps6.sum <- summary(rps6.mod)
-rps6.res <- plot(rps6.mod, resid(., type = "p") ~ fitted(.))
+joined.dat <- readRDS("./data/data-gen/rna.prot.RDS")
 
 
-# Log-transformed
-rps6.lmod <- lme(log(norm.sign) ~ time + supplement + time:supplement, 
-          random = list(subject = ~ 1),
-          data = filter(prot.dat, target == "rps6"))
-
-rps6.lsum <- summary(rps6.lmod)
-rps6.lres <- plot(rps6.lmod, resid(., type = "p") ~ fitted(.))
-
-
-### Getting emmeans from the models
-
-## c-Myc emmeans
-# Untransformed
-cmyc.emm <- emmeans(cmyc.mod, specs = ~ time|supplement) %>%
-  data.frame()
-
-# Log-transformed
-cmyc.lemm <- emmeans(cmyc.lmod, specs = ~ time|supplement) %>%
-  data.frame()
+mod <- lmerTest::lmer(log(mean.rna) ~ sd.ubf + time +  (1|subject), 
+            data = joined.dat)
 
 
 
-## UBF emmeans
-# Untransformed
-ubf.emm <- emmeans(ubf.mod, specs = ~ time|supplement) %>%
-  data.frame()
-
-# Log-transformed
-ubf.lemm <- emmeans(ubf.lmod, specs = ~ time|supplement) %>%
-  data.frame()
-
-
-
-## RPS6
-# Untransformed
-rps6.emm <- emmeans(rps6.mod, specs = ~ time|supplement) %>%
-  data.frame()
-
-# Log-transformed
-rps6.lemm <- emmeans(rps6.lmod, specs = ~ time|supplement) %>%
-  data.frame()
-
-
-
-### For inline reporting
-## Diff cmyc
-
-ccoef <- coef(summary(cmyc.lmod))
-cdiff <- round(ccoef[4,5], 3)
-cpla <- round(ccoef[2,5], 20)
-
-## Diff UBF
-ucoef <- coef(summary(ubf.lmod))
-udiff <- round(ucoef[4,5], 3)
-
-## Diff rps6
-rpcoef <- coef(summary(rps6.lmod))
-rpdiff <- round(rpcoef[4,5], 3)
+corr_incr <- round(100 * (exp(coef(summary(mod))[2,1])-1),1)
+corrp <- sprintf("%.3f", coef(summary(mod))[2,5])
 
 ```
 
@@ -701,8 +605,8 @@ ubf.rdy <- west.dat %>%  # One data frame without outliers
 
 
 rna.rdy <- rna.dat %>%
-  select(subject, time, outlier, supplement, RNA.weight) %>%
-  filter(outlier == "in") %>%
+  select(subject, time, supplement, RNA.weight) %>%
+
   mutate(subject = as.character(subject)) %>%
   group_by(subject, time, supplement) %>%
   summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) 
@@ -716,29 +620,34 @@ joined.dat <- ubf.rdy %>%
   mutate(sd.ubf = (mean.sign - mean(mean.sign, na.rm = TRUE )/sd(mean.sign, na.rm = TRUE))) 
 
 
-library(nlme)
+library(lme4)
 
-corr.mod <- lme(mean.rna ~ mean.sign + time , 
-         random = list(subject = ~ 1), 
+corr.mod <- lmerTest::lmer(mean.rna ~ mean.sign + time + (1|subject), 
           data = joined.dat, 
          na.action = na.omit)
 
 corr.sum <- summary(corr.mod)
 corr.res <- plot(corr.mod)
 
-corr.lmod <- lme(log(mean.rna) ~ log(mean.sign) + time , 
-         random = list(subject = ~ 1), 
+corr.lmod <- lmerTest::lmer(log(mean.rna) ~ log(mean.sign) + time + (1|subject), 
+   
           data = joined.dat, 
          na.action = na.omit)
+
 
 corr.lsum <- summary(corr.lmod)
 corr.lres <- plot(corr.lmod)
 
 corrcoef <- coef(summary(corr.mod))
 corrp <- round(corrcoef[2,5], 3)
+
+## Percentage increase in RNA per 1 SD uinit increase in UBF using log-model to show relative increse
+corr_incr <- round(100 * (exp(coef(summary(corr.lmod))[2,1])-1), 0)
+
+
 ```
 
-Levels of c-Myc increased by 42% more after RT with placebo compared to RT with glucose, a significant difference (Figure 3A: *p* = `r cdiff`). Levels of UBF and rpS6 increased by 19 and 23% more in placebo compared to glucose, with no significant differences between groups (Figure 3A: UBF: *p* = `r udiff`, rpS6: *p* = `r rpdiff`). The increase in both RT with glucose and placebo for all measured proteins was significant at post compared to baseline (*p* < 0.05). Further, we found a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a 13% increase in total RNA (*p* = `r corrp`).
+Overall, RT led to robust increases in all measured proteins (Figure 3A). RT with glucose resulted in estimated levels of c-Myc, UBF and RPS6 being `r stat_west$cmyc`, `r stat_west$ubf` and `r stat_west$rps6`% lower compared to placebo, respectively, without showing statistical significance (*p* = `r min(p_west)`-`r max(p_west)`; Figure 3A). There was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a $\sim$ `r corr_incr`% increase in total RNA (*p* = `r corrp`; Figure 3C).
 
 ## Discussion
 
