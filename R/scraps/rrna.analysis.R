@@ -48,6 +48,61 @@ rrna47 <- qdat %>%
   filter(target == "trg_47s") %>%
   print()
 
+
+## Modelling:
+# Random slope/intercept models are used to account for 
+
+
+targets <- distinct(qdat, target) %>%
+  filter(target %in% c("trg_18s", "trg_28s", "trg_47s", "trg_5.8s", "trg_5s")) %>%
+  pull(target)
+
+
+  
+for(i in 1:length(targets)) {
+  
+  model <- lmer(nf.expr ~ time * supplement + 
+                  (time*supplement|subject),
+                
+                data = filter(qdat, target == target[i]))
+  
+  
+ plot(model)
+  
+  
+} 
+  
+model <- lmer(nf.expr ~ time * supplement + 
+                      (supplement*time|subject),
+                    
+                    data = filter(prot.dat, target == target[i]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #### Baseline analysis and change scores per rRNA
 ### A baseline analysis comparing rRNA expression at baseline between the two legs via a paired t.test, and providing a summary of mean rRNA expression
 ### and sd

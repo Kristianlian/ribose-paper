@@ -20,12 +20,12 @@ sample.info <- western.dat %>%
 
 
 mean.tp <- western.dat %>%
-  select(gel, sample.id, tp1:bg4) %>%
+  select(gel, well, sample.id, tp1:bg4) %>%
   pivot_longer(names_to = "var", 
                values_to = "mean_gray", 
                cols = tp1:bg4) %>%
   mutate(var = gsub('[0-9]+', '', var)) %>%
-  group_by(gel, sample.id, var) %>%
+  group_by(gel, well, sample.id, var) %>%
   
   ## Below, mean gray is summarised for total protein signal in lanes and the background between lanes
   summarise(mean_gray = mean(mean_gray)) %>%
@@ -39,7 +39,7 @@ mean.tp <- western.dat %>%
   group_by(gel) %>%
   mutate(tpl = tpl/max(tpl)) %>% 
 
-  dplyr::select(gel, sample.id, tpl) %>%
+  dplyr::select(gel, well, sample.id, tpl) %>%
   print()
 
 
@@ -47,7 +47,7 @@ mean.tp <- western.dat %>%
 
 
 dat2 <- western.dat %>%
-  dplyr::select(gel, sample.id, subject, time, sample.name, leg, 
+  dplyr::select(gel, well, sample.id, subject, time, sample.name, leg, 
                 cmyc.sig, cmyc2.sig, ubf.sig, ubf2.sig, rps6.sig, rps62.sig) %>%
   pivot_longer(names_to = "target", 
                values_to = "signal", 
@@ -56,11 +56,8 @@ dat2 <- western.dat %>%
   ## Removes ".sig" and "2.sig" from target signal variables, so they can be summarised
   mutate(target = gsub(".sig", "", target), 
          target = gsub("2", "", target)) %>% 
-  
-  ## Groups by and summarises mean signal, then imports the lane normalisation factor (tpl) 
-  group_by(gel, sample.id, sample.name, subject, leg, time, target) %>%
-  summarise(signal = mean(signal, na.rm = TRUE)) %>% 
   inner_join(mean.tp) %>%
+  
   
   ## Normalization 
   # We want to normalise per gel and target (group_by()), as there is variation between the gels, 
@@ -70,11 +67,17 @@ dat2 <- western.dat %>%
   mutate(signal = signal / max(signal)) %>% 
   ungroup() %>%
   #print()
-  mutate(norm.sign = signal / tpl) %>% 
+  mutate(norm.sign = signal) %>% 
   
+  
+  ## Groups by and summarises mean signal, then imports the lane normalisation factor (tpl) 
+  group_by(gel, sample.id, sample.name, subject, leg, time, target) %>%
+  summarise(norm.sign = mean(norm.sign, na.rm = TRUE)) %>% 
+
   ## Adds pool on all samples per gel, so we can normalise the signal by pool via the mutate(norm.sign = norm.sign / pool).
   # Thereafter, "pool" is filtered out, as we no longer need this in the data frame.
   group_by(gel, target) %>%
+
   mutate(pool = if_else(subject == "pool", norm.sign, NA_real_), 
          pool = mean(pool, na.rm = TRUE)) %>% 
   ungroup() %>%
@@ -97,7 +100,7 @@ dat2 <- western.dat %>%
                mutate(sample.time = time, 
                       subject = as.character(subject)) %>%
                dplyr::select(subject, supplement, sample.time)) %>%
-  dplyr::select(gel, sample.id, gel.sorted, subject, leg, time, target, supplement, tpl, norm.sign) %>%
+  dplyr::select(gel, sample.id, gel.sorted, subject, leg, time, target, supplement,  norm.sign) %>%
   mutate(gel.sample = paste0(gel, sample.id), 
          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
   print()

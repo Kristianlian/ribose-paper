@@ -30,8 +30,7 @@ ubf.rdy <- west.dat %>%  # One data frame without outliers
 saveRDS(ubf.rdy, "./data/data-gen/protein/ubf.rdy.RDS")
 
 rna.rdy <- rna.dat %>%
-  select(subject, time, outlier, supplement, RNA.weight) %>%
-  filter(outlier == "in") %>%
+  select(subject, time, supplement, RNA.weight) %>%
   mutate(subject = as.character(subject)) %>%
   group_by(subject, time, supplement) %>%
   summarise(mean.rna = mean(RNA.weight, na.rm = TRUE)) %>%
