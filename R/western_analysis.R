@@ -9,8 +9,9 @@
 library(tidyverse); library(emmeans); library(lme4); library(buildmer)
 
 #
-# Data # from the script: western.cleanup.R
-prot.dat <- readRDS("./data/data-gen/protein/prot.datc.RDS") %>%
+# Data 
+# from the script: western_import.R
+prot.dat <- readRDS("./data/data-gen/protein/prot.dat.RDS") %>%
   mutate(sample.id = paste0(gel.sorted, sample.id)) %>%
   print()
 
