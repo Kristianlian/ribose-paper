@@ -53,6 +53,7 @@ Stian Ellefsen https://orcid.org/0000-0003-0467-2018
 <div custom-style="abstract_style">
 ## Abstract
 
+<!-- To do: Fix tables, add outlier figures to the readme -->
 ```{r}
 #| echo: false
 
