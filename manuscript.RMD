@@ -5,7 +5,7 @@ bibliography: resources/ribose-paper.bib
 csl: resources/jap.csl
 output:
   word_document:
-    reference_docx: resources/reference-template-02.docx
+    reference_docx: resources/jap-template.docx
 editor_options: 
   chunk_output_type: console
 ---
@@ -18,10 +18,8 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse);library(lme4);library(emmeans);library(cowplot);library(tinytex);library(nlme)
 ```
 
-<<<<<<< HEAD:manuscript.RMD
-=======
 
->>>>>>> main:ribose-paper.postfeedback.RMD
+
 ### Affiliations
 <div custom-style="correspondence_style">
 ^1^ Section for Health and Exercise Physiology, Department of Public Health and Sport Sciences, Inland Norway University of Applied Sciences, Lillehammer, Norway.
@@ -711,10 +709,15 @@ corr.lsum <- summary(corr.lmod)
 corr.lres <- plot(corr.lmod)
 
 corrcoef <- coef(summary(corr.mod))
-corrp <- round(corrcoef[2,5], 3)
+corrp <- sprintf("%.4f", corrcoef[2,5])
 
 ## Percentage increase in RNA per 1 SD uinit increase in UBF using log-model to show relative increse
 corr_incr <- round(100 * (exp(coef(summary(corr.lmod))[2,1])-1), 0)
+
+
+
+
+
 
 
 ```
