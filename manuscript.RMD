@@ -694,24 +694,14 @@ corr.lsum <- summary(corr.lmod)
 corr.lres <- plot(corr.lmod)
 
 corrcoef <- coef(summary(corr.mod))
-<<<<<<< HEAD
+
 corrp <- sprintf("%.3f", coef(summary(mod))[2,5])
-=======
+
 corrp <- sprintf("%.4f", corrcoef[2,5])
->>>>>>> c5f7bb4e9614ac8c5483d34ee8a95c875e7f5788
 
 ## Percentage increase in RNA per 1 SD uinit increase in UBF using log-model to show relative increase
 corr_incr <- round(100 * (exp(coef(summary(corr.lmod))[2,1])-1), 0)
 
-<<<<<<< HEAD
-=======
-
-
-
-
-
-
->>>>>>> c5f7bb4e9614ac8c5483d34ee8a95c875e7f5788
 ```
 
 Overall, RT led to robust increases from pre- to post-intervention in all measured proteins (Figure 3A). RT with glucose resulted in estimated levels of c-Myc, UBF and RPS6 being `r stat_west$cmyc`, `r stat_west$ubf` and `r stat_west$rps6`% lower compared to placebo, respectively, without showing statistical significance (*p* = `r min(p_west)`-`r max(p_west)`; Figure 3A). There was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a $\sim$ `r corr_incr`% increase in total RNA (*p* = `r corrp`; Figure 3C).
