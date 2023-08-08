@@ -51,7 +51,7 @@ Stian Ellefsen https://orcid.org/0000-0003-0467-2018
 
 \pagebreak
 <div custom-style="abstract_style">
-## Abstract
+# ABSTRACT
 
 <!-- To do: Fix tables, add outlier figures to the readme -->
 ```{r}
@@ -96,19 +96,15 @@ corrp <- readRDS("./data/data-gen/protein/corrp.RDS")
 
 **Conclusion.** Glucose supplement before and after RT does not augment RT-induced ribosome biogenesis, nor does it enhance muscular performance and recovery after two weeks of heavy RT in moderately trained, young individuals. 
 
-<!--*Introduction:*Responses to resistance training (RT) are not uniform across the population, and individuals responding poorly to RT show a blunted ability to produce novel ribosomes [@hammarstrom_benefits_2020; @stec_ribosome_2016]. Recent research solidifies the relationship between increased rates of total RNA and the magnitude of RT-induced adaptations [@hammarstrom_benefits_2020; @hammarstrom_ribosome_2022; @figueiredo_revisiting_2019], with ribosome abundance being associated with UBF protein levels [@hammarstrom_ribosome_2022]. However, 10-15% of individuals undertaking a period of RT showed considerable impaired growth [@alvarez_interindividual_2018; @mann_high_2014; @thalacker-mercer_cluster_2013]. Since modifying RT alone does not convert low-responders to high-responders [@hammarstrom_benefits_2020] other means than RT *per se* is necessary to circumvent this discrepancy. High glucose treatment has been observed to augment rDNA transcription in vitro [@sebata_control_2018], however, its effect on RT-induced adaptations remains quite unexplored.  
-*Methods:*Sixteen healthy moderately trained participants were included and randomized to unilateral resistance training with glucose- and placebo supplement. Participants remained fasted overnight receiving glucose/placebo and protein only before and after RT. Resistance training consisted of 3 sets of 10 repetitions maximum unilateral leg press and knee extension. Micro biopsies were sampled pre (T1/T2) and post (T3/T4) the intervention, and maximal unilateral isometric and isokinetic knee extension torque were measured pre (T0), during (days 4, 5, 8, 9) and post (T3/T4, day 13) the intervention.  
-*Results:*Despite robust increases in total RNA and rRNA in glucose and placebo (RNA: 26 and 22% respectively, rRNA: 33-43% and 33-41% respectively), there were no differences between supplements (p > 0.05). There were no differences in change of c-Myc, UBF and rpS6 content between treatments (*p* > 0.05). There was indeed a linear relationship between content of UBF and total RNA, where an increase of 1 SD unit in UBF equated to 6.8% increase in total RNA (*p* = 0.002). Lastly, there were no differences between supplements in maximal unilateral isometric knee extension force and isokinetic peak torque during the intervention (p > 0.05) and following the last session (p > 0.05), apart from the 60 d/s test before last RT session (p < 0.05). 
-*Conclusion:* Glucose supplement before and after RT does not acutely augment ribosome biogenesis, nor does it enhance muscular performance and recovery after two weeks of heavy RT in moderately trained young individuals. OLD ABSTRACT-->
+## NEW AND NOTEWORTHY
 
-
-**Keywords: **
+**Keywords:** Skeletal muscle; hypertrophy; resistance training; glucose; ribosome
 
 </div>
 
 
 \pagebreak
-## Introduction
+# INTRODUCTION
 
 Responses to systematic resistance training (RT) vary widely between individuals, with as many as 10-15% showing impaired muscle growth in response to standardized training interventions [@alvarez_interindividual_2018; @mann_high_2014; @thalacker-mercer_cluster_2013]. Such inability to benefit from RT may be explained by genetic and/or epigenetic disposition affecting the internal physiological milieu and subsequently affecting the ability to mount an anabolic response to RT [@figueiredo_genetic_2021;@thalacker-mercer_cluster_2013].<!-- Check these refs, do they correspond to genet epigen and internal mileu? Kristian: The way I read it, it looks like it corresponds --> Although RT program modifications such as altered exercise volume or intensity may induce more favourable adaptations in some individuals, these benefits are not uniform between individuals [@hammarstrom_benefits_2020;@krieger_single_2009;@schoenfeld_strength_2017].<!-- Add ref for more rt program modifications. Kristian: Added krieger et al. 2009 and schoenfeld et al. 2017 --> For instance, although changes in training volume generally induce greater benefits of RT, not all individuals benefit from such modifications [@hammarstrom_benefits_2020]. Therefore, other means than modification of RT variables seem necessary to optimize individual responses.<!-- The above sentence might be a bit contradictory? Kristian: Im not sure, are you thinking about "other means than modification of RT" being contradictory of "modifications such as altered exercise volume.." sentence? I think there is a point to establishing that yes, increasing exercise volume is a potent way to increase the RT stimulus in general. However, in cases where this alone fails to elicit true responses, other means are necessary. Or am I missinterpreting this? --> 
 
@@ -119,44 +115,42 @@ Transcription of ribosomal RNA (rRNA) by Pol I is considered the rate limiting s
 The purpose of this investigation was to test the hypothesis that glucose supplementation before and after<!-- during? Kristian: before and after would be more precise, since they're not strictly ingesting anything during RT - I got a comment on that during the thesis defense --> RT increases markers of ribosomal abundance following five RT sessions. Secondly, we aimed to describe the association between UBF and total RNA abundance in human skeletal muscle. There have been multiple studies in the last years suggesting translational capacity to be as important, if not more, as translational efficiency in regard to long-term skeletal muscle adaptations to RT [@hammarstrom_benefits_2020;@hammarstrom_ribosome_2022;@figueiredo_revisiting_2019]. Previously, *in vitro* studies have shown UBF and c-Myc to be important factors in the PIC, c-Myc as a general transcription factor and UBF as a specific transcription factor for rDNA transcription initiation [@mariappan_ribosomal_2011;@von_walden_ribosome_2019]. Coupled with the recent observations by Hammarström et al. [@hammarstrom_benefits_2020;@hammarstrom_ribosome_2022], understanding underlying factors regulating and affecting ribosome biogenesis seems key to furthering our understanding of the optimization of RT to individual phenotypes.    
 <!-- We should maybe add a line or two about the rational here. Kristian: Tried to add some, what about this? to general? -->
 
-## Methods
-
-### Materials and methods
+# MATERIALS AND METHODS
 
 All participants gave their informed consent prior to study enrollment. The study was approved by the regional ethical committee (REK, ID nr. 153628), pre-registered at clinicaltrials.gov (Identifier: NCT04545190), and conducted according to the Helsinki declaration.
 
-### Participants
+## PARTICIPANTS
 
 Sixteen healthy male and female participants (20-33 years, Table 1) were recruited to the study through social media advertisement and word of mouth. The eligibility criteria were non-smokers and moderately trained (i.e. 2-8 RT sessions per 14 days for the last six months). Exclusion criteria were previous injury leading to impaired strength, inability to perform resistance exercise training, symptoms, and a medical record of metabolic disorders including hyperglycemia, i.e. fasting venous plasma glucose ≥6.1 mmol/L and/or 2-hour glucose tolerance ≥7.8 mmol/L, and/or HbA1c >42 mmol/mol. Of the sixteen participants that commenced the intervention, three participants dropped out. One due to sickness and inability to resume, two participants experienced muscular discomfort related to heavy resistance training. Lean mass (Table 1) was measured using DXA (Prodigy Advance PA+302047, Lunar, San Francisco, CA, USA) on Day -1, the last day preceding the RT intervention.
 
-### Experimental design
+## EXPERIMENTAL DESIGN
 
 The study was designed as a 12-day double-blinded randomized controlled trial, with an alternating unilateral RT protocol (Figure 1A). Participants were randomly allocated to exercise one leg with a glucose condition and one leg with a placebo condition (Figure 1A).
 <!--from the "old" methods: either their dominant or non-dominant leg with glucose or placebo before and after RT, and whether they started RT with glucose or placebo. Thus, participants exercised every day, alternating between e.g., one leg + glucose and the other leg + placebo - this might be TMI, as it's presented in the figure as well?--> One person was exclusively responsible for the randomization code and supplement distribution, blinding both investigators and participants regarding which leg exercised with glucose/placebo. Glucose (Glucosum monohydricum, Merck KGaA, Darmstadt, Germany) and placebo (Steviosa, Soma Nordic AS, Oslo, Norway) were masked by mixing with 300ml Fun Light (Orkla, Oslo, Norway). A blinded taste test revealed that the participants were not able to disclose the contents of the provided boluses (30g glucosum monohydricum vs. ~0.3g Stevia rebaudiana extract). To ensure equal conditions during training sessions and strength testing, participants exercised and tested at the same time of day, +/- 1hr with the same supervisor on pairwise consecutive days (i.e. on days 1-2, 3-4, etc.). To further standardize this, participants also recorded and repeated their daily macronutrient intake (protein, fat, carbohydrate) and total calories on pairwise consecutive days.
 
 All participants completed six RT sessions with glucose and six with placebo, allowing a within-subjects analysis of the effects of glucose ingestion before and after RT. Data from the first five RT sessions was used to investigate main outcome measures (total RNA, rRNA and protein) and leg muscle strength, whereas data from the sixth RT session was used to explore secondary outcomes (muscular recovery, plasma glucose and -c-peptide levels). Participants were asked to avoid  resistance- or high-intensity training of the legs from Day -7 (Figure 1A) and onwards, until completion of the intervention and post-testing, to ensure the reliability of pre-intervention strength data and minimal interference from external exercise sources. If participants did conduct exercise training outside of the prescribed protocol, they were asked to ensure equal loading on pairwise consecutive days.
 
-### Dietary intervention
+## DIETARY INTERVENTION
 
 The dietary intervention spanned the whole day, divided into three periods: I) From awakening until 2.5 hours after RT, II) from 2.5 hours after RT until 2200hrs, and III) from 2200hrs until awakening. During period I, participants ingested protein and glucose/placebo only. Glucose/placebo was ingested three times in period I: 30 minutes before RT (0830hrs, 30g vs 0g glucose), immediately before RT (0900hrs, 30g vs. 0g glucose), and immediately after RT (~0930hrs, 30g vs. 0g glucose). Whey Protein Isolate (Proteinfabrikken, Stokke, Norway) was ingested 2hrs before RT (0700hrs) and immediately after RT (~0930hrs), in boluses of 25 g mixed with 150 ml water. In the afternoon (1800hrs-1900hrs, period II) participants ingested glucose or placebo (3x30g vs. 3x0g glucose) opposite to the supplement they received during RT, to ensure a balanced daily intake of glucose. Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications. The self-chosen diet was repeated on pairwise consecutive days, to ensure similar premises for resistance training responses between conditions. During period III (2200-0700hrs), participants remained in an overnight fasted state. The daily onset of the dietary intervention (i.e., first ingestion of PRO supplement) varied between participants, from 0600hrs to 0900hrs to allow multiple participants to complete the protocol simultaneously.  During sessions, participants were free to ingest water ad libitum.
 
-### Assessment of muscular strength
+## ASSESSMENT OF MUSCULAR STRENGTH
 
 Strength tests were performed prior to (Days -7 and -5, and -1, both legs) and during the intervention (Figure 1A, on days 4 and 8 for leg 1, and days 5 and 9 for leg two), after session 5 and after finalization of intervention (Figure 1A, on days 11/12 for leg 1 and days 12/13 for leg 2). Maximal isometric and isokinetic knee extension torque was measured with a Humac Norm Dynamometer (CSMi, Stoughton, Massachusetts, USA). Individual positions were recorded and standardized from pre-intervention tests (Figure 1A, days -7 and -5). Isokinetic peak torque was measured at extensions speeds of 60- and 240 d/s, 2x3 repetitions each, with the first set of each exercise as a sub-maximal warm-up. Isometric peak torque was measured at a knee-angle of 60 degrees (extended knee was set to 0 degrees), for a maximum of 10 seconds and two repetitions per test. The isometric tests were ended when the participants reached a plateau or peak torque development decreased, which on average occurred between 2-4 seconds into the test. During days 4, 5, 8 and 9 (Figure 1D, days 4 and 5 = Post 2RT, days 8 and 9 = Post 4RT), humac tests were conducted one hour before RT on the leg performing RT the previous day. During days 11 and 12, humac tests were performed four times: I) 45min before the last RT session (Figure 1D, Post 5RT), II) 30min after the last RT session (Figure 1D, 30 min post 6RT), III) 2hrs after the last RT session (Figure 1D, 2h post 6RT), and IV) 23hrs after the last RT session (Figure 1D, 23h post 6RT). Test I on day 12/13 included testing of both legs, representing 23hrs post-RT session test of one leg and post-session 5 test of the other leg. The highest peak torque values from the respective extension speeds and time points were summarized in an index. The index was calculated by dividing the average peak torque value by the highest observed peak torque value per extension speed, and summarizing this new index per extension speed to a mean strength index. 
 
 Assessment of unilateral one repetition maximum (1RM) leg press and knee extension was conducted at pre-intervention testing during familiarization (Figure 1, Ddays -7 and -5). The participants performed a general warm-up with 10min cycling on an indoor exercise bicycle. A protocol consisting of 1x10, 1x6 and 1x3 repetitions with a load equivalent to ~50-75% of assumed max repetitions, was used as a specific warm-up before each of the tests. All positions were controlled and recorded at the first 1RM test and repeated for the RT sessions. Maximal leg press strength was defined as the maximal load lifted in a controlled fashion, with a knee angle of 45 degrees (start), within a 2.5kg range. Attempts where participants did not reach 45 degrees during the eccentric phase, were not approved. Maximal knee extension testing followed the same specific warm-up and pause protocol and was defined as maximal load lifted in a controlled fashion, reaching full extension of the knee joint, within a 1.25kg range. Attempts with exaggerated hip movement or beneath full extension were not approved. Two minutes of rest were given during the specific warm-up, and three minutes of rest was given between 1RM attempts.
 
-### Resistance training protocol
+## RESISTANCE TRAINING PROTOCOL
 
 Resistance training consisted of three sets of unilateral leg presses and three sets of knee extensions, with an intensity of 10 repetition maximum (10RM). As a general warm-up, the participants cycled on an indoor exercise bicycle for 5-10min. In addition, before the respective exercises, two 10-repetition warm-up sets were completed at ~50% and ~70% of 10RM. To ensure an adequate exercise stimulation throughout the intervention, the exercise load was increased if the participants lifted more than 12 repetitions, as a progressive loading strategy. Rest between working sets was two minutes. For safety and standardization purposes, all sessions were monitored by trained personnel. <!-- From the "old" methods: The rate of perceived exertion (RPE, 0–10-point scale) was logged before every session, and the session score was logged 15min after each session - is this necessary info, as we are not reporting these data? --> Lastly, training volume (load and repetitions) was logged for every session.
 
-### Sampling of muscle tissue and blood
+## SAMPLING OF MUSCLE TISSUE AND BLOOD
 
 Muscle biopsies were sampled from m. vastus lateralis using well-established procedures [@hammarstrom_benefits_2020]. Briefly, muscle biopsy sampling was performed under local anaesthesia (Xylocaine, 10 mg ml^-1^ with adrenaline 5 μg ml^−1^, AstraZeneca AS, Oslo, Norway) using a 12-gauge needle (Universal Plus, Mermaid Medical AS, Stenløse, Denmark), operated with a spring-loaded biopsy gun (Bard Magnum, Bard, Rud, Norway). After the biopsy sampling, muscle tissue was divided into two aliquots for determination of total RNA/expression of rRNA and two aliquots for protein content measurement. Aliquots were snap frozen in isopentane (-80°C) and stored at -80°C until further analyses. Muscle biopsies were sampled at four times: I/II) Pre-intervention (Figure 1A, 2hrs before training, Day 1 = leg 1, Day 2 = leg 2), and III/IV) after the fifth RT session, two hours before the sixth RT session (Figure 1A, Day 11 = leg 1, Day 12 = leg 2). At each time point, two samples were taken from the same incision. To standardize this procedure, all individual participants had biopsies taken at the same time of day, in an overnight fasted state.
 
 To measure blood glucose levels with and without glucose ingestion/training, capillary blood was collected from finger draws on days with biopsy sampling. One capillary blood sample was taken on day 1 (Figure 1A) to serve as a baseline. On days 11 and 12 (Figure 1A), capillary blood samples were collected seven times: I) Immediately prior to protein ingestion (0700hrs) II) 45 minutes after protein ingestion (0745hrs) III) 1.5hrs after protein ingestion (0800hrs, i.e., immediately before GLU/PLAC intake), IV) 2hrs after protein ingestion (0900hrs, i.e., immediately before training), IV) in the middle of RT (~0915hrs), V) immediately after training (~0930hrs), and VI) 2hrs after completion of training (~1130hrs). Capillary blood samples were analysed with in-house equipment (BIOSEN C-Line, EKF diagnostic GmbH, Barleben). Venous blood samples were collected from the antecubital vein, coinciding with the capillary samples except 45min after protein ingestion and in the middle of the RT session, to analyse endocrine variables.
 
-### Total RNA extraction and quantitative real-time reverse transcription polymerase chain reaction
+## TOTAL RNA EXTRACTION AND REAL-TIME REVERSE TRANSCRIPTION POLYMERASE CHAIN REACTION
 ```{r totrna-extraction}
 
 totrna_complete <- readRDS("./data/data-gen/rna/rna_complete.RDS")
@@ -181,17 +175,17 @@ Two muscle biopsy aliquots were used for total RNA extraction per leg and result
 
 Five-hundred ng of RNA was reverse transcribed using Super Script IV Reverse Transcriptase (Invitrogen, Oslo, Norway), according to the manufacturer's instructions using anchored oligo-dT and random hexamer primers (Thermo Scientific, Oslo, Norway). All samples were reverse transcribed and diluted to 1:50 before quantitative real-time polymerase chain reaction (qPCR). qPCR reactions were run over 40 cycles (3 s 95°C denaturing and 30 s 60°C annealing) on a fast-cycling real-time detection system (Applied Biosystems 7500 fast Real-Time PCR Systems, Life Technologies AS), with a total reaction volume of 10 µl consisting of 2 µl of cDNA, gene-specific primers (0.5 µM final concentration) and a commercial master mix (2X SYBR Select Master Mix, Applied Biosystems, Life Technologies AS, Oslo, Norway). Raw fluorescence data was modelled with a best-fit sigmoidal model using the qPCR package [@ritz_qpcr_2008] written for R [@hammarstrom_benefits_2020; @Rcore]. qPCR data was normalized to wet muscle weight using the external reference gene [@ellefsen_improved_2008; @ellefsen_reliable_2014] and analyzed on the log scale on a target-by-target basis. <!-- add explanations of normalization to extended methods -->
 
-### Protein extraction and immunoblotting
+## PROTEIN EXTRACTION AND IMMUNOBLOTTING
 
 Total protein was extracted using the Minute Total Protein Extraction Kit for Muscles (Invent Biotechnology), according to the manufacturer’s protocol, optimised for our lab. Wet muscle was freeze-dried for 24 hrs and dissected before extraction. The tissue was homogenized with a plastic rod in 80 mg protein extraction powder (Invent Biotechnology) and 100 ul ice cold cell lysis buffer (Denaturing Buffer, Invent Biotechnology), and centrifuged at 19 000 g for 1 min. The supernatant was divided into aliquots to run samples in duplicates, and total protein concentrations were determined in a 1:10 dilution (Pierce Detergent Compatible Bradford Assay Reagent, Thermo Fisher Scientific, Oslo, Norway). The protein samples were diluted to <!-- Check this, it should be 1.5? -->20.25 µg µl^−1^ total protein with lysis buffer and 4X Laemmli sample buffer (Bio-Rad Laboratories AB, Oslo, Norway) containing 2-mercaptoethanol. All protein samples were incubated at 95°C and stored at -20°C until further analysis. The protein samples (20.25 µg total protein) were separated at 250V on 4-20% Tris-Glycine gels (Bio-Rad Laboratories) for 50 min and then transferred to PVDF membranes with wet transfer at 300 mA for 3 hrs. Both gel electrophoresis and protein transfer were performed at 4°C. Following the wet transfer, membranes were stained with a reversible total protein stain (Thermo Fisher Scientific) and then blocked for 1hr at room temp with a blocking buffer of Tris-buffered saline (TBS; 20 mM Tris, 150 mM NaCl) with 5% non-fat dry milk and 0.1% Tween-20. Primary and secondary antibodies were purchased from Santa Cruz Biotechnology (Texas, USA): UBF, UBF F-9, sc-13125; rpS6, Ribosomal protein S6 C-8, sc-74459; and Thermo Fisher Scientific (Oslo, Norway): c-Myc, 9E10; goat anti-mouse (for c-Myc), goat anti-mouse IgG1 (y1) horseradish peroxidase conjugate; and anti-mouse (anti-mouse IgG1 horseradish peroxidase conjugate)<!-- insert manufacturer -->. Antibodies were diluted in blocking buffer to concentrations corresponding to <!-- Add final concentrations of antibodies -->. 
 Membranes were incubated overnight with primary antibodies, and for 1 hr with secondary antibodies. Between blocking and primary antibody staining, membranes were washed 5 min, between primary and secondary staining, and after secondary staining, membranes were washed 3 x 5 min with TBS-Tween (TBS; 20mM Tris, 150mM NaCl, 0.1% Tween). Following the last wash, membranes were incubated 5 min with enhanced chemiluminescent substrate (ECL, SuperSignal West Femto Maximum Sensitivity Substrate, Thermo Fisher Scientific). Membrane blocking, secondary antibody incubation, washing and ECL incubation were performed at room temp. Primary antibody incubation was performed at 4°C. Chemiluminescence signals were quantified using Image Studio Lite (LI-COR Biotechnology, Lincoln, NE, USA), and total protein content was quantified using ImageJ [@rueden_imagej2_2017], where total protein content was defined as mean grey value of the whole well with between-well values subtracted as background. A pooled sample was used as a control on each gel to allow for between gel comparisons and  quantified protein signals were subsequently normalized to the pooled control sample and total protein.  
 
-### Statistics and data analysis
+## STATISTICS AND DATA ANALYSIS
 
 A priori power calculations showed that 20 participants would grant a statistical power of 80% (alpha = 0.05), accounting for an expected dropout of 20%. This power calculation was based on an assumption that the effects of glucose ingestion on ribosome biogenesis (measured as within participant differences in total RNA) may equate to the effects of increasing RT volume from low to moderate [@hammarstrom_benefits_2020] corresponding to an effect size of d =  <!-- Add the effect size here-->.
-Total RNA, protein and qPCR data were analyzed by mixed-effects models with fixed effects included as *supplement $\times$ time*. To decrease the risk of Type I errors, random effects were selected from step-wise elimination of terms from the most complex structure (random slopes for time and supplement and their interaction) to less complex. The most complex random effects structure that converged was chosen as the final model[@Matuschek_2017]. Plasma glucose, c-peptide, training volume, and the strength index were analyzed by multiple time-point log-fold change score comparisons, using mixed-effects model with baseline values, time and supplement, and the interaction between time and supplement as fixed effects. These data only supported a random intercept per participant. The linear mixed effects models were fitted with the lmer function from the lme4 package using the lmerTest package to procure p-values (Satterthwaite's method for approximating degrees of freedom)[@bates_fitting_2014; @lmerTest], written for R[@Rcore]. Log-transformed values were expressed as fold-changes in presentations. Descriptive data are presented as mean and (SD). Inferential statistics are presented as means with 95% confidence intervals and *p*-values unless otherwise stated. *p* < 0.05 was considered statistically significant.
+Total RNA, protein and qPCR data were analyzed by mixed-effects models with fixed effects included as *supplement $\times$ time*. To decrease the risk of Type I errors, random effects were selected from step-wise elimination of terms from the most complex structure (random slopes for time and supplement and their interaction) to less complex. The most complex random effects structure that converged was chosen as the final model[@matuschek_2017_balancing]. Plasma glucose, c-peptide, training volume, and the strength index were analyzed by multiple time-point log-fold change score comparisons, using mixed-effects model with baseline values, time and supplement, and the interaction between time and supplement as fixed effects. These data only supported a random intercept per participant. The linear mixed effects models were fitted with the lmer function from the lme4 package using the lmerTest package to procure p-values (Satterthwaite's method for approximating degrees of freedom)[@bates_fitting_2014; @lmerTest], written for R[@Rcore]. Log-transformed values were expressed as fold-changes in presentations. Descriptive data are presented as mean and (SD). Inferential statistics are presented as means with 95% confidence intervals and *p*-values unless otherwise stated. *p* < 0.05 was considered statistically significant.
 
-## Results
+# RESULTS
 
 ```{r nutrition model}
 # Scripts
@@ -559,8 +553,6 @@ stat_fun_rna <- function(model) {
 
 total_rna_stats <- stat_fun_rna(trna.lmod)
 
-saveRDS(total_rna_stats, "./data/data-gen/rna/total_rna_stats.RDS")
-
 
 ```
 
@@ -581,7 +573,6 @@ rrna_analysis_results <- readRDS("./data/data-gen/rna/rrna_analysis_results.RDS"
 stat_rrna <- lapply(rrna_analysis_results$rrna_models, 
        stat_fun_rna)
 
-saveRDS(stat_rrna, "./data/data-gen/rna/stat_rrna.RDS")
 
 
 ```
@@ -628,12 +619,8 @@ west_estimate <- function(model, p = FALSE) {
 
 stat_west <- lapply(prot_models$prot_models, west_estimate)
 
-saveRDS(stat_west, "./data/data-gen/protein/stat_west.RDS")
-
 
 p_west <- unlist(lapply(prot_models$prot_models, west_estimate, p = TRUE))
-
-saveRDS(p_west, "./data/data-gen/protein/p_west.RDS")
 
 
 ### Linear relationship between UBF and Total RNA
@@ -647,11 +634,9 @@ mod <- lmerTest::lmer(log(mean.rna) ~ sd.ubf + time +  (1|subject),
 
 
 corr_incr <- round(100 * (exp(coef(summary(mod))[2,1])-1),1)
-saveRDS(corr_incr, "./data/data-gen/protein/corr_incr.RDS")
+
 
 corrp <- sprintf("%.3f", coef(summary(mod))[2,5])
-saveRDS(corrp, "./data/data-gen/protein/corrp.RDS")
-
 
 
 ```
@@ -711,17 +696,16 @@ corr.lsum <- summary(corr.lmod)
 corr.lres <- plot(corr.lmod)
 
 corrcoef <- coef(summary(corr.mod))
-corrp <- round(corrcoef[2,5], 3)
+corrp <- sprintf("%.3f", coef(summary(mod))[2,5])
 
-## Percentage increase in RNA per 1 SD uinit increase in UBF using log-model to show relative increse
+## Percentage increase in RNA per 1 SD uinit increase in UBF using log-model to show relative increase
 corr_incr <- round(100 * (exp(coef(summary(corr.lmod))[2,1])-1), 0)
-
 
 ```
 
 Overall, RT led to robust increases from pre- to post-intervention in all measured proteins (Figure 3A). RT with glucose resulted in estimated levels of c-Myc, UBF and RPS6 being `r stat_west$cmyc`, `r stat_west$ubf` and `r stat_west$rps6`% lower compared to placebo, respectively, without showing statistical significance (*p* = `r min(p_west)`-`r max(p_west)`; Figure 3A). There was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a $\sim$ `r corr_incr`% increase in total RNA (*p* = `r corrp`; Figure 3C).
 
-## Discussion
+# DISCUSSION
 
 The main findings of the present study were that heavy resistance training with glucose did not affect markers of ribosome biogenesis, measured as total RNA, rRNA, and rDNA transcription initiation-associated proteins, compared to RT with placebo. Similarly, RT with glucose in general did not affect markers of skeletal muscle functionality such as strength and recovery, or total training session volume. At one time point, RT with glucose led to less reduction in strength compared to placebo. Levels of plasma glucose and c-peptide were significantly higher before, during and after the RT sessions with glucose. Importantly, there were no differences in daily macronutrient intake on pairwise consecutive days. These findings suggest that the effects of high vs. low glucose/glucose starvation condition on rDNA transcription initiation observed in previous *in vitro* studies [@mariappan_ribosomal_2011; @tanaka_mild_2015] are not translatable to acute effects in human skeletal muscle *in vivo*. Notably, the present study was specifically designed to investigate differences in pre-post changes within participants, and is as such also quite limited to this perspective. Hence, the observed effects of time serve as supplementary to the efficiency of the design, without a negative control group to compare with.  
 
@@ -734,12 +718,28 @@ As in the biological data, there was generally no difference in the change of st
 
 In conclusion, ingestion of glucose immediately before and after resistance exercise training does not acutely augment ribosome biogenesis after two weeks of heavy resistance exercise training, in moderately trained young adults. Neither does it acutely enhance muscular performance during the exercise period or after five sessions, nor recovery within 23hrs of the last session. The observations in total RNA, rRNA and rDNA transcription initiation-associated proteins support the key role of UBF in ribosome biogenesis regulation in human skeletal muscle following resistance training. If future investigations are to be made on this topic, a greater sample size coupled with a negative control group and analyses of the intramuscular glycogen storage may provide higher-resolution results.
 
+# APPENDIX
 
-## References
+IS THIS REQUIRED? IF NOT, IS IT NECESSARY?
+
+# DATA AVAILABILITY
+
+LINK TO GITHUB
+
+# GRANTS
+
+IS THIS NECESSARY?
+
+# DISCLOSURES
+
+
+# AUTHOR CONTRIBUTIONS
+
+# References
 
 <div id="refs"></div>
 
-## Figure captions
+# FIGURE LEGENDS
 
 **Figure 1:** A) An overview of the experimental design with 12 days of concomitant dietary intervention and resistance training (RT), preceded by 7 days involving familiarization. Between days -7 and -1, participants were familiarized to the RT exercises via 1RM leg press and knee extension testing, and to the strength tests via Humac Norm dynamometer (days -7 and -5). Before baseline testing, the participants were randomly allocated to exercise one leg with GLU (glucose) and the other with PLA (placebo), in a unilateral, alternating fashion. Further, non-dominant/dominant + GLU/PLA, and onset with GLU or PLA was also randomized, the figure illustrates an example where the participant was randomized to start RT with GLU. Biopsies were taken from m. vastus lateralis at baseline (Day 1 leg 1, Day 2 leg 2), and after five RT sessions (Day 11 leg 1, Day 12 leg 2). Blood for measurement of plasma glucose and -c-peptide was sampled at baseline (Day 1), and during post testing (Day 11 leg 1, Day 12 leg 2), via finger draws and venous blood samples. Skeletal muscle strength was measured as peak torque in unilateral isometric and isokinetic (at 60 and 240 d/s) knee extension before, multiple times during, and after five and six session. <!-- A total of three participants dropped out of the intervention, either due to reported muscular discomforts of heavy RT, or sickness in their family - necessary to include this here? Its already reported under "experimental design" -->. B and C) Changes in plasma glucose (B, mmol/L) and c-peptide levels (C, pmol/L). Glucose levels in blood was measured via finger draws 120 (-120), 90 (-90), and 30min (-30) before RT, immediately before RT (0), during RT (15), immediately after RT (30) and 2hrs after RT (120). C-peptide levels were measured simultaneously to these finger draws, except for 90min before and during RT. D) Changes in muscular strength measured as isometric and isokinetic peak torque (60 and 240 d/s) via Humac Norm Dynamometer, conducted at baseline (A: Day -1), after two and four RT sessions (A: Day 4 and 8 leg 1, Day 5 and 9 leg 2), after five RT sessions/before the 6th session (Day 11 leg 1, Day 12 leg 2), as well as 30min, 2hrs and 23hrs after the 6th RT session (A: Day 11/12 leg 1, Day 12/13 leg 2). The index was calculated by normalizing peak torque values to the highest peak torque value at each respective speed, and then summarized and used in change score calculations. Values are presented as changes in estimated marginal means ± 95% CI. * = *p* < 0.05 between groups. Glucose n = 13, placebo n = 13.
 
@@ -747,9 +747,10 @@ In conclusion, ingestion of glucose immediately before and after resistance exer
 
 **Figure 3:** Changes in protein content. A) Fold-change pre-post in levels of protein in placebo and glucose + fold-change difference 95% CI, with representative western blots of the respective proteins. Protein samples were analyzed in two duplicates per biopsy per time point, loaded on separate gels in an inverted order, e.g. from gel 3 to 6, as shown by the duplicates (1 and 2). Changes in protein levels were calculated as log-fold change scores normalized by pools (pool of all protein samples per gel). Mean log fold-change scores of the duplicates were calculated before modelling and reverse-transformed for figure illustration. Values are estimated marginal means fold change per leg per supplement ± 95% CI. Glucose n = 13, placebo n = 13. B) Representative total protein stain blot. C) Linear relationship between total RNA (ng x mg) and UBF levels (SD units), with time added as a covariate. Total RNA was normalized by wet muscle weight, and UBF was normalized by pools per gel and total protein per lane factor. Values are presented as log-transformed means.
 
-## Tables
 
-```{r, echo = FALSE}
+# TABLES
+
+```{r baseline table, echo = FALSE}
 
 ###### Baseline tab
 #
@@ -869,6 +870,39 @@ dxa.tab %>%
 
 ```
 
+```{r primer table, echo = FALSE}
+
+### Primer sequence table
+
+## Packages
+library(readxl); library(tidyverse); library(flextable)
+
+## Data
+primer.dat <- read_excel("./data/primer.seq2.xlsx")
+
+tab.dat <- primer.dat %>%
+  select(Gene, fr, CT.mean, E)
+
+
+
+## Flextable
+tab.dat %>%
+  flextable() %>%
+  compose(i = 1, j = c(1, 2, 3, 4), part = "header",
+          value = c(as_paragraph("Gene"),
+                    as_paragraph("Sequence (forward - reverse)"),
+                    as_paragraph("CT mean (SD)"),
+                    as_paragraph("E"))) %>%
+  #add_header_row(values = c(" ", " ", " ", "Primer sequences"), 
+               #  colwidths = c(1, 1, 1, 1)) %>%
+  set_caption("Table 2. Primer Sequences") %>%
+  width(j = 1, 1.5, unit = "in") %>%
+  width(j = 2, 3, unit = "in") %>%
+  width(j = 3, 1.5, unit = "in") %>%
+  width(j = 4, 0.5, unit = "in")
+  #set_table_properties(layout = "autofit")
+
+```
 
 
 

@@ -94,7 +94,45 @@ prot_models <- list(prot_models = models_final,
 saveRDS(prot_models, "./data/data-gen/protein/protein_lmer_models.RDS")
 
 
+# Data and models
 
+
+prot_models <- readRDS("./data/data-gen/protein/protein_lmer_models.RDS")
+
+model <- prot_models$prot_models$cmyc
+
+
+## extract estimated change
+west_estimate <- function(model, p = FALSE) {
+  
+  # Return absolute values 
+  
+  
+  if(isFALSE(p)){
+    
+    est <- round(100 * (exp(coef(summary(model))[4,1])-1),0)
+    
+    return(est)
+  }
+  
+  if(p){
+    
+    pval <- sprintf("%.3f", coef(summary(model))[4,5])
+    
+    return(pval)
+  }
+  
+  
+}
+
+stat_west <- lapply(prot_models$prot_models, west_estimate)
+
+saveRDS(stat_west, "./data/data-gen/protein/stat_west.RDS")
+
+
+p_west <- unlist(lapply(prot_models$prot_models, west_estimate, p = TRUE))
+
+saveRDS(p_west, "./data/data-gen/protein/p_west.RDS")
 
 
 

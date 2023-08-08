@@ -129,6 +129,35 @@ saveRDS(list(model = models_final,
              coefs = coefs), "./data/data-gen/rna/tot_rna_coefs.RDS")
 
 
+## Get results from totrna_analysis.R 
+
+totrna_results <- readRDS("./data/data-gen/rna/tot_rna_coefs.RDS")
+
+# retrieve model
+trna.lmod <- totrna_results$model
+
+### Function for inline reporting of total RNA and rRNA data
+
+stat_fun_rna <- function(model) {
+  
+  coefs <- coef(summary(model))
+  ci <- confint(model)
+  meandiff <- sprintf("%.1f", 100 * (exp(coefs[4,1]) -1))
+  cilower <- sprintf("%.1f",100 * (exp(ci[6,1]) -1))
+  ciupper <- sprintf("%.1f",100 * (exp(ci[6,2]) -1))
+  pval <- sprintf("%.3f",coefs[4,5])
+  
+  
+  stats <- paste0(meandiff, "%, [", cilower, ", ", ciupper,"], *p* = ", pval)
+  
+  stats
+}
+
+# Save these stats for inline reporting in abstract
+
+total_rna_stats <- stat_fun_rna(trna.lmod)
+
+saveRDS(total_rna_stats, "./data/data-gen/rna/total_rna_stats.RDS")
 
 
 # Saved for reference

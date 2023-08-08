@@ -164,7 +164,37 @@ rrna_analysis_results <- list(rrna_models = models_final,
 saveRDS(rrna_analysis_results, "./data/data-gen/rna/rrna_analysis_results.RDS")
 
 
+### Function for inline reporting of total RNA and rRNA data
 
+
+stat_fun_rna <- function(model) {
+  
+  coefs <- coef(summary(model))
+  ci <- confint(model)
+  meandiff <- sprintf("%.1f", 100 * (exp(coefs[4,1]) -1))
+  cilower <- sprintf("%.1f",100 * (exp(ci[6,1]) -1))
+  ciupper <- sprintf("%.1f",100 * (exp(ci[6,2]) -1))
+  pval <- sprintf("%.3f",coefs[4,5])
+  
+  
+  stats <- paste0(meandiff, "%, [", cilower, ", ", ciupper,"], *p* = ", pval)
+  
+  stats
+}
+
+# Retrieve models from rds
+
+rrna_analysis_results <- readRDS("./data/data-gen/rna/rrna_analysis_results.RDS")
+
+
+# Get estimated means from the model, these are average baseline-corrected log-fold differences 
+# at post.
+
+# Applying the stat_fun_rna function to models
+stat_rrna <- lapply(rrna_analysis_results$rrna_models, 
+                    stat_fun_rna)
+
+saveRDS(stat_rrna, "./data/data-gen/rna/stat_rrna.RDS")
 
 
 
