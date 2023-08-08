@@ -1,6 +1,6 @@
 ---
-title: "Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults"
-author: "Kristian Lian^1^, Sara Christine Olsen Moen^1^, Håvard Hamarsland^1^, Daniel Hammarström^1^, Stian Ellefsen^1^"
+title: ""
+author: ""
 bibliography: resources/ribose-paper.bib
 csl: resources/jap.csl
 output:
@@ -18,22 +18,23 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse);library(lme4);library(emmeans);library(cowplot);library(tinytex);library(nlme)
 ```
 
+RESEARCH ARTICLE
 
+RUNNING HEAD: Glucose ingestion and resistance training in young adults
 
-### Affiliations
+Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults
+
+Kristian Lian^1^, Sara Christine Olsen Moen^1^, Håvard Hamarsland^1^, Daniel Hammarström^1^, Stian Ellefsen^1^
+
 <div custom-style="correspondence_style">
-^1^ Section for Health and Exercise Physiology, Department of Public Health and Sport Sciences, Inland Norway University of Applied Sciences, Lillehammer, Norway.
+^1^Section for Health and Exercise Physiology, Department of Public Health and Sport Sciences, Inladn Norway University of Applied Sciences, Lillehammer, Norway
 </div>
 
 <div custom-style="correspondence_style">
-### Correspondance
-Kristian Lian, Section for Health and Exercise Physiology, Department of Public Health and Sport Sciences, Inland Norway University of Applied Sciences, Lillehammer, Norway. Email: kristian.lian@inn.no
-
-Stian Ellefsen, Section for Health and Exercise Physiology, Department of Public Health and Sport Sciences, Inland Norway University of Applied Sciences, Lillehammer, Norway. Email: stian.ellefsen@inn.no
+Correspondance: Kristian Lian (kristian.lian@inn.no), Stian Ellefsen (stian.ellefsen@inn.no)
 </div>
 
-
-### ORCID
+ORCID:<!-- I does not say anything about ORCID in the journal template, do we leave it in?-->
 <div custom-style="correspondence_style">
 Kristian Lian: https://orcid.org/0000-0002-5169-5960
 
@@ -86,15 +87,14 @@ corrp <- readRDS("./data/data-gen/protein/corrp.RDS")
 ```
 
 
-**Introduction.** Muscle hypertrophy, induced by resistance training (RT), is determined by ribosomal biogenesis. Synthesis of ribosomes may augment the transcription of ribosomal RNA, as evident from in vitro studies. However, its effect on RT-induced adaptations remains unexplored.  
+Muscle hypertrophy, induced by resistance training (RT), is determined by ribosomal biogenesis. Synthesis of ribosomes may augment the transcription of ribosomal RNA, as evident from in vitro studies. However, its effect on RT-induced adaptations remains unexplored. Sixteen healthy, moderately trained individuals (male/female, n = 9/7; age, 23.7 (1.8)/24.6 (4.8)), participated in a within-participant trial with unilateral resistance training with glucose- and placebo supplement on alternate days over six sessions per condition. Participants remained fasted overnight, receiving glucose/placebo and protein supplementation only before and after RT sessions (3 sets of 10 repetitions maximum unilateral leg press and knee extension). Micro biopsies were sampled from m. vastus lateralis pre and post the intervention, and maximal unilateral isometric and isokinetic knee extension torque were measured before, during (days 4, 5, 8, 9) and after the intervention. Between conditions, there were no significant differences in increases of total RNA and rRNA (Figure 2A; mean difference `r total_rna_stats`, Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`), or levels of c-Myc, UBF and RPS6 (*p* = `r min(p_west)`-`r max(p_west)`; Figure 3A). There was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a $\sim$ `r corr_incr`% increase in total RNA (*p* = `r corrp`; Figure 3C). In conclusion, glucose supplement before and after RT does not augment RT-induced ribosome biogenesis after two weeks of heavy RT in moderately trained young adults.
 
-**Methods.** Sixteen healthy, moderately trained individuals (male/female, n = 9/7; age, 23.7 (1.8)/24.6 (4.8)),<!-- Add male/female numbers, age. Kristian: Done--> participated in a within-participant trial with unilateral resistance training performed with glucose- and placebo supplement on alternate days over six sessions per condition. Participants remained fasted overnight, receiving glucose/placebo and protein supplementation only before and after RT sessions (3 sets of 10 repetitions maximum unilateral leg press and knee extension). Micro biopsies were sampled from m. vastus lateralis pre and post the intervention, and maximal unilateral isometric and isokinetic knee extension torque were measured before, during (days 4, 5, 8, 9) and after the intervention. 
-
-**Results.** <!-- update statistics in this section -->From baseline to post-intervention total RNA and rRNA per unit muscle weight increased on average by ~24% and ~33-43%, respectively (Figure 2), with no differences between supplements (Figure 2A; mean difference `r total_rna_stats`, Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`). RT with glucose resulted in estimated levels of c-Myc, UBF and RPS6 being `r stat_west$cmyc`, `r stat_west$ubf` and `r stat_west$rps6`% lower compared to placebo, respectively, without showing statistical significance (*p* = `r min(p_west)`-`r max(p_west)`; Figure 3A). There was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a $\sim$ `r corr_incr`% increase in total RNA (*p* = `r corrp`; Figure 3C). Lastly, there were no differences between supplements in maximal unilateral isometric knee extension force and isokinetic peak torque during the intervention (p > 0.05) and following the last session (p > 0.05), apart from the 60 d/s test before last RT session (p < 0.05). 
-
-**Conclusion.** Glucose supplement before and after RT does not augment RT-induced ribosome biogenesis, nor does it enhance muscular performance and recovery after two weeks of heavy RT in moderately trained, young individuals. 
+</div>
 
 ## NEW AND NOTEWORTHY
+The effect of glucose ingestion on resistance training-induced ribosome biogenesis is quite unexplored in human skeletal muscle, and our results show no beneficial acute effect following six bouts of exercise. The linear relationship observed between UBF and total RNA do solidify the importance of UBF in human skeletal muscle ribosome biogenesis.
+
+</div>
 
 **Keywords:** Skeletal muscle; hypertrophy; resistance training; glucose; ribosome
 
@@ -712,29 +712,31 @@ The main findings of the present study were that heavy resistance training with 
 
 To our knowledge, no previous study has investigated the effects of glucose compared to placebo ingestion with RT on ribosome biogenesis in human skeletal muscle previously, making our hypotheses exploratory and comparisons few. *In vitro* studies on mice glomerular epithelial cells [@mariappan_ribosomal_2011] and human breast cancer cells [@tanaka_mild_2015] have observed glucose-induced UBF-dependent augmentation of ribosome biogenesis [@mariappan_ribosomal_2011], and reduced rRNA transcription by glucose starvation [@tanaka_mild_2015]. These findings do imply an important role for glucose in the initiation of rDNA transcription, the rate-limiting step of ribosome biogenesis [@mariappan_ribosomal_2011; @tanaka_mild_2015]. In addition, Hillier et al. found physiological hyperinsulinemia to stimulate p70S6K phosphorylation in human skeletal muscle [@hillier_physiological_2000]. Moreover, robust increases in markers of ribosome biogenesis such as 47S pre-rRNA and mature rRNA can be expected after an acute bout of RT [@figueiredo_impact_2016] or a short period of RT [@hammarstrom_benefits_2020; @hammarstrom_ribosome_2022]. Therefore, we hypothesized that if glucose can, directly or indirectly via insulin, stimulate the initiation of rDNA transcription, five sessions of RT with glucose compared to placebo will elicit this effect. Further, glucose ingestion increases energy levels, leading us to hypothesize that high glucose vs. placebo condition would stimulate energy-sensitive pathways such as PIH1, mTORC1, ERK1/2, AMPK and SIRT1 [@kim_nutrient_2013; @mariappan_ribosomal_2011; @tanaka_mild_2015; @zhai_human_2012]. Despite previously reported upregulation in PIC assembly due to high-glucose mediated mTORC1, ERK1/2 and PIH1 or low-glucose mediated AMPK and SIRT1 activation  [@hoppe_amp-activated_2009; @kim_nutrient_2013; @mariappan_ribosomal_2011; @tanaka_mild_2015; @zhai_human_2012], the present study showed no signs of such effects of glucose vs. placebo conditions. Resistance training, irrespective of condition, yielded a robust accumulation of total RNA and expression of rRNA, in line with previous observations [@hammarstrom_benefits_2020; @hammarstrom_ribosome_2022]. Due to the exploratory nature of our hypotheses, this was hardly a very surprising result. Indeed, previous studies have used cell cultures from yeast [@zhai_human_2012], rodent [@hoppe_amp-activated_2009; @mariappan_ribosomal_2011] or human cells [@tanaka_mild_2015] and are, as such, not directly comparable to human skeletal muscle cells. Importantly, previous studies investigated high vs. low glucose conditions [@mariappan_ribosomal_2011], or high glucose vs. glucose starvation [@hoppe_amp-activated_2009; @tanaka_mild_2015], while the present study aimed to compare high glucose condition to placebo, with a matched daily macronutrient and energy intake. Therefore, the comparison made in the present study was high plasma glucose levels vs. normal plasma glucose levels, to investigate the effect of glucose *per se* and not intracellular energy status. Thus, while glucose ingestion presumably is important in supplying energy for growth-inducing processes such as ribosome biogenesis [@figueiredo_regulation_2019; @kusnadi_regulation_2015; @sebata_control_2018] there is no apparent effect of ingesting glucose *per se* on markers of ribosome biogenesis. 
 
-In the present study, despite not measuring the activity in central pathways mediating anabolic signalling (mTORC1, ERK1/2), analyses of the downstream target UBF and the ribosomal protein S6 (rpS6), as well as the general transcription factor c-Myc, further supported observations from the RNA data. UBF has previously been described as a master regulator of rDNA transcription *in vitro* [@figueiredo_regulation_2019; @kusnadi_regulation_2015; @russell_rna-polymerase-i-directed_2005], while rpS6 is proposed as a valid and reliable means to measure ribosome biogenesis [@chaillou_hypoxia_2012; @nakada_correlation_2016]. Lastly, c-Myc has previously been described as a potent regulator of ribosome biogenesis, independent of mTORC1, and a direct regulator of UBF [@mori_c-myc_2021; @poortinga_c-myc_2011; @west_acute_2016]. Hence, it seems quite reasonable to observe equal changes in these three proteins.
+In the present study, despite not measuring the activity in central pathways mediating anabolic signalling (mTORC1, ERK1/2), analyses of the downstream target UBF and the ribosomal protein S6 (rpS6), as well as the general transcription factor c-Myc, further supported observations from the RNA data. UBF has previously been described as a master regulator of rDNA transcription *in vitro* [@figueiredo_regulation_2019; @kusnadi_regulation_2015; @russell_rna-polymerase-i-directed_2005], while rpS6 is proposed as a valid and reliable means to measure ribosome biogenesis [@chaillou_hypoxia_2012; @nakada_correlation_2016]. Lastly, c-Myc has previously been described as a potent regulator of ribosome biogenesis, independent of mTORC1, and a direct regulator of UBF [@mori_c-myc_2021; @poortinga_c-myc_2011; @west_acute_2016]. Hence, it seems quite reasonable to observe similar changes in these three proteins.
 <!-- OLD: While content of UBF and rpS6 changed equally in RT with glucose compared to placebo, content of c-Myc was significanly higher after RT with placebo. This was unexpected, since the general transcription factor c-Myc previously has been described as a potent regulator of ribosome biogenesis, independent of mTORC1, and a direct regulator of UBF [@mori_c-myc_2021; @poortinga_c-myc_2011; @west_acute_2016]. Along that notion, it would be reasonable to expect that differences in c-Myc content was reflected in total RNA and rRNA. However, this was not the case in the present study. c-Myc's independency from mTORC1 may explain why only c-Myc content differed between treatments, while UBF and rpS6 content changed equally. Moreover, the observation that total RNA and rRNA were unaffected by the significant differences in c-Myc content, does strengthen the importance and specificity of UBF content in human skeletal muscle ribosome biogenesis. -->The linear relationship found exclusively between UBF content and total RNA accumulation, and neither c-Myc nor rpS6, support the importance and specificity of UBF content in human skeletal muscle ribosome biogenesis. While this is not a novel finding, it has only recently been observed in human skeletal muscle following RT [@hammarstrom_ribosome_2022]. As such, UBF also seems to respond to mechanical loading in human muscle cells in line with responses seen in cell cultures and synergist ablation models [@mariappan_ribosomal_2011; @von_walden_mechanical_2012], in addition to the previously reported response to hormonal, nutritional, and cellular energy signals [@figueiredo_regulation_2019; @kusnadi_regulation_2015; @russell_rna-polymerase-i-directed_2005].
 
 As in the biological data, there was generally no difference in the change of strength as an index between the conditions. Generally, skeletal muscle strength decreased from baseline to post-fifth and -sixth RT sessions, with a significantly less reduction in glucose compared to placebo at post-fifth session measurement. This could suggest that the RT protocol fatigued the participants, as both training frequency and intensity were quite high. Another promising explanation might be the biphasic recovery pattern, as described by Raastad & Hallén [@raastad_recovery_2000], where the participants experienced a rapid recovery during the initial 11hrs post-exercise, followed by a levelling off or drop until 22hrs post-exercise. Herein, inflammation and phagocytic activity were proposed to be involved in the performance drop between 11-22hrs [@raastad_recovery_2000]. Indeed, this pattern seems quite similar to what was observed in the present study, with a rapid recovery at 30min and 2hrs post-sixth RT session and a drop at 23hrs. Further, strength testing during the intervention was conducted 23hrs after RT, meaning that these tests also may have been influenced by the biphasic recovery. However, this does not explain the difference between conditions at post-fifth RT session, or the great drop in strength from post 4RT to post 5RT sessions. A possible argument could be that exercising without glucose may have caused more stress compared to exercising with glucose, as glucose is the preferred energy source during strenuous exercise [@mul_exercise_2015], thus increasing performance with glucose compared to placebo. Notably, training volume showed that the total training session volume was equal on pairwise consecutive days, i.e. no difference between days 1-2, days 3-4 and so on. Hence, there were no differences in mechanical loading to induce a higher stress between conditions. Arguably, an increased energy availability via glucose ingestion during RT may induce less acute stress on the exercised skeletal muscle, therefore less fatigue, and perhaps less performance reduction, compared to placebo during RT <!-- this is possibly a stretch -->[@westerblad_mechanisms_1998; @kent-braun_central_1999] Unfortunately, we did not conduct measurements of markers of metabolic stress such ass inorganic phosphate, H+, Mg2+ and the ADP/ATP ratio [@westerblad_mechanisms_1998; @kent-braun_central_1999]. Therefore, discussing the potential effect of differences in metabolic stress between conditions would only be speculation, however probable. Lastly, these inconclusive observations may also reflect our limited sample size, despite using a within-subjects design. Initially, we met our minimum limit of 16 participants. Unfortunately, three dropped out during the intervention, leaving our statistical power slightly underpowered according to the a priori calculation. 
 
+Perspectives and Significance
+
 In conclusion, ingestion of glucose immediately before and after resistance exercise training does not acutely augment ribosome biogenesis after two weeks of heavy resistance exercise training, in moderately trained young adults. Neither does it acutely enhance muscular performance during the exercise period or after five sessions, nor recovery within 23hrs of the last session. The observations in total RNA, rRNA and rDNA transcription initiation-associated proteins support the key role of UBF in ribosome biogenesis regulation in human skeletal muscle following resistance training. If future investigations are to be made on this topic, a greater sample size coupled with a negative control group and analyses of the intramuscular glycogen storage may provide higher-resolution results.
-
-# APPENDIX
-
-IS THIS REQUIRED? IF NOT, IS IT NECESSARY?
 
 # DATA AVAILABILITY
 
-LINK TO GITHUB
+Complete data sets and scripts are downloadable here; https://github.com/Kristianlian/ribose-paper
 
-# GRANTS
+# SUPPLEMENTAL MATERIAL
 
-IS THIS NECESSARY?
-
-# DISCLOSURES
-
+Extended methods can be found here; https://github.com/Kristianlian/ribose-paper
 
 # AUTHOR CONTRIBUTIONS
+Conceived and designed research: Stian Ellefsen, Håvard Hamarsland, Daniel Hammarström.
+Performed experiments: Kristian Lian, Sara Christine Moen.
+Interpreted results of experiments: Kristian Lian, Daniel Hammarström.
+Prepared Figures: Kristian Lian, Daniel Hammarström.
+Drafted manuscripts: Kristian Lian, Daniel Hammarström.
+Edited and revised manuscript: Stian Ellefsen, Håvard Hamarsland, Daniel Hammarström.
+Approved final version of the manuscript: .
 
 # References
 
