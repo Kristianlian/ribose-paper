@@ -18,13 +18,13 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse);library(lme4);library(emmeans);library(cowplot);library(tinytex);library(nlme)
 ```
 
-RESEARCH ARTICLE
+##### RESEARCH ARTICLE
 
 RUNNING HEAD: Glucose ingestion and resistance training in young adults
 
-Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults
+#### Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults
 
-Kristian Lian^1^, Sara Christine Olsen Moen^1^, Håvard Hamarsland^1^, Daniel Hammarström^1^, Stian Ellefsen^1^
+###### Kristian Lian^1^, Sara Christine Olsen Moen^1^, Håvard Hamarsland^1^, Daniel Hammarström^1^, Stian Ellefsen^1^
 
 <div custom-style="correspondence_style">
 ^1^Section for Health and Exercise Physiology, Department of Public Health and Sport Sciences, Inladn Norway University of Applied Sciences, Lillehammer, Norway
@@ -96,7 +96,7 @@ The effect of glucose ingestion on resistance training-induced ribosome biogenes
 
 </div>
 
-**Keywords:** Skeletal muscle; hypertrophy; resistance training; glucose; ribosome
+**Keywords:** Glucose; hypertrophy; resistance training; ribosome; skeletal muscle
 
 </div>
 
@@ -511,9 +511,9 @@ apc4 <- round(astrcoef[4,5], 3)
 
 After 5 RT sessions (Figure 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength by 7% more than glucose (Figure 1D, *p* = `r pdiff.c4`). At the other time points, there were no significant differences in mean change between exercising with glucose and placebo (Figure 1D, Post 2RT: *p* = `r pdiff.c2`, Post 4RT: *p* = `r pdiff.c3`, 30min post 6RT: *p* = `r pdiff.c5`, 2h post 6RT: *p* = `r pdiff.c6`, 23h post 6RT: *p* = `r pdiff.c7`). Both RT with glucose and placebo led to significantly reduced strength post-fifth session compared to baseline, by 11 and 18% respectively (Figure 1D, Post 5RT: *p* = 0.000). Comparisons of the acute data gathered from the post-fifth session until and including 23hrs post-sixth session showed a significant mean increase in strength of 5-9% after RT with glucose and placebo 30min after the sixth RT session (Figure 1D, 30min post 6RT: *p* = `r apc2`) and two hours after the sixth RT session (Figure 1D, 2h post 6RT: *p* = `r apc3`). Twenty-three hours after the last (sixth) RT session, strength was unchanged compared to after the fifth RT session (Figure 1D, 23h post 6RT: *p* = `r apc4`).
 
-### Markers of ribosome biogenesis
+## Markers of ribosome biogenesis
 
-##### Total RNA and ribosomal RNA
+### Total RNA and ribosomal RNA
 
 ```{r total RNA model}
 ## Scripts
@@ -577,7 +577,7 @@ stat_rrna <- lapply(rrna_analysis_results$rrna_models,
 
 From baseline to post-intervention total RNA and rRNA per unit muscle weight increased on average by ~24% and ~33-43%, respectively (Figure 2). However, RT with glucose did not induce increased accumulation of total RNA (Figure 2A, mean difference `r total_rna_stats`) or rRNA  (Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`) compared to RT with placebo.
 
-##### Protein
+### Protein
 
 ```{r western modelling}
 ## Script: 
@@ -843,7 +843,7 @@ humac.tab <- humac.clean2 %>%
 
 # Joining the data frames to be used in the flextable
 
-dxa.tab %>%
+dxa.flex <- dxa.tab %>%
   full_join(humac.tab) %>%
   pivot_wider(values_from = mean,
               names_from = measure) %>%
@@ -864,14 +864,27 @@ dxa.tab %>%
                     as_paragraph("240\U00BA sec", as_sup("-1")), 
                     as_paragraph("0\U00BA sec", as_sup("-1")))) %>%
   add_header_row(values = c(" ", "Knee-extension peak torque"), colwidths = c(6, 3)) %>%
-  add_body_row(top = FALSE, value = as_paragraph("Values are mean and (SD)"), colwidths = 9) %>%
   set_caption("Table 1. Participant characteristics")
+
+
+dxa.flex <- border(dxa.flex, 
+                     i = NULL,
+                     j = NULL,
+                     border = NULL,
+                     border.top = fp_border_default(color = "grey"),
+                     border.bottom = fp_border_default(color = "grey"),
+                     border.left = fp_border_default(color = "grey"),
+                     border.right = fp_border_default(color = "grey"),
+                     part = "all") 
+
+dxa.flex
   
   
 
 
 
 ```
+Values are means ± SD. 60º sec-1 = 60 degrees per second movement speed (isokinetic), 240º sec-1 = 240 degrees per second movement speed (isokinetic), 0º sec-1 = 0 degrees per second movement speed (isometric).
 
 ```{r primer table, echo = FALSE}
 
@@ -887,25 +900,33 @@ tab.dat <- primer.dat %>%
   select(Gene, fr, CT.mean, E)
 
 
-
 ## Flextable
-tab.dat %>%
+primer.tab <- tab.dat %>%
   flextable() %>%
   compose(i = 1, j = c(1, 2, 3, 4), part = "header",
           value = c(as_paragraph("Gene"),
                     as_paragraph("Sequence (forward - reverse)"),
-                    as_paragraph("CT mean (SD)"),
+                    as_paragraph("Ct mean (SD)"),
                     as_paragraph("E"))) %>%
-  #add_header_row(values = c(" ", " ", " ", "Primer sequences"), 
-               #  colwidths = c(1, 1, 1, 1)) %>%
   set_caption("Table 2. Primer Sequences") %>%
-  width(j = 1, 1.5, unit = "in") %>%
-  width(j = 2, 3, unit = "in") %>%
-  width(j = 3, 1.5, unit = "in") %>%
-  width(j = 4, 0.5, unit = "in")
-  #set_table_properties(layout = "autofit")
+  set_table_properties(layout = "autofit")
+  
+
+
+primer.tab <- border(primer.tab, 
+                     i = NULL,
+                     j = NULL,
+                     border = NULL,
+                     border.top = fp_border_default(color = "grey"),
+                     border.bottom = fp_border_default(color = "grey"),
+                     border.left = fp_border_default(color = "grey"),
+                     border.right = fp_border_default(color = "grey"),
+                     part = "all") 
+
+primer.tab
+
 
 ```
-
+Values of CT are means ± SD. rRNA = ribosomal RNA, E = primer efficiency. Average cycle thresholds (Ct) and priming efficiencies were calculated from all qPCR reactions. 
 
 
