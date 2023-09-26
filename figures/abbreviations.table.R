@@ -1,4 +1,4 @@
-### Primer sequence table
+### Abbreviations table
 
 ## Packages
 library(readxl); library(tidyverse); library(flextable)
@@ -12,11 +12,8 @@ tab.dat <- abbreviations.dat
 ## Flextable
 abb.tab <- tab.dat %>%
   flextable() %>%
-  #print()
-  #compose(i = 1, j = c(1, 2), part = "header",
-   #       value = c(as_paragraph(""),
-    #                as_paragraph(""))) %>%
-  #set_caption("") %>%
+  set_caption(caption = "Abbreviations",
+              align_with_table = FALSE) %>%
   set_table_properties(layout = "autofit")
 
 abb.tab <- delete_part(x = abb.tab, part = "header")
