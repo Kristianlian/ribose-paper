@@ -95,13 +95,49 @@ corrp <- readRDS("./data/data-gen/protein/corrp.RDS")
 
 *Keywords:* Glucose; hypertrophy; resistance training; ribosome; skeletal muscle
 
+```{r abbreviation table}
+### Abbreviations table
+
+## Packages
+library(readxl); library(tidyverse); library(flextable)
+
+## Data
+abbreviations.dat <- read_excel("./data/abbreviations.xlsx")
+
+tab.dat <- abbreviations.dat
+
+
+## Flextable
+abb.tab <- tab.dat %>%
+  flextable() %>%
+  set_caption(caption = "Abbreviations",
+              align_with_table = FALSE) %>%
+  set_table_properties(layout = "autofit")
+
+abb.tab <- delete_part(x = abb.tab, part = "header")
+  
+
+
+
+abb.tab <- border(abb.tab, 
+                     i = NULL,
+                     j = NULL,
+                     border = NULL,
+                     border.top = fp_border_default(color = "black"),
+                     border.bottom = fp_border_default(color = "black"),
+                     border.left = fp_border_default(color = "black"),
+                     border.right = fp_border_default(color = "black"),
+                     part = "all") 
+
+abb.tab
+```
+
+
 </div>
 
 # Statements and Declarations
-????
+This study was financed through research funds from the Inland Norway University of Applied Sciences. There were no economical vested interest and everyone participating as researchers and associates, received only a regular salary during this study.
 
-# Abbreviations
-Make a table for this
 
 \pagebreak
 # INTRODUCTION
@@ -729,12 +765,12 @@ Complete data sets and scripts are downloadable here; https://github.com/Kristia
 Extended methods can be found here; https://github.com/Kristianlian/ribose-paper
 
 # AUTHOR CONTRIBUTIONS
-Conceived and designed research: Stian Ellefsen, Håvard Hamarsland, Daniel Hammarström.
-Performed experiments: Kristian Lian, Daniel Hammarström, Håvard Hamarsland, Håvard Nygaard, Sara Christine Moen.
-Interpreted results of experiments: Kristian Lian, Daniel Hammarström.
-Prepared Figures: Kristian Lian, Daniel Hammarström.
-Drafted manuscripts: Kristian Lian, Daniel Hammarström.
-Edited and revised manuscript: Stian Ellefsen, Håvard Hamarsland, Daniel Hammarström.
+Conceived and designed research: SE, HH, DH.
+Performed experiments: KL, DH, HH, HN, SCM.
+Interpreted results of experiments: KL, DH.
+Prepared Figures: KL, DH.
+Drafted manuscripts: KL, DH.
+Edited and revised manuscript: SE, HH, DH.
 Approved final version of the manuscript: .
 
 # References
@@ -863,17 +899,18 @@ dxa.flex <- dxa.tab %>%
                     as_paragraph("240\U00BA sec", as_sup("-1")), 
                     as_paragraph("0\U00BA sec", as_sup("-1")))) %>%
   add_header_row(values = c(" ", "Knee-extension peak torque"), colwidths = c(6, 3)) %>%
-  set_caption("Table 1. Participant characteristics")
+  set_caption(caption = "Table 1. Participant characteristics",
+              align_with_table = FALSE)
 
 
 dxa.flex <- border(dxa.flex, 
                      i = NULL,
                      j = NULL,
                      border = NULL,
-                     border.top = fp_border_default(color = "grey"),
-                     border.bottom = fp_border_default(color = "grey"),
-                     border.left = fp_border_default(color = "grey"),
-                     border.right = fp_border_default(color = "grey"),
+                     border.top = fp_border_default(color = "black"),
+                     border.bottom = fp_border_default(color = "black"),
+                     border.left = fp_border_default(color = "black"),
+                     border.right = fp_border_default(color = "black"),
                      part = "all") 
 
 dxa.flex
@@ -907,7 +944,8 @@ primer.tab <- tab.dat %>%
                     as_paragraph("Sequence (forward - reverse)"),
                     as_paragraph("Ct mean (SD)"),
                     as_paragraph("E"))) %>%
-  set_caption("Table 2. Primer Sequences") %>%
+  set_caption(caption = "Table 2. Primer Sequences",
+              align_with_table = FALSE) %>%
   set_table_properties(layout = "autofit")
   
 
@@ -916,10 +954,10 @@ primer.tab <- border(primer.tab,
                      i = NULL,
                      j = NULL,
                      border = NULL,
-                     border.top = fp_border_default(color = "grey"),
-                     border.bottom = fp_border_default(color = "grey"),
-                     border.left = fp_border_default(color = "grey"),
-                     border.right = fp_border_default(color = "grey"),
+                     border.top = fp_border_default(color = "black"),
+                     border.bottom = fp_border_default(color = "black"),
+                     border.left = fp_border_default(color = "black"),
+                     border.right = fp_border_default(color = "black"),
                      part = "all") 
 
 primer.tab
