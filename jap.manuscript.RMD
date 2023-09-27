@@ -509,7 +509,7 @@ apc4 <- round(astrcoef[4,5], 3)
 
 ```
 
-After 5 RT sessions (Figure 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength by 7% more than glucose (Figure 1D, *p* = `r pdiff.c4`). At the other time points, there were no significant differences in mean change between exercising with glucose and placebo (Figure 1D, Post 2RT: *p* = `r pdiff.c2`, Post 4RT: *p* = `r pdiff.c3`, 30min post 6RT: *p* = `r pdiff.c5`, 2h post 6RT: *p* = `r pdiff.c6`, 23h post 6RT: *p* = `r pdiff.c7`). Both RT with glucose and placebo led to significantly reduced strength post-fifth session compared to baseline, by 11 and 18% respectively (Figure 1D, Post 5RT: *p* = 0.000). Comparisons of the acute data gathered from the post-fifth session until and including 23hrs post-sixth session showed a significant mean increase in strength of 5-9% after RT with glucose and placebo 30min after the sixth RT session (Figure 1D, 30min post 6RT: *p* = `r apc2`) and two hours after the sixth RT session (Figure 1D, 2h post 6RT: *p* = `r apc3`). Twenty-three hours after the last (sixth) RT session, strength was unchanged compared to after the fifth RT session (Figure 1D, 23h post 6RT: *p* = `r apc4`).
+After 5 RT sessions (Figure 1D, Post 5RT), there was a significant difference in strength between glucose and placebo,  where placebo decreased strength by 7% more than glucose (Figure 1D, *p* = `r pdiff.c4`). At the other time points, there were no significant differences in mean change between exercising with glucose and placebo (Figure 1D, Post 2RT: *p* = `r pdiff.c2`, Post 4RT: *p* = `r pdiff.c3`, 30min post 6RT: *p* = `r pdiff.c5`, 2h post 6RT: *p* = `r pdiff.c6`, 23h post 6RT: *p* = `r pdiff.c7`). Both RT with glucose and placebo led to significantly reduced strength post-fifth session compared to baseline, by 11 and 18% respectively (Figure 1D, Post 5RT: *p* = 0.000). Comparisons of the acute data gathered from the post-fifth session until and including 23hrs post-sixth session showed a significant mean increase in strength of 5-9% after RT with glucose and placebo, 30min after the sixth RT session (Figure 1D, 30min post 6RT: *p* = `r apc2`) and two hours after the sixth RT session (Figure 1D, 2h post 6RT: *p* = `r apc3`). Twenty-three hours after the last (sixth) RT session, strength was unchanged compared to after the fifth RT session (Figure 1D, 23h post 6RT: *p* = `r apc4`).
 
 ## Markers of ribosome biogenesis
 
@@ -575,7 +575,7 @@ stat_rrna <- lapply(rrna_analysis_results$rrna_models,
 
 ```
 
-From baseline to post-intervention total RNA and rRNA per unit muscle weight increased on average by ~20-27% and ~25-57%, respectively (Figure 2). However, RT with glucose did not induce increased accumulation of total RNA (Figure 2A, mean difference `r total_rna_stats`) or rRNA  (Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`) compared to RT with placebo.
+From baseline to after the intervention, total RNA and rRNA per unit muscle weight increased on average by ~20-27% and ~25-57%, respectively (Figure 2). However, RT with glucose did not induce increased accumulation of total RNA (Figure 2A, mean difference `r total_rna_stats`) or rRNA  (Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`) compared to RT with placebo.
 
 ### Protein
 
@@ -704,7 +704,7 @@ corr_incr <- round(100 * (exp(coef(summary(corr.lmod))[2,1])-1), 0)
 
 ```
 
-Overall, RT led to robust increases from pre- to post-intervention in all measured proteins (Figure 3A). RT with glucose resulted in estimated levels of c-Myc, UBF and RPS6 being `r stat_west$cmyc`, `r stat_west$ubf` and `r stat_west$rps6`% lower compared to placebo, respectively, without showing statistical significance (*p* = `r min(p_west)`-`r max(p_west)`; Figure 3A). There was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a $\sim$ `r corr_incr`% increase in total RNA (*p* = `r corrp`; Figure 3C).
+Overall, RT led to robust increases in all measured proteins from before to after the intervention (Figure 3A). RT with glucose resulted in estimated levels of c-Myc, UBF and RPS6 being `r stat_west$cmyc`, `r stat_west$ubf` and `r stat_west$rps6`% lower compared to placebo, respectively, without showing a statistically significant difference between conditions (*p* = `r min(p_west)`-`r max(p_west)`; Figure 3A). There was a linear relationship between UBF and total RNA, where an increase of 1 SD unit of UBF equated to a $\sim$ `r corr_incr`% increase in total RNA (*p* = `r corrp`; Figure 3C).
 
 # DISCUSSION
 
