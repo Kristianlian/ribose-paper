@@ -6,7 +6,7 @@
 # Packages
 library(emmeans); library(tidyverse); library(cowplot); library(magick); 
 
-library(nlme); library(ggtext)
+library(nlme); library(ggtext); library(lme4)
 #
 # Data
 

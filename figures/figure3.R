@@ -5,7 +5,7 @@
 #
 # Packages
 library(emmeans); library(tidyverse); library(cowplot); library(magick); 
- library(nlme); library(ggtext)
+library(nlme); library(ggtext)
 #
 # Data
 
@@ -29,10 +29,10 @@ rps6.x2.img <- cowplot::ggdraw() + cowplot::draw_image("./figures/archive/rps6_x
 # Colours
 
 colors <- c("#d7191c",
-            "#fdae61",
-            "#abd9e9",
-            "#2c7bb6")
-            
+                     "#fdae61",
+                     "#abd9e9",
+                     "#2c7bb6")
+                     
 # Textsizes
 
 labsize <- 8
@@ -54,8 +54,8 @@ plot_theme <- theme(panel.grid.major = element_blank(),
 ## cmyc fig
 
 cmyc.plot <- cmyc %>%
- # mutate(time = "post") %>%
- # add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
+  # mutate(time = "post") %>%
+  # add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
   annotate("text", x = "Post", y = 1.6, label = "*", size = 3) +
@@ -66,13 +66,13 @@ cmyc.plot <- cmyc %>%
   geom_point(shape = 21, size = 2, position = position_dodge(width = 0.2)) +
   scale_fill_manual(values = colors[c(4,1)]) +
   #scale_y_continuous(breaks = c(1,2,3,4),
-   #                labels = c("1.0", "2.0", "3.0", "4.0"))+
+  #                labels = c("1.0", "2.0", "3.0", "4.0"))+
   labs(x = "Time", y = "c-Myc AU", fill = "Supplement") +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = htextsize),
         axis.text = element_text(size = textsize)) +
   plot_theme
-        
+
 
 # UBF plot
 
@@ -91,8 +91,8 @@ ubf.plot <- ubf %>%
   scale_fill_manual(values = colors[c(4,1)]) +
   labs(x = "Time", y = "UBF AU", fill = "") + 
   theme(axis.title.x = element_blank(),
-    axis.title = element_text(size = htextsize),
-      axis.text = element_text(size = textsize)) +
+        axis.title = element_text(size = htextsize),
+        axis.text = element_text(size = textsize)) +
   plot_theme
 
 
@@ -104,7 +104,7 @@ rps6.plot <- rps6 %>%
   #add_row(supplement = c("PLACEBO", "GLUCOSE"), time = "pre", emmean = 0, lower.CL = 0, upper.CL = 0) %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
- # annotate("text", x = "Post", y = 1.87, label = "*", size = 3) +
+  # annotate("text", x = "Post", y = 1.87, label = "*", size = 3) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
                 width = 0.1,
                 position = position_dodge(width = 0.2)) +
@@ -204,13 +204,13 @@ rps6.fig <- plot_grid(rps6.plot + theme(legend.position = "none"),
                       NULL,
                       NULL,
                       NULL,
-          rps6.x2.img,
-          ncol = 5,
-          rel_widths = c(.75,
-                         .15, 
-                         .1, 
-                         .0, 
-                         1.5)) +
+                      rps6.x2.img,
+                      ncol = 5,
+                      rel_widths = c(.75,
+                                     .15, 
+                                     .1, 
+                                     .0, 
+                                     1.5)) +
   draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
                             "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
                             "kDa 37", "25", "37", "25", 
@@ -253,16 +253,16 @@ cmyc.fig <- plot_grid(cmyc.plot + theme(legend.position = "none"),
 
 
 ubf.fig <- plot_grid(ubf.plot + theme(legend.position = "none"),
-                      NULL,
-                      NULL,
-                      NULL,
-                      ubf.x2.img,
-                      ncol = 5,
-                      rel_widths = c(.75,
-                                     .15, 
-                                     .1, 
-                                     .0, 
-                                     1.5))+
+                     NULL,
+                     NULL,
+                     NULL,
+                     ubf.x2.img,
+                     ncol = 5,
+                     rel_widths = c(.75,
+                                    .15, 
+                                    .1, 
+                                    .0, 
+                                    1.5))+
   draw_plot_label(label = c("PLA \npost\n", "GLU \npre\n", "GLU \npost\n", "PLA \npre\n",
                             "PLA \npre\n", "GLU \npost\n", "GLU \npre\n", "PLA \npost\n",
                             "kDa 100", "75", "100", "75", "Duplicate 1", "Duplicate 2"),
@@ -278,9 +278,9 @@ ubf.fig <- plot_grid(ubf.plot + theme(legend.position = "none"),
 
 
 prot.fig <- plot_grid(ubf.fig,
-          cmyc.fig,
-          rps6.fig,
-          nrow = 3) 
+                      cmyc.fig,
+                      rps6.fig,
+                      nrow = 3) 
 
 
 # Total Protein stain images
@@ -288,18 +288,18 @@ prot.fig <- plot_grid(ubf.fig,
 tot.fig <- plot_grid(NULL,
                      g3,
                      NULL,
-          g6,
-          NULL,
-          ncol = 5, 
-          rel_widths = c(0.4,1,0.1,1,0.65)) +
+                     g6,
+                     NULL,
+                     ncol = 5, 
+                     rel_widths = c(0.4,1,0.1,1,0.65)) +
   draw_plot_label(label = c("Duplicate 1", "kDa 250", "150", "100", "75", "50", "37", "25", "20", "15", 
                             "Duplicate 2"), #"250", "150", "100", "75", "50", "37", "25", "20", "15"),
-                                    x = c(.29, .11, .143, .143, .15, .15, .15, .15, .15, .15, 
-                                          .64), #.683, .683, .683, .69, .69, .69, .69, .69, .69),
-                                    y = c(.98,.93, .885, .833, .775, .653, .53, .332, .25, .072,
-                                          .98),#.93, .885, .833, .775, .653, .535, .332, .25, .072),
-                                    hjust = .5, vjust = .5, size = 6)
-                  
+                  x = c(.29, .11, .143, .143, .15, .15, .15, .15, .15, .15, 
+                        .64), #.683, .683, .683, .69, .69, .69, .69, .69, .69),
+                  y = c(.98,.93, .885, .833, .775, .653, .53, .332, .25, .072,
+                        .98),#.93, .885, .833, .775, .653, .535, .332, .25, .072),
+                  hjust = .5, vjust = .5, size = 6)
+
 
 ## Gathered fig
 
@@ -322,23 +322,23 @@ tot.fig <- plot_grid(NULL,
 #                  hjust = .5, vjust = .5, size = 5) 
 
 fig3 <- plot_grid(plot_grid(NULL,
-                    prot.fig,
-                    ncol = 2,
-                    rel_widths = c(.01, .999)),
-          NULL,
-          plot_grid(tot.fig,
-                    NULL,
-                    corr.fig,
-                    NULL,
-                    ncol = 4,
-                    rel_widths = c(1.7,0,2, 0.1)),
-          nrow = 3,
-          rel_heights = c(1.1, .05, .9))  + 
+                            prot.fig,
+                            ncol = 2,
+                            rel_widths = c(.01, .999)),
+                  NULL,
+                  plot_grid(tot.fig,
+                            NULL,
+                            corr.fig,
+                            NULL,
+                            ncol = 4,
+                            rel_widths = c(1.7,0,2, 0.1)),
+                  nrow = 3,
+                  rel_heights = c(1.1, .05, .9))  + 
   draw_plot_label(label = c("A)", "B)", "C)"),
                   x = c(.015, .015, .475),
                   y = c(.99, .43, .43),
                   hjust = .5, vjust = .5, size = 5) 
-          
+
 
 ggsave(
   file = "fig3.pdf",
@@ -350,4 +350,3 @@ ggsave(
   units = "cm",
   dpi = 600
 )
-
