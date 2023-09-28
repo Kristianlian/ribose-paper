@@ -2,7 +2,7 @@
 title: ""
 author: ""
 bibliography: resources/ribose-paper.bib
-csl: resources/jap.csl
+csl: resources/ejap.csl
 output:
   word_document:
     reference_docx: resources/reference-template-02.docx
@@ -138,10 +138,12 @@ abb.tab
 # Statements and Declarations
 This study was financed through research funds from the Inland Norway University of Applied Sciences. There were no economical vested interest and everyone participating as researchers and associates, received only a regular salary during this study.
 
-## Acknowledgements
-Great thanks are in order to Henriette Spilhaug Bollandsås, Nora Lerdalen Bonsak and Thea Bøhn Nyløkken for their impressive commitment and dedication in the training intervention
-the Inland Norway University of Applied Sciences, for funding this research. Gratitude is also due to Daniel Hammarström, Håvard Hamarsland and Prof. Stian Ellefsen for the guidance and <!-- needs more work -->
+## AUTHOR CONTRIBUTIONS
 
+Data was collected at the sports science lab at the Inland Norway University of Applied Sciences, with all analyses except for serum blood samples were performed at the university. Serum blood samples were performed at Innlandet Hospital Trust. S.E., H.H. and D.H. conceived and designed the study; K.L., S.C.M., D.H. and H.H. performed experiements; K.L. and D.H. interpreted the results; K.L. and D.H. prepared figures; K.L. drafted the manuscript; D.H., H.H. and S.E. edited and revised the manuscript; D.H., H.H. and S.E. approved the final version of the manuscript.
+
+## Acknowledgements
+Gratitude are in order to Henriette Spilhaug Bollandsås, Nora Lerdalen Bonsak and Thea Bøhn Nyløkken for their dedication and hard work in the training intervention. The authors would also like to express their gratitude to all the participants, staying commited to this demanding protocol in an impressive way. We also thank Håvard Nygaard for lending your expertise and technical skills to improve this project. 
 
 \pagebreak
 # INTRODUCTION
@@ -767,15 +769,6 @@ Complete data sets and scripts are downloadable here; https://github.com/Kristia
 ## SUPPLEMENTAL MATERIAL
 
 Extended methods can be found here; https://github.com/Kristianlian/ribose-paper
-
-## AUTHOR CONTRIBUTIONS
-Conceived and designed research: SE, HH, DH.
-Performed experiments: KL, DH, HH, HN, SCM.
-Interpreted results of experiments: KL, DH.
-Prepared Figures: KL, DH.
-Drafted manuscripts: KL, DH.
-Edited and revised manuscript: SE, HH, DH.
-Approved final version of the manuscript: .
 
 ## References
 
