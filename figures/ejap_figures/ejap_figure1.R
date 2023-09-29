@@ -6,7 +6,7 @@
 #
 # Packages 
 library(tidyverse); library(emmeans); library(cowplot); library(grid); library(gridExtra); library(readxl); 
-library(elementalist); library(ggtext)
+library(ggtext)
 #
 ## Data
 
@@ -28,14 +28,14 @@ vol.lemm <- readRDS("./data/data-gen/training/vol.lemm.RDS")
 
 
 ### Plots
-pos <- position_dodge(width = .2)
+pos <- position_dodge(width = 10)
 
 # Designing the plot theme
 
 plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
                     panel.background = element_rect(fill = "white", colour = NA),
-                    axis.line = element_line(colour = "black"))
+                    axis.line = element_line(colour = "black", linewidth = 0.4))
 
 # Colours
 # Colours
@@ -56,9 +56,10 @@ cpep.fig <- cpep.change %>%
   annotate("text", x = c(120, 150), y = c(975, 950), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
-                position = pos) +
-  geom_line(position = pos, lty = 2) +
-  geom_point(shape = 21, position = pos, size = 2) +
+                width = 0,
+                position = position_dodge(width = 10)) +
+  geom_line(position = position_dodge(width = 10), lty = 2) +
+  geom_point(shape = 21, position = position_dodge(width = 10), size = 2) +
   scale_fill_manual(values = colors[c(1,2)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120 min", "change.90" = "-30 min", "change.120" = "0 min", 
@@ -87,6 +88,7 @@ glu.fig <- glu.change %>%
   annotate("text", x = c(270), y = c(0.23), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
+                width = 0,
                 position = pos) +
   geom_line(position = pos, lty = 2) +
   geom_point(shape = 21, position = pos, size = 2) +
@@ -134,14 +136,19 @@ str.fig2 <- str.emm2 %>%
   data.frame() %>%
   ggplot(aes(timeh, emmean, fill = supplement)) +
   annotate("text", x = 20, y = -0.04, label = "*") +
+  
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
-                position = pos,
+                position = position_dodge(width = 0.5),
                 width = 0.2) +
-  geom_line(lty = 2) +
-  geom_point(shape = 21, size = 2) +
+  
+  geom_line(lty = 2, position = position_dodge(width = 0.5)) +
+  
+  geom_point(shape = 21, size = 2, position = position_dodge(width = 0.5)) +
+  
+  
   scale_fill_manual(values = colors[c(1,2)],
                     labels = c("Glucose", "Placebo")) +
-  scale_x_continuous(limits = c(0,25), breaks = c(0, 8, 16, 20, 21, 22, 23.5),
+  scale_x_continuous(limits = c(-1,25), breaks = c(0, 8, 16, 20, 21, 22, 23.5),
                      expand = expansion(0),
                      labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "21" = "Post 5RT",
                                 "22.7" = "30min post 6RT", "23.4" = "2h post 6RT",
@@ -249,8 +256,8 @@ d.fig <- d.dat %>%
   annotate(geom = "label", x = 5, y = 2.5, label = c("Randomization"), fill = "white", size = textsize) +
   
   # Pointers
-  annotate("segment", x = 6.3, xend = 7.3, y = 2.5, yend = 4.3, size = line_size) +
-  annotate("segment", x = 6.3, xend = 8.3, y = 2.5, yend = 0.7, size = line_size) +
+  annotate("segment", x = 6.3, xend = 7.3, y = 2.5, yend = 4.3, linewidth = line_size) +
+  annotate("segment", x = 6.3, xend = 8.3, y = 2.5, yend = 0.7, linewidth = line_size) +
   
   ## Randomized unilateral RT
   # Glucose
@@ -290,9 +297,8 @@ d.fig <- d.dat %>%
         axis.text.y = element_blank(),
         axis.title.x = element_text(size = 7),
         axis.text.x = element_text(size = 6),
-        plot.background = element_rect_round(color = "white",
-                                             size = 0.50,
-                                             radius = unit(0.50, "cm"),
+        plot.background = element_rect(color = "white",
+                                             linewidth = 0.50,
                                              fill = "white"))
 
 
@@ -309,7 +315,7 @@ fig1 <- plot_grid(d.fig,
                   plot_grid(str.fig2),
                   ncol = 1,
                   rel_heights = c(1.5, 0.3, 1.5, 1.5)) +
-  draw_plot_label(label = c("A)", "B)", "C)", "D)"),
+  draw_plot_label(label = c("a", "b", "c", "d"),
                   x = c(0.02, 0.02, 0.53, 0.02),
                   y = c(0.98, 0.63, 0.63, 0.3),
                   hjust = .5, vjust = .5, size = 7) 

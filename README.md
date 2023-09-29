@@ -1,9 +1,7 @@
 
-true
-
 <!-- README.md is generated from README.Rmd. -->
 
-# Repository organization and extended methods: *Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults*
+# Extended methods: *Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults*
 
 ## Authors
 
@@ -627,17 +625,17 @@ correlation.model
 
     ## Linear mixed-effects model fit by REML
     ##   Data: joined.dat 
-    ##   Log-restricted-likelihood: -298.0688
+    ##   Log-restricted-likelihood: -301.2661
     ##   Fixed: mean.rna ~ mean.sign + time 
     ## (Intercept)   mean.sign    timepost 
-    ##   817.54781    41.98931   180.21057 
+    ##    792.0698     50.9248    159.9062 
     ## 
     ## Random effects:
     ##  Formula: ~1 | subject
     ##         (Intercept) Residual
-    ## StdDev:    49.39411 114.5794
+    ## StdDev:    70.34196 100.8819
     ## 
-    ## Number of Observations: 50
+    ## Number of Observations: 51
     ## Number of Groups: 13
 
 Strength, plasma glucose & c-peptide, nutrition and volume

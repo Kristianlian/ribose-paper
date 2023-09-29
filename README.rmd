@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. -->
 
-# Repository organization and extended methods: *Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults*
+# Extended methods: *Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults*
 
 
 
