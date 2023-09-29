@@ -7,12 +7,12 @@
 
 Kristian Lian <a href="https://orcid.org/0000-0002-5169-5960">
 <img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>,
-Sara Christine Moen, Håvard Hamarsland
-<a href="https://orcid.org/0000-0002-7343-2774">
-<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>,
 Daniel Hammarström <a href="https://orcid.org/0000-0001-8360-2100">
-<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>
-Stian Ellefsen <a href="https://orcid.org/0000-0003-0467-2018">
+<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>,
+Håvard Hamarsland <a href="https://orcid.org/0000-0002-7343-2774">
+<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>,
+Sara Christine Moen, Stian Ellefsen
+<a href="https://orcid.org/0000-0003-0467-2018">
 <img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16" height="16" /></a>,
 
 Section for Health and Exercise Physiology, Department of Public Health
@@ -84,7 +84,7 @@ were then randomly labelled with participant number and a number between
 
 For extraction of RNA and protein per sample:
 
-- 1.5 ml Eppendorf tube with 0.5 mm RNase-free Zirconium beads (~50 ul)
+- 1.5 ml Eppendorf tube with 0.5 mm RNase-free Zirconium beads (\~50 ul)
   Keep out DNA RNAse contaminations (Eppendorf safe-lock for use in
   bullet blender.
 - 1.5 ml tube for RNA precipitation
