@@ -1,4 +1,4 @@
-### Ribose figure 1 ######
+### Ribose figure 1 in ejap format######
 #
 # Study design, strength (1RM, Humac), c-peptide and blood glucose
 #
@@ -6,7 +6,7 @@
 #
 # Packages 
 library(tidyverse); library(emmeans); library(cowplot); library(grid); library(gridExtra); library(readxl); 
-library(elementalist); library(ggtext)
+library(ggtext)
 #
 ## Data
 
@@ -28,23 +28,20 @@ vol.lemm <- readRDS("./data/data-gen/training/vol.lemm.RDS")
 
 
 ### Plots
-pos <- position_dodge(width = .2)
+pos <- position_dodge(width = 10)
 
 # Designing the plot theme
 
 plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
-                    panel.background = element_rect(fill = "lightblue", colour = NA),
-                    axis.line = element_line(colour = "black"))
+                    panel.background = element_rect(fill = "white", colour = NA),
+                    axis.line = element_line(colour = "black", linewidth = 0.4))
 
 # Colours
 # Colours
 
-colors <- c("#d7191c",
-            "#fdae61",
-            "#abd9e9",
-            "#2c7bb6")
-
+colors <- c("black","white")
+                     
 
 
 ## C-peptide
@@ -59,10 +56,11 @@ cpep.fig <- cpep.change %>%
   annotate("text", x = c(120, 150), y = c(975, 950), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
-                position = pos) +
-  geom_line(position = pos, lty = 2) +
-  geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = colors[c(1,4)]) +
+                width = 0,
+                position = position_dodge(width = 10)) +
+  geom_line(position = position_dodge(width = 10), lty = 2) +
+  geom_point(shape = 21, position = position_dodge(width = 10), size = 2) +
+  scale_fill_manual(values = colors[c(1,2)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120 min", "change.90" = "-30 min", "change.120" = "0 min", 
                                                        "change.150" = "30 min", "change.270" = "120 min")) +
@@ -90,10 +88,11 @@ glu.fig <- glu.change %>%
   annotate("text", x = c(270), y = c(0.23), label = "*") +
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
                 size = 0.5,
+                width = 0,
                 position = pos) +
   geom_line(position = pos, lty = 2) +
   geom_point(shape = 21, position = pos, size = 2) +
-  scale_fill_manual(values = colors[c(1,4)]) +
+  scale_fill_manual(values = colors[c(1,2)]) +
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 45, 90, 120, 135, 150, 270),
                      expand = expansion(0), labels = c("0" = "-120 min", "45" = "-90 min", "90" = "-30 min", "120" = "0 min", "135" = "15 min",
                                                        "150" = "30 min", "270" = "120 min")) +
@@ -129,22 +128,27 @@ str.emm2 <- str.emm %>%
   mutate(#timeh = factor(timeh, levels = c("0", "72", "192", "264", "266", "268", "291")),
     timeh = as.numeric(timeh)) %>%
   mutate(status = if_else(time %in% c("0", "change.2", "change.3", "change.4"),
-                         "rest",
-                         if_else(time %in% c("change.5", "change.6", "change.7"),
-                                              "acute", time))) 
+                          "rest",
+                          if_else(time %in% c("change.5", "change.6", "change.7"),
+                                  "acute", time))) 
 
 str.fig2 <- str.emm2 %>%
   data.frame() %>%
   ggplot(aes(timeh, emmean, fill = supplement)) +
   annotate("text", x = 20, y = -0.04, label = "*") +
+  
   geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
-                position = pos,
+                position = position_dodge(width = 0.5),
                 width = 0.2) +
-  geom_line(lty = 2) +
-  geom_point(shape = 21, size = 2) +
-  scale_fill_manual(values = colors[c(1,4)],
+  
+  geom_line(lty = 2, position = position_dodge(width = 0.5)) +
+  
+  geom_point(shape = 21, size = 2, position = position_dodge(width = 0.5)) +
+  
+  
+  scale_fill_manual(values = colors[c(1,2)],
                     labels = c("Glucose", "Placebo")) +
-  scale_x_continuous(limits = c(0,25), breaks = c(0, 8, 16, 20, 21, 22, 23.5),
+  scale_x_continuous(limits = c(-1,25), breaks = c(0, 8, 16, 20, 21, 22, 23.5),
                      expand = expansion(0),
                      labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "21" = "Post 5RT",
                                 "22.7" = "30min post 6RT", "23.4" = "2h post 6RT",
@@ -209,7 +213,7 @@ d.fig <- d.dat %>%
                                 "18" = "11", "19" = "12", "20" = "13")) +
   
   # Time periods (familiarisation/internvetion)
-  annotate("rect", xmin = -3, xmax = 21, ymin = 0, ymax = 7, alpha = 2, color = "lightblue", fill = "lightblue") +
+  annotate("rect", xmin = -3, xmax = 21, ymin = 0, ymax = 7, alpha = 2, color = "white", fill = "white") +
   annotate("text", x = 2, y = 5.6, label = "Familiarization (7 days)", size = htextsize) +
   annotate("text", x = 11, y = 5.6, label = "Unilateral RT + Dietary intervention (12 days)", size = htextsize) +
   
@@ -218,9 +222,9 @@ d.fig <- d.dat %>%
   annotate("text", x = -1.7, y = 4.5, label = "Muscle biopsies", vjust = 0, size = textsize) +
   annotate("text", x = -0.2, y = 4.45, label = rep(biopsy_glyph, 1), vjust = 0, size = textsize) +
   annotate("text", x = c(8, 18), y = rep(3.6),
-           label = rep(biopsy_glyph, 2), color = "red", vjust = 0, size = textsize) +
+           label = rep(biopsy_glyph, 2), color = "black", vjust = 0, size = textsize) +
   annotate("text", x = c(9, 19), y = rep(1.6),
-           label = rep(biopsy_glyph, 2), color = "royalblue", vjust = 0, size = textsize) +
+           label = rep(biopsy_glyph, 2), color = "black", vjust = 0, size = textsize) +
   
   # Strength
   annotate("text", x = -2, y = 4, label = "Strength test", vjust = 0, size = textsize) +
@@ -228,9 +232,9 @@ d.fig <- d.dat %>%
   annotate("text", x = c(1, 3, 7), y = rep(2.5),
            label = rep(strength_glyph, 3), vjust = 0, size = textsize) +
   annotate("text", x = c(11, 15, 18, 18.2, 18.5, 19), y = rep(4),
-           label = rep(strength_glyph, 6), color = "red", vjust = 0, size = textsize) +
+           label = rep(strength_glyph, 6), color = "black", vjust = 0, size = textsize) +
   annotate("text", x = c(12, 16, 19, 19.2, 19.5, 20), y = rep(1.2),
-           label = rep(strength_glyph, 6), color = "royalblue", vjust = 0, size = textsize) +
+           label = rep(strength_glyph, 6), color = "black", vjust = 0, size = textsize) +
   
   
   # Blood
@@ -239,50 +243,50 @@ d.fig <- d.dat %>%
   annotate("text", x = 8, y = rep(2.5),
            label = rep(blood_glyph, 3), vjust = 0, size = textsize) +
   annotate("text", x = 18.2, y = rep(3.6),
-           label = rep(blood_glyph, 1), color = "red", vjust = 0, size = textsize) +
+           label = rep(blood_glyph, 1), color = "black", vjust = 0, size = textsize) +
   annotate("text", x = 19.2, y = rep(1.6),
-           label = rep(blood_glyph, 1), color = "royalblue", vjust = 0, size = textsize) +
+           label = rep(blood_glyph, 1), color = "black", vjust = 0, size = textsize) +
   
   ## Randomization
   
   # Inclusion
-  annotate(geom = "label", x = -1, y = 2.5, label = c("Inclusion (n=16)"), fill = "lightblue", size = textsize) +
+  annotate(geom = "label", x = -1, y = 2.5, label = c("Inclusion (n=16)"), fill = "white", size = textsize) +
   
   # Randomization
-  annotate(geom = "label", x = 5, y = 2.5, label = c("Randomization"), fill = "lightblue", size = textsize) +
+  annotate(geom = "label", x = 5, y = 2.5, label = c("Randomization"), fill = "white", size = textsize) +
   
   # Pointers
-  annotate("segment", x = 6.3, xend = 7.3, y = 2.5, yend = 4.3, size = line_size) +
-  annotate("segment", x = 6.3, xend = 8.3, y = 2.5, yend = 0.7, size = line_size) +
+  annotate("segment", x = 6.3, xend = 7.3, y = 2.5, yend = 4.3, linewidth = line_size) +
+  annotate("segment", x = 6.3, xend = 8.3, y = 2.5, yend = 0.7, linewidth = line_size) +
   
   ## Randomized unilateral RT
   # Glucose
   # Day 1
-  annotate(geom = "text", x = 8.2, y = 4.5, label = c("Leg 1 RT +\nGLU (n=8)\n"), color = "red", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 8.2, y = 4.5, label = c("Leg 1 RT +\nGLU (n=8)\n"), color = "black", angle = 0, size = textsize) +
   # Day 3
-  annotate(geom = "text", x = 10, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 10, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "black", angle = 0, size = textsize) +
   # Day 5
-  annotate(geom = "text", x = 12, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 12, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "black", angle = 0, size = textsize) +
   # Day 7
-  annotate(geom = "text", x = 14, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 14, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "black", angle = 0, size = textsize) +
   # Day 9
-  annotate(geom = "text", x = 16, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 16, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "black", angle = 0, size = textsize) +
   # Day 11
-  annotate(geom = "text", x = 18, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "red", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 18, y = 4.5, label = c("Leg 1 \nRT+GLU\n"), color = "black", angle = 0, size = textsize) +
   
   # Placebo
   # Day 2
-  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "royalblue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 9.2, y = 0.5, label = c("Leg 2 RT +\nPLA (n=8)\n"), color = "black", angle = 0, size = textsize) +
   # Day 4
-  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 11, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "black", angle = 0, size = textsize) +
   # Day 6
-  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 13, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "black", angle = 0, size = textsize) +
   # Day 8
-  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 15, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "black", angle = 0, size = textsize) +
   # Day 10
-  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 17, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "black", angle = 0, size = textsize) +
   # Day 12
-  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "royalblue", angle = 0, size = textsize) +
+  annotate(geom = "text", x = 19, y = 0.5, label = c("Leg 2 \nRT+PLA\n"), color = "black", angle = 0, size = textsize) +
   
   theme_classic()+
   
@@ -293,10 +297,9 @@ d.fig <- d.dat %>%
         axis.text.y = element_blank(),
         axis.title.x = element_text(size = 7),
         axis.text.x = element_text(size = 6),
-        plot.background = element_rect_round(color = "lightblue",
-                                             size = 0.50,
-                                             radius = unit(0.50, "cm"),
-                                             fill = "lightblue"))
+        plot.background = element_rect(color = "white",
+                                             linewidth = 0.50,
+                                             fill = "white"))
 
 
 
@@ -312,7 +315,7 @@ fig1 <- plot_grid(d.fig,
                   plot_grid(str.fig2),
                   ncol = 1,
                   rel_heights = c(1.5, 0.3, 1.5, 1.5)) +
-  draw_plot_label(label = c("A)", "B)", "C)", "D)"),
+  draw_plot_label(label = c("a", "b", "c", "d"),
                   x = c(0.02, 0.02, 0.53, 0.02),
                   y = c(0.98, 0.63, 0.63, 0.3),
                   hjust = .5, vjust = .5, size = 7) 
@@ -324,10 +327,10 @@ ggsave(
   plot = fig1,
   device = "pdf",
   path = "./figures",
-  width = 7.7*2,
-  height = 23*0.75,
-  units = "cm",
-  dpi = 600
+  width = 174,
+  height = 234*0.75,
+  units = "mm",
+  dpi = 1200
 )
 
 

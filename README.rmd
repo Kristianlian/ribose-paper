@@ -31,7 +31,13 @@ Section for Health and Exercise Physiology, Department of Public Health and Spor
 
 ## Abstract
 
+**Purpose:** Muscle hypertrophy, induced by resistance training, is determined by ribosomal biogenesis. High-glucose treatment may augment the transcription of ribosomal RNA, as evident from in vitro studies. However, its effect on resistance training-induced adaptations remains unexplored.
 
+**Methods:** Sixteen healthy, moderately trained individuals (male/female, n = 9/7; age, 23.7 (1.8)/24.6 (4.8)), participated in a within-participant trial with unilateral resistance training with glucose- and placebo supplementation on alternate days over six sessions per condition. Participants remained fasted overnight, receiving glucose/placebo and protein supplementation only before and after RT sessions (3 sets of 10 repetitions maximum unilateral leg press and knee extension). Micro biopsies were sampled from m. vastus lateralis before and after the intervention.
+
+**Results:** Between conditions, there were no significant differences in increases of total RNA and ribosomal RNA (mean difference 7.6%, [-7.2, 24.9], p = 0.337, 47S, 37.9%, [-28.4, 131.6], p = 0.400; 18S, -7.6%, [-34.0, 29.8], p = 0.652; 28S, -2.5%, [-37.7, 53.2], p = 0.915; 5.8S, -7.7%, [9.8, 98.0], p = 0.644; 5S, -0.4%, [-31.1, 44.2], p = 0.982), or levels of cellular myelocytomatosis oncogene, upstream binding factor and ribosomal protein S6 (p = 0.094-0.292). There was a linear relationship between upstream binding factor and total RNA, where an increase of 1 standard deviance unit of upstream binding factor equated to a ∼ 14% increase in total RNA (p = 0.003).
+
+**Conclusion:** Glucose supplementation before and after RT does not augment RT-induced ribosome biogenesis after two weeks of heavy RT in moderately trained young adults.
 
 ## Repository organization
 

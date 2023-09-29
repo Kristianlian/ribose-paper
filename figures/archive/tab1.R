@@ -48,10 +48,10 @@ dxa.tab <- dxa.dat %>%
             sd.w = sd(weight),
             mean.lm = mean(leanmass),
             sd.lm = sd(leanmass)) %>%
-  mutate(age = paste0(sprintf("%.1f", mean.a), " (", sprintf("%.1f",sd.a), ")"),
-         height = paste0(sprintf("%.1f",mean.h), " (",sprintf("%.1f",sd.h), ")"),
-         weight = paste0(sprintf("%.1f",mean.w), " (", sprintf("%.1f",sd.w), ")"),
-         lm = paste0(sprintf("%.1f",mean.lm), " (", sprintf("%.1f",sd.lm), ")")) %>%
+  mutate(age = paste0(round(mean.a, 2), " (", round(sd.a, 2), ")"),
+         height = paste0(round(mean.h, 2), " (", round(sd.h, 2), ")"),
+         weight = paste0(round(mean.w, 2), " (", round(sd.w, 2), ")"),
+         lm = paste0(round(mean.lm, 2), " (", round(sd.lm, 2), ")")) %>%
   mutate(sex = if_else(sex == "female",
                        "Female",
                        if_else(sex == "male",
@@ -66,7 +66,8 @@ dxa.tab <- dxa.dat %>%
 # data
 
 gender <- dxa.dat %>%
-  select(subject, sex) 
+  select(subject, sex) %>%
+  print()
 
 # Summarising and prepping humac data
 humac.tab <- humac.clean2 %>%
@@ -76,47 +77,60 @@ humac.tab <- humac.clean2 %>%
   group_by(sex, measure) %>%
   summarise(mean.pt = mean(peak.torque),
             sd.pt = sd(peak.torque)) %>%
-  mutate(mean = paste0(sprintf("%.1f",mean.pt), " (", sprintf("%.1f",sd.pt), ")")) %>%
+  mutate(mean = paste0(round(mean.pt, 2), " (", round(sd.pt, 2), ")")) %>%
   select(sex, measure, mean) %>%
   mutate(sex = if_else(sex == "female",
                        "Female",
                        if_else(sex == "male",
                                "Male", sex))) 
-
+ 
 
 # Joining the data frames to be used in the flextable
-
-dxa.flex <- dxa.tab %>%
+desc.dat <- dxa.tab %>%
   full_join(humac.tab) %>%
   pivot_wider(values_from = mean,
               names_from = measure) %>%
   full_join(gendercount) %>%
   select(sex, n, age, height, weight, lm, isok.60, isok.240, isom) %>%
-  
-  ## Make it to flextable
-  flextable() %>%
-  ## Change headers
-  compose(i = 1, j = c(1, 2, 3, 4, 5, 6, 7, 8, 9), part = "header", 
-          value = c(as_paragraph("Sex"),
-                    as_paragraph("n"), 
-                    as_paragraph("Age (yrs)"), 
-                    as_paragraph("Stature (cm)"), 
-                    as_paragraph("Body mass (kg)"),
-                    as_paragraph("Lean mass (kg)"),
-                    as_paragraph("60\U00BA sec", as_sup("-1")), 
-                    as_paragraph("240\U00BA sec", as_sup("-1")), 
-                    as_paragraph("0\U00BA sec", as_sup("-1")))) %>%
-  add_header_row(values = c(" ", "Knee-extension peak torque"), colwidths = c(6, 3))
+  print()
 
 
-dxa.flex <- border(dxa.flex, 
-                   i = NULL,
-                   j = NULL,
-                   border = NULL,
-                   border.top = fp_border_default(color = "black"),
-                   border.bottom = fp_border_default(color = "black"),
-                   border.left = fp_border_default(color = "black"),
-                   border.right = fp_border_default(color = "black"),
-                   part = "all") 
+### Flextable 
+# A table of average total session volume and the change per supplement from baseline/session 1 until session 6
 
-dxa.flex
+## Settings for the table
+set_flextable_defaults(
+  font.size = 10, theme_fun = theme_booktabs,
+  padding = 6,
+  background.color = "#EFEFEF")
+
+desc.tab <- flextable(desc.dat)
+
+## Sets decimal marks and digits
+desc.tab <- colformat_double(desc.tab,
+                            big.mark=",", digits = 2, na_str = "N/A")
+
+## Headers 
+# Labelling
+desc.tab <- set_header_labels(desc.tab,
+                              sex = "Sex", n = "n", age = "Age (SD)", height = "Height (SD)",
+                              weight = "Weight (SD)", lm = "Leanmass (SD)", 
+                              isok.60 = "Iso 60 (SD)", isok.240 = "Iso 240 (SD)", isom = "Isom (SD)")
+
+# Bold font
+desc.tab <- bold(desc.tab, bold = TRUE, part = "header")
+# Aligning numbers and headers
+desc.tab <- align_nottext_col(desc.tab, align = "center", header = TRUE, footer = FALSE)
+
+## Body
+# Increases width for selected columns (j = ..) or the whole table
+desc.tab <- width(desc.tab, width = 1.25)
+desc.tab <- width(desc.tab, j = 2, width = 0.75)
+desc.tab <- width(desc.tab, j = 1, width = 0.65)
+
+
+
+
+save_as_image(desc.tab, path = "./figures/tab1.png")
+
+

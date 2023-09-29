@@ -1,10 +1,10 @@
-### Ribose figure 2 in ejap format ######
+### Ribose figure 2 ######
 #
 # This script creates figure 2, containing log-fold change data of total RNA and rRNA
 #
 # Packages 
 library(tidyverse); library(emmeans); library(cowplot); library(ggtext)
-
+                                                              
 #
 ### Data
 #
@@ -56,13 +56,16 @@ emm.47 <- readRDS("./data/data-gen/rna/emm.47.RDS") %>%
 
 plot_theme <- theme(panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
-                    panel.background = element_rect(fill = "white", colour = NA),
-                    axis.line = element_line(colour = "black", linewidth = 0.4))
+                    panel.background = element_rect(fill = "lightblue", colour = NA),
+                    axis.line = element_line(colour = "black"))
 
 # Colours
 
-colors <- c("black","white")
-                     
+colors <- c("#d7191c",
+                     "#fdae61",
+                     "#abd9e9",
+                     "#2c7bb6")
+
 # Default textsizes
 labsize <- 8
 textsize <- 6
@@ -77,23 +80,23 @@ totrna.plot <- emm.tot %>%
   mutate(time = factor(time, levels = c("pre", "post"), labels = c("Baseline", "Post"))) %>%
   ggplot(aes(time, exp(emmean), group = supplement, fill = supplement)) +
   geom_errorbar(aes(ymin = exp(lower.CL), ymax = exp(upper.CL)),
-                width = 0,
+                width = 0.1,
                 position = position_dodge(width = 0.2)) +
   geom_line(position = position_dodge(width = 0.2), lty = 2) +
   geom_point(position = position_dodge(width = 0.2), shape = 21, size = 2) +
-  scale_fill_manual(values = colors[c(1,2)],
+  scale_fill_manual(values = colors[c(1,4)],
                     labels = c("Glucose", "Placebo")) +
   labs(x = "Time-point", y = "Total RNA (ng &times; mg<sup>-1</sup> fold change)", fill = "Supplement") +
   theme_classic() +
   theme(axis.title.x = element_blank(), 
-        axis.title.y = element_markdown(size = htextsize),
-        axis.text.x = element_text(size = textsize, color = "black"),
-        axis.text.y = element_text(size = textsize, color = "black"),
-        legend.title = element_text(size = htextsize),
-        legend.text = element_text(size = textsize),
-        legend.key.size = unit(0.3, "cm")) +
+       axis.title.y = element_markdown(size = htextsize),
+       axis.text.x = element_text(size = textsize),
+       axis.text.y = element_text(size = textsize),
+       legend.title = element_text(size = htextsize),
+       legend.text = element_text(size = textsize),
+       legend.key.size = unit(0.3, "cm")) +
   plot_theme
-
+  
 
 # rRNA plot
 
@@ -107,39 +110,44 @@ rrna.fig <- bind_rows(emm.47, emm.18, emm.28, emm.5.8, emm.5) %>%
                 position = position_dodge(width = 0.3)) +
   geom_line(position = position_dodge(width = 0.3), lty = 2) +
   geom_point(shape = 21, size = 1.5, position = position_dodge(width = 0.3)) +
-  scale_fill_manual(values = colors[c(1,2)]) +
+  scale_fill_manual(values = colors[c(1,4)]) +
   scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
   labs(x = "Time", y = "AU fold change", fill = "Supplement") +
   facet_wrap(~target, nrow = 1) +
   theme(axis.title = element_text(size = htextsize),
-        axis.text = element_text(size = textsize, color = "black"),
+        axis.text = element_text(size = textsize),
         legend.title = element_text(size = textsize),
         legend.text = element_text(size = textsize),
         strip.text = element_text(hjust = 0, size = htextsize),
         strip.background = element_rect(fill = "white")) + 
   theme(axis.title.x = element_blank()) +
   plot_theme 
-
+  
 
 fig2 <- plot_grid(plot_grid(NULL,
                             totrna.plot,
                             nrow = 1,
                             rel_widths = c(0.05, 1)),
-                  
-                  rrna.fig + theme(legend.position = "none"),
-                  nrow = 2,
-                  rel_heights = c(1.5, 1),
-                  labels = c("a", "b"),
-                  label_size = labsize)
+            
+          rrna.fig + theme(legend.position = "none"),
+          nrow = 2,
+          rel_heights = c(1.5, 1),
+          labels = c("A)", "B)"),
+          label_size = labsize)
 
 
 ggsave(
-  file = "ejapfig2.pdf",
+  file = "fig2.pdf",
   plot = fig2,
   device = "pdf",
-  path = "./figures/ejap_figures",
-  width = 84,
-  height = 234*0.33,
-  units = "mm",
+  path = "./figures",
+  width = 7.7,
+  height = 23*0.33,
+  units = "cm",
   dpi = 600
 )
+
+
+
+
+
