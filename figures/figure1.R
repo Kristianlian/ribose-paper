@@ -150,7 +150,7 @@ str.fig2 <- str.emm2 %>%
                     labels = c("Glucose", "Placebo")) +
   scale_x_continuous(limits = c(-1,25), breaks = c(0, 8, 16, 20, 21, 22, 23.5),
                      expand = expansion(0),
-                     labels = c("0" = "Baseline", "8" = "Post 2RT", "16" = "Post 4RT", "21" = "Post 5RT",
+                     labels = c("0" = "Baseline", "8" = "23hrs after 2RT", "16" = "23hrs after 4RT", "21" = "23hrs after 5RT",
                                 "22.7" = "30min post 6RT", "23.4" = "2h post 6RT",
                                 "24.4" = "23h post 6RT")) +
   labs(x = "Time", y = "Strength index change", fill = "Supplement") +
