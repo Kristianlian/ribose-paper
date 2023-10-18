@@ -477,7 +477,222 @@ strength.model
 ```
 
 
+### Supplementary figures
 
+```{r macro nutrient figure, echo=FALSE, message=FALSE, warning=FALSE}
+#### Nutrition change figs
+
+# Author: KL
+# Project: Ribose
+
+# Purpose: This script plots figures from protein, fat, carbs, calories and propr kg emmeans
+
+# Packages
+library(tidyverse); library(emmeans); library(cowplot)
+
+# Data
+
+pro <- readRDS("./data/data-gen/nutrition/prot.emm.RDS")
+fat <- readRDS("./data/data-gen/nutrition/fat.emm.RDS")
+cho <- readRDS("./data/data-gen/nutrition/cho.emm.RDS")
+cal <- readRDS("./data/data-gen/nutrition/cal.emm.RDS")
+propr <- readRDS("./data/data-gen/nutrition/propr.emm.RDS")
+
+## Figures
+
+pos <- position_dodge(width = 0.2)
+
+# Protein
+
+pro.fig <- pro %>%
+  data.frame() %>%
+  add_row(supplement = "placebo", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+                position = pos,
+                width = 0.2) +
+  geom_line(position = pos) +
+  geom_point(shape = 21, position = pos, size = 3) +
+  scale_x_discrete(labels=c("change.d1" = "Day 1", "change.d2" = "Day 2", "change.d3" = "Day 3",
+                            "change.d4" = "Day 4", "change.d5" = "Day 5", 
+                            "change.d6" = "Day 6")) +
+  labs(x = "", y = "Protein (g)", fill = "Supplement") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size=8))
+
+# Fat
+fat.fig <- fat %>%
+  data.frame() %>%
+  add_row(supplement = "placebo", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+                position = pos,
+                width = 0.2) +
+  geom_line(position = pos) +
+  geom_point(shape = 21, position = pos, size = 3) +
+  scale_x_discrete(labels=c("change.d1" = "Day 1", "change.d2" = "Day 2", "change.d3" = "Day 3",
+                            "change.d4" = "Day 4", "change.d5" = "Day 5", "change.d6" = "Day 6")) +
+  labs(x = "", y = "Fat (g)", fill = "Supplement") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size=8))
+
+# Carbs
+cho.fig <- cho %>%
+  data.frame() %>%
+  add_row(supplement = "placebo", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+                position = pos,
+                width = 0.2) +
+  geom_line(position = pos) +
+  geom_point(shape = 21, position = pos, size = 3) +
+  scale_x_discrete(labels=c("change.d1" = "Day 1", "change.d2" = "Day 2", "change.d3" = "Day 3",
+                            "change.d4" = "Day 4", "change.d5" = "Day 5", "change.d6" = "Day 6")) +
+  labs(x = "", y = "Carbohydrates (g)", fill = "Supplement") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size=8))
+
+# Calories
+cal.fig <- cal %>%
+  data.frame() %>%
+  add_row(supplement = "placebo", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+                position = pos,
+                width = 0.2) +
+  geom_line(position = pos) +
+  geom_point(shape = 21, position = pos, size = 3) +
+  scale_x_discrete(labels=c("change.d1" = "Day 1", "change.d2" = "Day 2", "change.d3" = "Day 3",
+                            "change.d4" = "Day 4", "change.d5" = "Day 5", "change.d6" = "Day 6")) +
+  labs(x = "", y = "Calories", fill = "Supplement") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size=8))
+
+# Protein pr kg
+propr.fig <- propr %>%
+  data.frame() %>%
+  add_row(supplement = "placebo", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =1) %>%
+  add_row(supplement = "glucose", time = "change.d1", emmean = 0, SE = 0, df = 0, lower.CL = 0, upper.CL = 0, .before =2) %>%
+  ggplot(aes(time, emmean, group = supplement, fill = supplement)) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL),
+                position = pos,
+                width = 0.2) +
+  geom_line(position = pos) +
+  geom_point(shape = 21, position = pos, size = 3) +
+  scale_x_discrete(labels=c("change.d1" = "Day 1", "change.d2" = "Day 2", "change.d3" = "Day 3",
+                            "change.d4" = "Day 4", "change.d5" = "Day 5", "change.d6" = "Day 6")) +
+  labs(x = "", y = "Protein (g) \nper kg body weight\n", fill = "Supplement") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size=8))
+
+# Cowplot for gathering figures
+
+legend <- get_legend(pro.fig + theme(legend.box.margin = margin(0, 0, 0,12)))
+
+nut.fig <- plot_grid(pro.fig + theme(legend.position = "none"),
+                     propr.fig + theme(legend.position = "none"),
+                     cho.fig + theme(legend.position = "none"),
+                     fat.fig + theme(legend.position = "none"),
+                     cal.fig + theme(legend.position = "none"), 
+                     legend, ncol = 2, nrow = 3)
+nut.fig
+
+```
+
+**Figure 4: Daily change in macronutrient intake per condition.** For the purpose of illustration the first day with the glucose condition and the first day with the placebo condition are combined into "Day 1", though they were completed on separate days (i.e., day 1 and 2). The same goes for Day 2, 3, 4, 5 and 6. Macronutrient intake data was gathered from the MyFitnessPal application, where participants registered their daily intake. Values are estimated marginal means with 95% CI. 
+
+**Table 3: Daily mean dietary intake of macro nutrients during each training day per supplement leg.** Glu = glucose,Plac = placebo. Training day 1-training day 12 are combined pairwise to day 1-6: Day 1 = training day 1/2, Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12. Values are mean ± standard deviation. P = difference between Glu and Plac. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac = 11.
+```{r nutrition table, echo=FALSE, message=FALSE, warning=FALSE}
+### Nutrition data table
+
+# This script produces a table of the daily nutritional intake, calculated to mean and SD per supplement.
+
+library(knitr)
+library(rmarkdown)
+library(tidyverse)
+library(readxl)
+library(readr)
+library(tinytex)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+#nutritiontable with pro.pr kg bodyweight pr. group
+
+#laod dxa data and take out weight and subject to join with nutrition data
+fp.weight <-read_excel("data/dxa/ribose_dxa.xlsx") %>%
+  select(weight, subject)
+
+#nutrition data.
+# Data are presented as grams, supplemented protein (25g whey protein isolate = 42g protein) and glucose (90g) has been added by investigators,
+# and calculated into the total amount of ingested per day.
+
+# Load nutrition data. Sorts data and summarises into mean per supplement per day
+
+nut.weight <- read_excel("data/nutrition/ribose_nutrition.xlsx")%>%
+  select(timepoint, meal, subject, protein, fat, calories,
+         carbohydrates, group, sup_pro, sup_gluc, kcal_glu) %>%
+  #changed names to compare groups each paired days
+  mutate(timepoint = if_else(timepoint %in% c("T1","T2"), 
+                             "Day 1",
+                             if_else(timepoint %in% c("3", "4"),
+                                     "Day 2",
+                                     if_else(timepoint %in% c("5", "6"),
+                                             "Day 3",
+                                             if_else(timepoint %in% c("7", "8"),
+                                                     "Day 4",
+                                                     if_else(timepoint %in% c("9", "10"),
+                                                             "Day 5",
+                                                             if_else(timepoint %in% c("T3", "T4"),
+                                                                     "Day 6",
+                                                                     "na"))))))) %>%
+  group_by(timepoint, subject, group) %>%
+  #take in weight
+  inner_join(fp.weight) %>%
+  #summarise each variable to get total pr timepoint.
+  #Whey protein supplement is added to total protein ingestion
+  summarise(protein = sum(protein + sup_pro),
+            fat = sum(fat),
+            calories = sum(calories + kcal_glu),
+            carbohydrates = sum(carbohydrates + sup_gluc),
+            weight = sum(weight)) %>%
+  #summarise to get protein pr weight.
+  mutate(proprkg = (protein/weight)) %>%
+  pivot_wider(names_from = group,
+              values_from = c(fat, protein, calories, carbohydrates, weight, proprkg))
+
+# Nutrition table with pro/weight. The table shows mean and SD of total intake 
+# of grams per supplement per time point.
+
+nuttable <- nut.weight %>%
+  pivot_longer(names_to = "variable",
+               values_to = "values", col= fat_glucose:proprkg_placebo) %>%
+  group_by(timepoint, variable) %>%
+  summarise(m = mean(values, na.rm = TRUE),
+            s= sd(values, na.rm = TRUE)) %>%
+  ungroup() %>%
+  separate(variable, into = c("variable", "group")) %>%
+  mutate(stat = paste0(round(m, 1), " (", round(s, 1), ")")) %>%
+  select(timepoint, variable, group, stat,) %>%
+  pivot_wider(names_from = variable,
+              values_from = stat) %>%
+  select(timepoint, group, calories, carbohydrates, fat, protein,
+         proprkg) %>%
+  #changed names of group for simplicity 
+  mutate(group = if_else(group %in% c("glucose"),
+                         "G",
+                         if_else(group %in% c("placebo"),
+                                 "P",
+                                 ""))) 
+
+nuttable %>%
+  kable()
+
+```
 
 
 

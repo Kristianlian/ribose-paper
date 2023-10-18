@@ -762,11 +762,11 @@ In conclusion, ingestion of glucose immediately before and after five heavy-load
 
 ### Data availability
 
-Complete data sets and scripts are downloadable here; <https://github.com/Kristianlian/ribose-paper>
+The datasets generated during and analysed during the current study are available in the "ribose-paper" repository; <https://github.com/Kristianlian/ribose-paper>
 
 ### Supplementary material
 
-Extended methods can be found here; <https://github.com/Kristianlian/ribose-paper>
+Supplementary material can be found in the readme file of the "ribose-paper" repository, available here; <https://github.com/Kristianlian/ribose-paper>
 
 \pagebreak
 

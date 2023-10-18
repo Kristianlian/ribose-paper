@@ -115,7 +115,7 @@ were then randomly labelled with participant number and a number between
 
 For extraction of RNA and protein per sample:
 
-- 1.5 ml Eppendorf tube with 0.5 mm RNase-free Zirconium beads (\~50 ul)
+- 1.5 ml Eppendorf tube with 0.5 mm RNase-free Zirconium beads (~50 ul)
   Keep out DNA RNAse contaminations (Eppendorf safe-lock for use in
   bullet blender.
 - 1.5 ml tube for RNA precipitation
@@ -701,3 +701,330 @@ strength.model
     ##                      -0.027713                       -0.023897  
     ## timechange.7:supplementplacebo  
     ##                      -0.001024
+
+### Supplementary figures
+
+![](README_files/figure-gfm/macro%20nutrient%20figure-1.png)<!-- -->
+
+**Figure 4: Daily change in macronutrient intake per condition.** For
+the purpose of illustration the first day with the glucose condition and
+the first day with the placebo condition are combined into “Day 1”,
+though they were completed on separate days (i.e., day 1 and 2). The
+same goes for Day 2, 3, 4, 5 and 6. Macronutrient intake data was
+gathered from the MyFitnessPal application, where participants
+registered their daily intake. Values are estimated marginal means with
+95% CI.
+
+**Table 3: Daily mean dietary intake of macro nutrients during each
+training day per supplement leg.** Glu = glucose,Plac = placebo.
+Training day 1-training day 12 are combined pairwise to day 1-6: Day 1 =
+training day 1/2, Day 2 = training day 3/4, Day 3 = training day 5/6,
+Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training
+day 11/12. Values are mean ± standard deviation. P = difference between
+Glu and Plac. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac =
+11.
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+timepoint
+</th>
+<th style="text-align:left;">
+group
+</th>
+<th style="text-align:left;">
+calories
+</th>
+<th style="text-align:left;">
+carbohydrates
+</th>
+<th style="text-align:left;">
+fat
+</th>
+<th style="text-align:left;">
+protein
+</th>
+<th style="text-align:left;">
+proprkg
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Day 1
+</td>
+<td style="text-align:left;">
+G
+</td>
+<td style="text-align:left;">
+2493.4 (539.2)
+</td>
+<td style="text-align:left;">
+315 (86.9)
+</td>
+<td style="text-align:left;">
+78.1 (23.9)
+</td>
+<td style="text-align:left;">
+171 (40.8)
+</td>
+<td style="text-align:left;">
+2.4 (0.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 1
+</td>
+<td style="text-align:left;">
+P
+</td>
+<td style="text-align:left;">
+2349.2 (576.4)
+</td>
+<td style="text-align:left;">
+315.6 (78.1)
+</td>
+<td style="text-align:left;">
+73.4 (20.9)
+</td>
+<td style="text-align:left;">
+168.6 (44.6)
+</td>
+<td style="text-align:left;">
+2.4 (0.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 2
+</td>
+<td style="text-align:left;">
+G
+</td>
+<td style="text-align:left;">
+2582.2 (569.8)
+</td>
+<td style="text-align:left;">
+369.8 (74.7)
+</td>
+<td style="text-align:left;">
+80.9 (41)
+</td>
+<td style="text-align:left;">
+173.2 (33.9)
+</td>
+<td style="text-align:left;">
+2.5 (0.4)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 2
+</td>
+<td style="text-align:left;">
+P
+</td>
+<td style="text-align:left;">
+2587.4 (653.3)
+</td>
+<td style="text-align:left;">
+367.8 (82.4)
+</td>
+<td style="text-align:left;">
+66.6 (24.6)
+</td>
+<td style="text-align:left;">
+170.6 (43.4)
+</td>
+<td style="text-align:left;">
+2.4 (0.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 3
+</td>
+<td style="text-align:left;">
+G
+</td>
+<td style="text-align:left;">
+2574.2 (532.6)
+</td>
+<td style="text-align:left;">
+352.2 (50)
+</td>
+<td style="text-align:left;">
+78.7 (31.6)
+</td>
+<td style="text-align:left;">
+171.4 (41.1)
+</td>
+<td style="text-align:left;">
+2.4 (0.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 3
+</td>
+<td style="text-align:left;">
+P
+</td>
+<td style="text-align:left;">
+2522 (560)
+</td>
+<td style="text-align:left;">
+354.8 (53.2)
+</td>
+<td style="text-align:left;">
+80.2 (28.7)
+</td>
+<td style="text-align:left;">
+172.4 (37.2)
+</td>
+<td style="text-align:left;">
+2.5 (0.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 4
+</td>
+<td style="text-align:left;">
+G
+</td>
+<td style="text-align:left;">
+2480.6 (573.4)
+</td>
+<td style="text-align:left;">
+323.8 (91)
+</td>
+<td style="text-align:left;">
+77.3 (34)
+</td>
+<td style="text-align:left;">
+167 (32.4)
+</td>
+<td style="text-align:left;">
+2.4 (0.4)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 4
+</td>
+<td style="text-align:left;">
+P
+</td>
+<td style="text-align:left;">
+2444.8 (591.5)
+</td>
+<td style="text-align:left;">
+316.2 (93.7)
+</td>
+<td style="text-align:left;">
+79.3 (32.7)
+</td>
+<td style="text-align:left;">
+163.6 (36.6)
+</td>
+<td style="text-align:left;">
+2.3 (0.5)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 5
+</td>
+<td style="text-align:left;">
+G
+</td>
+<td style="text-align:left;">
+2420.6 (724.6)
+</td>
+<td style="text-align:left;">
+327.2 (92.1)
+</td>
+<td style="text-align:left;">
+82.8 (44.3)
+</td>
+<td style="text-align:left;">
+157.6 (34.2)
+</td>
+<td style="text-align:left;">
+2.2 (0.4)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 5
+</td>
+<td style="text-align:left;">
+P
+</td>
+<td style="text-align:left;">
+2488.2 (680)
+</td>
+<td style="text-align:left;">
+344.4 (95.5)
+</td>
+<td style="text-align:left;">
+87.9 (42.3)
+</td>
+<td style="text-align:left;">
+164.2 (33)
+</td>
+<td style="text-align:left;">
+2.3 (0.4)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 6
+</td>
+<td style="text-align:left;">
+G
+</td>
+<td style="text-align:left;">
+2168 (535.5)
+</td>
+<td style="text-align:left;">
+304 (70.4)
+</td>
+<td style="text-align:left;">
+89.8 (32.4)
+</td>
+<td style="text-align:left;">
+156 (24.6)
+</td>
+<td style="text-align:left;">
+2.2 (0.2)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Day 6
+</td>
+<td style="text-align:left;">
+P
+</td>
+<td style="text-align:left;">
+2257.5 (510.9)
+</td>
+<td style="text-align:left;">
+302.5 (69.1)
+</td>
+<td style="text-align:left;">
+82.3 (34.2)
+</td>
+<td style="text-align:left;">
+153.8 (24.6)
+</td>
+<td style="text-align:left;">
+2.2 (0.2)
+</td>
+</tr>
+</tbody>
+</table>
