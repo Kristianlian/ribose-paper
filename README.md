@@ -702,9 +702,11 @@ strength.model
     ## timechange.7:supplementplacebo  
     ##                      -0.001024
 
-### Supplementary figures
+## Supplementary figures
 
 ![](README_files/figure-gfm/macro%20nutrient%20figure-1.png)<!-- -->
+
+#### Macronutrients
 
 **Figure 4: Daily change in macronutrient intake per condition.** For
 the purpose of illustration the first day with the glucose condition and
@@ -723,6 +725,7 @@ Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training
 day 11/12. Values are mean ± standard deviation. P = difference between
 Glu and Plac. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac =
 11.
+
 <table>
 <thead>
 <tr>
@@ -1028,3 +1031,13 @@ P
 </tr>
 </tbody>
 </table>
+
+#### Training volume
+
+![](README_files/figure-gfm/total%20session%20volume%20figure-1.png)<!-- -->
+
+**Figure 5:** Changes in total training session volume from baseline
+until resistance exercise session 6 (training day 11 and 12). Baseline =
+Training day 1/2, Session 2 = Training day 3/4, Session 3 = Training day
+5/6, Session 4 = Training day 7/8, Session 5 = Training day 9/10,
+Session 6 = Training day 11/12. Values are mean kg ± standard deviation.

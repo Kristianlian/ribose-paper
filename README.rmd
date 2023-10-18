@@ -477,7 +477,7 @@ strength.model
 ```
 
 
-### Supplementary figures
+## Supplementary figures
 
 ```{r macro nutrient figure, echo=FALSE, message=FALSE, warning=FALSE}
 #### Nutrition change figs
@@ -603,9 +603,12 @@ nut.fig
 
 ```
 
+#### Macronutrients
+
 **Figure 4: Daily change in macronutrient intake per condition.** For the purpose of illustration the first day with the glucose condition and the first day with the placebo condition are combined into "Day 1", though they were completed on separate days (i.e., day 1 and 2). The same goes for Day 2, 3, 4, 5 and 6. Macronutrient intake data was gathered from the MyFitnessPal application, where participants registered their daily intake. Values are estimated marginal means with 95% CI. 
 
 **Table 3: Daily mean dietary intake of macro nutrients during each training day per supplement leg.** Glu = glucose,Plac = placebo. Training day 1-training day 12 are combined pairwise to day 1-6: Day 1 = training day 1/2, Day 2 = training day 3/4, Day 3 = training day 5/6, Day 4 = training day 7/8, Day 5 = training day 9/10, Day 6 = training day 11/12. Values are mean ± standard deviation. P = difference between Glu and Plac. Glucose n = 12, placebo n = 12. Day 6: Glu = 11, Plac = 11.
+
 ```{r nutrition table, echo=FALSE, message=FALSE, warning=FALSE}
 ### Nutrition data table
 
@@ -694,7 +697,92 @@ nuttable %>%
 
 ```
 
+#### Training volume
 
+```{r total session volume figure, echo=FALSE, message=FALSE, warning=FALSE}
+
+### Total session volume change
+
+# Absolute changes are presented as mean change ± SD per supplement
+
+# Packages
+library(readxl);library(tidyverse);library(knitr);library(lme4);library(broom);library(emmeans)
+
+# Data
+tot.vol <- read_excel("./data/training/ribose_volume.xlsx", na = "NA") %>%
+  select(subject, timepoint, tot.volume, supplement) 
+
+## Handling the data by creating a new factor called time from timepoint. This factor combines any observation at T1 and T2 to baseline, etc. 
+# The code also sorts the order of the factor time, from baseline to session 6, using time = factor(time, levels c()), and sets placebo to be compared to 
+# glucose via supplement = factor(supplement, levels = c()).
+
+tot.volh <- tot.vol %>%
+  mutate(time = if_else(timepoint %in% c("T1", "T2"),
+                        "baseline",
+                        if_else(timepoint %in% c("D3", "D4"),
+                                "session2",
+                                if_else(timepoint %in% c("D5", "D6"),
+                                        "session3",
+                                        if_else(timepoint %in% c("D7", "D8"),
+                                                "session4",
+                                                if_else(timepoint %in% c("D9", "D10"),
+                                                        "session5",
+                                                        if_else(timepoint %in% c("T3", "T4"),
+                                                                "session6", timepoint))))))) %>%
+  mutate(time = factor(time, levels = c("baseline", "session1", "session2", "session3", "session4", "session5", "session6")),
+         supplement = factor(supplement, levels = c("placebo", "glucose")))
+
+## Baseline analysis - comparison of the two legs
+# A baseline analysis comparing training volume at baseline sessions between the two legs via a paired t.test, and providing a summary of mean training
+# volume and sd
+
+base.vol <- tot.volh %>%
+  filter(time == "baseline") %>%
+  select(subject, time, supplement, tot.volume) %>%
+  group_by(supplement) %>%
+  pivot_wider(names_from = supplement,
+              values_from = tot.volume)
+
+vol.ttest <- t.test(base.vol$glucose, base.vol$placebo, paired = TRUE)
+
+vol.summary <- tot.volh %>%
+  filter(time == "baseline") %>%
+  select(subject, time, supplement, tot.volume) %>%
+  group_by(supplement) %>%
+  mutate(m = mean(tot.volume),
+         s = sd(tot.volume))
+
+## Absolute data - summarising mean and SD for barplot
+# Mean and SD are calculated from absolute (kg) total volume, creating a basis for a barplot. 
+
+vol.exp <- tot.volh %>%
+  select(subject, supplement, time, tot.volume) %>% 
+  group_by(supplement, time) %>%
+  summarise(mean.vol = mean(tot.volume),
+            sd.vol = sd(tot.volume))
+
+totvol.barplot <- ggplot(vol.exp, aes(fill = supplement, y = mean.vol, x = time)) +
+  #annotate("text", x = c("session4", "session5", "session6"),
+   #        y = c(8500, 8500, 8700), label = "†") +
+  geom_bar(position = "dodge", stat = "identity") +
+  geom_errorbar(aes( ymin = mean.vol - sd.vol, ymax = mean.vol + sd.vol),
+                width = 0.2,
+                position = position_dodge(width = 1)) +
+  labs(x = "", y = "Training volume \n(kg)\n", fill = "Supplement") +
+  scale_x_discrete(labels=c("baseline" = "Baseline", "session2" = "Session 2", "session3" = "Session 3",
+                            "session4" = "Session 4", "session5" = "Session 5", 
+                            "session6" = "Session")) +
+  #scale_y_continuous(limits = c(0, 10), breaks = c(0, 1, 2, 3, 4, 5, 6,
+  #                                                7, 8, 9, 10),
+  #                 expand = expand_scale(0)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 7, angle = 45, hjust = 1))
+
+totvol.barplot
+
+```
+
+**Figure 5:** Changes in total training session volume from baseline until resistance exercise session 6 (training day 11 and 12). Baseline = Training day 1/2, Session 2 = Training day 3/4, Session 3 = Training day 5/6, Session 4 = Training day 7/8, Session 5 = Training day 9/10, Session 6 = Training day 11/12. Values are mean kg ± standard deviation. 
 
 
 
