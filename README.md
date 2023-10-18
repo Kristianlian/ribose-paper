@@ -60,7 +60,7 @@ moderately trained young adults.
 - Csl-files
 - Reference template
 - Pptx file for the blot images in figure 3
-- RMD output files <!-- if you get this to work -->
+- Previous versions of the manuscript
 
 `/data`
 
