@@ -61,10 +61,6 @@ Section for Health and Exercise Physiology, Department of Public Health and Spor
 
 - The manuscript source file
 
-`extended-methods.rmd`
-
-- Supplementary extended methods source file
-
 `/figures`
 
 - Figures source files and output

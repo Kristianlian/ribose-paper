@@ -74,10 +74,6 @@ moderately trained young adults.
 
 - The manuscript source file
 
-`extended-methods.rmd`
-
-- Supplementary extended methods source file
-
 `/figures`
 
 - Figures source files and output
