@@ -46,6 +46,14 @@ ins.change <- ins.dat2 %>%
 
 saveRDS(ins.change, "./data/data-gen/glucose/cpep.change.RDS")
 
+# Change in absolute values
+ins.change |>
+  group_by(time, supplement) |>
+  filter(subject != "102") |> #Missing measurements
+  summarise(mc = mean(change),
+            sd = sd(change))
+
+
 ins.lchange <- ins.dat2 %>%
   #filter(subject != "102") %>%
   dplyr::select(subject, time, c.pep, supplement) %>%

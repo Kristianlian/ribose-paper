@@ -88,6 +88,12 @@ str.change <- strength.index %>%
                cols = c(change.2:change.7)) %>%
   print()
 
+# Index change in absolute value
+str.change |>
+  group_by(time, supplement) |>
+  summarise(mc = mean(change),
+            sd = sd(change))
+
 saveRDS(str.change, "./data/data-gen/humac/str.change.RDS")
 
 str.lchange <- strength.index %>%

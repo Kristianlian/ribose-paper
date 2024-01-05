@@ -47,6 +47,13 @@ change_dat.glu <- gluc.clean %>%
                cols = (change.45:change.270)) %>%
   print()
 
+# Change in absolute values
+change_dat.glu |>
+  filter(subject != "107") |> # Missing measurement
+  group_by(time, supplement) |>
+  summarise(mc = mean(change),
+            sd = sd(change)) 
+
 saveRDS(change_dat.glu, "./data/data-gen/glucose/glu.change.RDS")
 
 # Log-transformed
