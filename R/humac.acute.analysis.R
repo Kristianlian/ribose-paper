@@ -55,7 +55,32 @@ change.isom <- isom.dat %>%
                cols = (change.2:change.4)) #%>%
 #  print()
 
-saveRDS(change.isom, "./data/data-gen/humac/isom.lchange.ac.RDS")
+saveRDS(change.isom, "./data/data-gen/humac/isom.lchange.ac.RDS") # This is used for analyses with the strength index
+
+
+# Absolute change isometric
+
+absolutechange.isom <- isom.dat %>%
+  dplyr::select(subject, acute, supplement, peak.torque) %>%
+  group_by(subject, acute, supplement) %>%
+  summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
+  pivot_wider(names_from = acute, 
+              values_from = peak.torque) %>%
+  #print()
+  
+  ungroup() %>%
+  mutate(change.2 = post30min-rest,
+         change.3 = post2h-rest,
+         change.4 = post23h-rest,
+         baseline = rest - mean(rest, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, baseline, change.2, change.3, change.4) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.2:change.4)) #%>%
+
+saveRDS(absolutechange.isom, "./data/data-gen/humac/isom.absolutechange.ac.RDS") # This is used for the strength table
+
 
 # Isok.60
 
@@ -84,7 +109,30 @@ change.60 <- isok60.dat %>%
                cols = (change.2:change.4)) #%>%
 #  print()
 
-saveRDS(change.60, "./data/data-gen/humac/iso60.lchange.ac.RDS")
+saveRDS(change.60, "./data/data-gen/humac/iso60.lchange.ac.RDS") # This is used for analyses with the strength index
+
+# Absolute change isokinetic 60
+
+absolutechange.60 <- isok60.dat %>%
+  dplyr::select(subject, acute, supplement, peak.torque) %>%
+  group_by(subject, acute, supplement) %>%
+  summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
+  pivot_wider(names_from = acute, 
+              values_from = peak.torque) %>%
+  #print()
+  
+  ungroup() %>%
+  mutate(change.2 = post30min-rest,
+         change.3 = post2h-rest,
+         change.4 = post23h-rest,
+         baseline = rest - mean(rest, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, baseline, change.2, change.3, change.4) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.2:change.4))
+
+saveRDS(absolutechange.60, "./data/data-gen/humac/iso60.absolutechange.ac.RDS") # This is used for the strength table
 
 ## Isok.240
 
@@ -113,7 +161,30 @@ change.240 <- isok240.dat %>%
                cols = (change.2:change.4)) #%>%
 #  print()
 
-saveRDS(change.240, "./data/data-gen/humac/iso240.lchange.ac.RDS")
+saveRDS(change.240, "./data/data-gen/humac/iso240.lchange.ac.RDS") # This is used for analyses with the strength index
+
+# Absolute change isokinetic 240
+
+absolutechange.240 <- isok240.dat %>%
+  dplyr::select(subject, acute, supplement, peak.torque) %>%
+  group_by(subject, acute, supplement) %>%
+  summarise(peak.torque = mean(peak.torque, na.rm = TRUE)) %>%
+  pivot_wider(names_from = acute, 
+              values_from = peak.torque) %>%
+  #print()
+  
+  ungroup() %>%
+  mutate(change.2 = post30min-rest,
+         change.3 = post2h-rest,
+         change.4 = post23h-rest,
+         baseline = rest - mean(rest, na.rm = TRUE),
+         supplement = factor(supplement, levels = c("placebo", "glucose"))) %>%
+  select(subject, supplement, baseline, change.2, change.3, change.4) %>%
+  pivot_longer(names_to = "time",
+               values_to = "change",
+               cols = (change.2:change.4))
+
+saveRDS(absolutechange.240, "./data/data-gen/humac/iso240.absolutechange.ac.RDS") # This is used for the strength table
 
 ## Linear mixed effects model
 # This model tries to explain the change by time and supplement, accounting for potential differences in baseline values and that the same participants

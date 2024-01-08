@@ -37,7 +37,7 @@ gendercount <- dxa.dat %>%
 
 # Summarising and prepping dxa data
 dxa.tab <- dxa.dat %>%
-  select(subject, sex, age, height, weight, leanmassg) %>%
+  select(subject, sex, age, height, weight, leanmassg, bodyfat) %>%
   mutate(leanmass = leanmassg/1000) %>%
   group_by(sex) %>%
   summarise(mean.a = mean(age),
@@ -47,19 +47,22 @@ dxa.tab <- dxa.dat %>%
             mean.w = mean(weight),
             sd.w = sd(weight),
             mean.lm = mean(leanmass),
-            sd.lm = sd(leanmass)) %>%
+            sd.lm = sd(leanmass),
+            mean.bf = mean(bodyfat),
+            sd.bf = sd(bodyfat)) %>%
   mutate(age = paste0(sprintf("%.1f", mean.a), " (", sprintf("%.1f",sd.a), ")"),
          height = paste0(sprintf("%.1f",mean.h), " (",sprintf("%.1f",sd.h), ")"),
          weight = paste0(sprintf("%.1f",mean.w), " (", sprintf("%.1f",sd.w), ")"),
-         lm = paste0(sprintf("%.1f",mean.lm), " (", sprintf("%.1f",sd.lm), ")")) %>%
+         lm = paste0(sprintf("%.1f",mean.lm), " (", sprintf("%.1f",sd.lm), ")"),
+         bf = paste0(sprintf("%.1f",mean.bf), " (", sprintf("%.1f",sd.bf), ")")) %>%
   mutate(sex = if_else(sex == "female",
                        "Female",
                        if_else(sex == "male",
                                "Male", sex))) %>%
-  select(sex, age, height, weight, lm) %>%
+  select(sex, age, height, weight, lm, bf) %>%
   pivot_longer(values_to = "mean",
                names_to = "measure",
-               cols = c(age:lm)) 
+               cols = c(age:bf)) 
 
 
 # Gets gender per subject, to mark the subjects with gender in the humac 
@@ -91,22 +94,23 @@ dxa.flex <- dxa.tab %>%
   pivot_wider(values_from = mean,
               names_from = measure) %>%
   full_join(gendercount) %>%
-  select(sex, n, age, height, weight, lm, isok.60, isok.240, isom) %>%
+  select(sex, n, age, height, weight, lm, bf, isok.60, isok.240, isom) %>%
   
   ## Make it to flextable
   flextable() %>%
   ## Change headers
-  compose(i = 1, j = c(1, 2, 3, 4, 5, 6, 7, 8, 9), part = "header", 
+  compose(i = 1, j = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), part = "header", 
           value = c(as_paragraph("Sex"),
                     as_paragraph("n"), 
                     as_paragraph("Age (yrs)"), 
                     as_paragraph("Stature (cm)"), 
                     as_paragraph("Body mass (kg)"),
                     as_paragraph("Lean mass (kg)"),
+                    as_paragraph("Body Fat (%)"),
                     as_paragraph("60\U00BA sec", as_sup("-1")), 
                     as_paragraph("240\U00BA sec", as_sup("-1")), 
                     as_paragraph("0\U00BA sec", as_sup("-1")))) %>%
-  add_header_row(values = c(" ", "Knee-extension peak torque"), colwidths = c(6, 3))
+  add_header_row(values = c(" ", "Knee-extension peak torque"), colwidths = c(7, 3))
 
 
 dxa.flex <- border(dxa.flex, 
