@@ -543,9 +543,9 @@ apc4 <- round(astrcoef[4,5], 3)
 
 ```
 
-Glucose ingestion before and after RT sessions did not generally improve skeletal muscle recovery throughout the intervention, neither during the intervention in a rested state (Figure 1D, 23hrs after exercise; Post 2RT: -0.02 ± 0.05 vs. -0.04 ± 0.03 *p* = `r pdiff.c2`, Post 4RT: -0.02 ± 0.05 vs. -0.06 ± 0.03 *p* = `r pdiff.c3`, glucose vs. placebo), nor acutely after the sixth and final RT-session (30min post 6RT: -0.03 ± 0.05 vs. -0.09 ± 0.06 *p* = `r pdiff.c5`, 2h post 6RT: -0.02 ± 0.07 vs. -0.08 ± 0.07 *p* = `r pdiff.c6`, glucose vs. placebo) or in a rested state after the sixth RT session (23h post 6RT: -0.05 ± 0.06 vs. -0.09 vs. 0.05 *p* = `r pdiff.c7`, glucose vs. placebo). Glucose ingestion before and after RT compared to placebo was associated with a 7% less reduction in strength after five RT sessions (Figure 1D, -0.06 ± 0.06 vs -0.14 ± 0.12 *p* = `r pdiff.c4`, glucose vs. placebo).
+Glucose ingestion before and after RT sessions did not generally improve skeletal muscle recovery throughout the intervention, neither during the intervention in a rested state (Figure 1D, 23hrs after exercise; Post 2RT: *p* = `r pdiff.c2`, Post 4RT: *p* = `r pdiff.c3`), nor acutely after the sixth and final RT-session (30min post 6RT: *p* = `r pdiff.c5`, 2h post 6RT: *p* = `r pdiff.c6`) or in a rested state after the sixth RT session (23h post 6RT: *p* = `r pdiff.c7`). Glucose ingestion before and after RT compared to placebo was associated with a 7% less reduction in strength after five RT sessions (Figure 1D, *p* = `r pdiff.c4`).
 
-Both RT with glucose and placebo led to significantly reduced strength after the fifth session compared to baseline, by 11 and 18% respectively (Figure 1D, Post 5RT: *p* = 0.000). Comparisons of the acute data gathered from after five sessions until and including 23 hours after the sixth session showed an average increase in strength of 5-9% from RT with glucose and placebo 30 minutes after the sixth RT session (Figure 1D, 30min post 6RT: *p* = `r apc2`) and two hours after the sixth RT session (Figure 1D, 2h post 6RT: *p* = `r apc3`). Twenty-three hours after the last (sixth) RT session, strength was unchanged compared to after the fifth RT session (Figure 1D, 23h post 6RT: *p* = `r apc4`).
+Both RT with glucose and placebo led to significantly reduced strength after the fifth session compared to baseline, by 11 and 18% respectively (Figure 1D, Post 5RT: *p* = 0.000). Comparisons of the acute data gathered from after five sessions until and including 23 hours after the sixth session showed an average increase in strength of 5-9% from RT with glucose and placebo 30 minutes after the sixth RT session (Figure 1D, 30min post 6RT: *p* = `r apc2`) and two hours after the sixth RT session (Figure 1D, 2h post 6RT: *p* = `r apc3`). Twenty-three hours after the last (sixth) RT session, strength was unchanged compared to after the fifth RT session (Figure 1D, 23h post 6RT: *p* = `r apc4`). Table 3 shows the mean change in absolute peak torque values per condition and angular velocity.
 
 ### Markers of ribosome biogenesis
 
@@ -789,15 +789,6 @@ Supplementary material can be found in the readme file of the "ribose-paper" rep
 
 ```{r baseline table, echo = FALSE}
 
-###### Baseline tab
-#
-#
-## Author: KL
-#
-#
-## Purpose:
-
-
 ## Packages
 library(readxl); library(tidyverse); library(flextable)
 
@@ -922,11 +913,6 @@ dxa.flex
 
 ```{r primer table, echo = FALSE}
 
-### Primer sequence table
-
-## Packages
-library(readxl); library(tidyverse); library(flextable)
-
 ## Data
 primer.dat <- read_excel("./data/primer.seq2.xlsx")
 
@@ -960,3 +946,88 @@ primer.tab
 
 
 ```
+
+
+**Table 3. Peak Torque** Mean peak torque per condition and angular velocity measured at the different times during the intervention. Baseline = before exercise, After 2RT = 23 hours after two training sessions, After 4RT = 23 hours after four training sessions, After RT5 = 23 hours after five training sessions, After 6RT#1 = 30min after the sixth training session, After 6RT#2 = 2 hours after the sixth training session, After 6RT#3 = 23 hours after the sixth training session. Values are reported as mean ± SD. * = significant difference between glucose and placebo.
+
+```{r humac table, echo = FALSE}
+
+## Data
+
+# Baseline data
+humac.clean2 <- readRDS("./data/data-gen/humac/humac.clean2.RDS")
+
+# Pre-post five sessions data
+
+isometric <- readRDS("./data/data-gen/humac/isom.absolutechange.RDS")
+iso60 <- readRDS("./data/data-gen/humac/iso60.absolutechange.RDS")
+iso240 <- readRDS("./data/data-gen/humac/iso240.absolutechange.RDS")
+
+# Pre-post session six data (acute data)
+isometric.acute <- readRDS("./data/data-gen/humac/isom.absolutechange.ac.RDS")
+iso60.acute <- readRDS("./data/data-gen/humac/iso60.absolutechange.ac.RDS")
+iso240.acute <- readRDS("./data/data-gen/humac/iso240.absolutechange.ac.RDS")
+
+## Summarising
+
+# Wide format
+
+tabdat <- humac.clean2 |>
+  select(subject, supplement, time, acute, measure = test, peak.torque) %>%
+#  filter(time == "baseline" & acute == "rest") |>
+  group_by(measure, supplement, time) |>
+  summarise(mean.pt = mean(peak.torque),
+            sd.pt = sd(peak.torque)) |>
+  mutate(mean = paste0(sprintf("%.1f",mean.pt), " (", sprintf("%.1f",sd.pt), ")")) |>
+  select(supplement, time, measure, mean) |>
+  mutate(supplement = if_else(supplement == "glucose",
+                       "Glucose",
+                       if_else(supplement == "placebo",
+                               "Placebo", supplement))) |>
+  mutate(measure = if_else(measure == "isom",
+                           "0\U00BA sec",
+                           if_else(measure == "isok.60",
+                                   "60\U00BA sec",
+                                   if_else(measure == "isok.240",
+                                           "240\U00BA sec", measure)))) |>
+  pivot_wider(names_from = time,
+              values_from = mean)
+
+
+## Making the table
+
+humac.flex <- tabdat |>
+  flextable() |>
+  compose(i = 1, j = c(1, 2, 3, 4, 5, 6, 7, 8, 9), part = "header",
+          value = c(as_paragraph("Condition"),
+                    as_paragraph("Velocity"),
+                    as_paragraph("Baseline"),
+                    as_paragraph("After 2RT"),
+                    as_paragraph("After 4RT"),
+                    as_paragraph("After 5RT"),
+                    as_paragraph("After 6RT#1"),
+                    as_paragraph("After 6RT#2"),
+                    as_paragraph("After 6RT#3"))) |>
+  add_body_row(values = c(" ", "Knee-extension peak torque (Nm)"), colwidths = c(2, 7))
+
+humac.flex <- border(humac.flex, 
+                     i = NULL,
+                     j = NULL,
+                     border = NULL,
+                     border.top = fp_border_default(color = "black"),
+                     border.bottom = fp_border_default(color = "black"),
+                     border.left = fp_border_default(color = "black"),
+                     border.right = fp_border_default(color = "black"),
+                     part = "all") 
+
+humac.flex <- footnote(humac.flex,
+                       i = 4,
+                       j = 6,
+                       as_paragraph("Sig. difference"),
+                       ref_symbols = "*",
+                       part = "body", inline = TRUE)
+
+humac.flex
+
+```
+
