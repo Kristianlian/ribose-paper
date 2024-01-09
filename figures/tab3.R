@@ -53,7 +53,7 @@ tabdat <- humac.clean2 |>
 
 ## Making the table
 
-humac.flex <- tabdat.wide |>
+humac.flex <- tabdat |>
   flextable() |>
   compose(i = 1, j = c(1, 2, 3, 4, 5, 6, 7, 8, 9), part = "header",
           value = c(as_paragraph("Condition"),
