@@ -20,7 +20,7 @@ library(tidyverse);library(lme4);library(emmeans);library(cowplot);library(tinyt
 
 # Glucose ingestion before and after resistance training does not augment ribosome biogenesis in healthy moderately trained young adults
 
-###### Kristian Lian^1^, Daniel Hammarström^1^, Håvard Hamarsland^1^, Sara Christine Olsen Moen^1^, Stian Ellefsen^1^
+###### Kristian Lian^1^, Daniel Hammarström^1^, Håvard Hamarsland^1^, Knut Sindre Mølmen^1^, Sara Christine Olsen Moen^1^, Stian Ellefsen^1^
 
 ::: {custom-style="correspondence_style"}
 ^1^Section for Health and Exercise Physiology, Department of Public Health and Sport Sciences, Inland Norway University of Applied Sciences, Lillehammer, Norway
