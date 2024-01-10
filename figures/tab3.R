@@ -42,11 +42,11 @@ tabdat <- humac.clean2 |>
                        if_else(supplement == "placebo",
                                "Placebo", supplement))) |>
   mutate(measure = if_else(measure == "isom",
-                           "0\U00BA sec",
+                           "0",
                            if_else(measure == "isok.60",
-                                   "60\U00BA sec",
+                                   "60",
                                    if_else(measure == "isok.240",
-                                           "240\U00BA sec", measure)))) |>
+                                           "240", measure)))) |>
   pivot_wider(names_from = time,
               values_from = mean)
 
@@ -65,7 +65,15 @@ humac.flex <- tabdat |>
                     as_paragraph("After 6RT#1"),
                     as_paragraph("After 6RT#2"),
                     as_paragraph("After 6RT#3"))) |>
-  add_body_row(values = c(" ", "Knee-extension peak torque (Nm)"), colwidths = c(2, 7))
+  add_body_row(values = c(" ", "Knee-extension peak torque (Nm)"), colwidths = c(2, 7)) |>
+  compose(i = c(2, 3, 4, 5, 6, 7), j = 2, part = "body",
+          value = c(as_paragraph("240\U00BA sec", as_sup("-1")),
+                    as_paragraph("240\U00BA sec", as_sup("-1")),
+                    as_paragraph("60\U00BA sec", as_sup("-1")),
+                    as_paragraph("60\U00BA sec", as_sup("-1")),
+                    as_paragraph("0\U00BA sec", as_sup("-1")),
+                    as_paragraph("0\U00BA sec", as_sup("-1"))))
+  
 
 humac.flex <- border(humac.flex, 
                      i = NULL,

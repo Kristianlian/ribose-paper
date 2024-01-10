@@ -6,58 +6,59 @@ editor: visual
 
 ### Revision
 
-Reviewer 1, comment 1: 25,000 dilution for primary seems quite diluted. Is the dilution is correct? Page 9, line 257-258 (line 211 in quarto) 
+<!--Reviewer 1, comment 1: 25,000 dilution for primary seems quite diluted. Is the dilution is correct? Page 9, line 257-258 (line 211 in quarto) 
 - Authors reply: By mistake, only the dilution volumes for the secondary antibodies were included in the original description. This section is now updated with dilution volumes of both primary and secondary antibodies. 
 - Revision: 
    - Original draft: Antibodies were diluted in blocking buffer to concentrations corresponding to 1:25 000 (UBF, rpS6) and 1:5000 (c-Myc).
-   - Revision: Antibodies were diluted in blocking buffer to concentrations corresponding to 1:500 (UBF and rpS6, primary), 1:2000 (c-Myc, primary), 1:5000 (c-Myc, secondary) and 1:25 000 (UBF, rpS6, secondary).
+   - Revision: Antibodies were diluted in blocking buffer to concentrations corresponding to 1:500 (UBF and rpS6, primary), 1:2000 (c-Myc, primary), 1:5000 (c-Myc, secondary) and 1:25 000 (UBF, rpS6, secondary).-->
 
-Reviewer 1, comment 2: Most of those antibodies have been discontinued by the commercial provided (Santa Cruz). Did the authors try to validate these antibodies? 
+<!--Reviewer 1, comment 2: Most of those antibodies have been discontinued by the commercial provided (Santa Cruz). Did the authors try to validate these antibodies? 
 - Authors reply: We did several rounds of antibody testing with these specific primers before analysing the muscle tissue from the present study. We compared the blots from said test runs to reviews on the providers own web page as a form of validation. 
 - Primary antibodies are available at: 
 - UBF F9: https://www.scbt.com/p/ubf-antibody-f-9 
 - rpS6 C-8: https://www.scbt.com/p/ribosomal-protein-s6-antibody-c-8 
 - c-Myc 9E10: https://www.thermofisher.com/antibody/product/c-Myc-Antibody-clone-9E10-Monoclonal/MA1-980?imageId=1024462 
-- Finner ikke eksakte matcher for sekundære, må sjekke navnene på laben. Finner allikevel ikke noen info om at de primære antistoffene er avviklet.
+- Finner ikke eksakte matcher for sekundære, må sjekke navnene på laben. Finner allikevel ikke noen info om at de primære antistoffene er avviklet.-->
 
-Reviewer 1, comment 3:Given that whey protein was also given to the participants following the resistance exercise session, could the increase insulin from whey protein ingestion already be enough to evoke the anabolic effects related to ribosome biogenesis? Did the authors measure plasma insulin levels? It would be interesting to this story to check insulin levels. 
+<!--Reviewer 1, comment 3:Given that whey protein was also given to the participants following the resistance exercise session, could the increase insulin from whey protein ingestion already be enough to evoke the anabolic effects related to ribosome biogenesis? Did the authors measure plasma insulin levels? It would be interesting to this story to check insulin levels. 
 - Authors reply: We did expect protein ingestion to possible impact plasma insulin levels, hence the participants waited for 2hrs from ingesting protein before exercising, thus "washing out" the potential effect of protein on plasma insulin levels. Further, 30 minutes before exercise there was no significant change in c-peptide levels, indicating no significant change in plasma insuline at this time. What occured between protein ingestion and the 30 min pre exericise mark, and/or if anything, this impacted ribosome biogenesis prior to glucose ingestion and exercise. We decided to measure plasma c-peptide rather than insulin. Indeed this provides an indirect measure as opposed to directly measuring plasma insulin, however, c-peptide stays in the blood longer than insulin, making c-peptide easier to accurately measure over several time points [@leighton2017practical]. Further, c-peptide is widely used as an insulin secretion measure [@leighton2017practical]. 
-- Er det noe argument for at ikke-signifikante endringer i plasma glukose 30 min etter protein inntak også underbygger lite endring i plasma insulin? Altså, dersom det hadde vært en stor utskillelse i plasma insulin, ville ikke dette ha påvirket plasma glukose?
+- Er det noe argument for at ikke-signifikante endringer i plasma glukose 30 min etter protein inntak også underbygger lite endring i plasma insulin? Altså, dersom det hadde vært en stor utskillelse i plasma insulin, ville ikke dette ha påvirket plasma glukose?-->
 
-Reviewer 2, comment 1: Please, also describe in the abstract the second objective of the study (lines 98-99). The abstract does not state, and, therefore is not clear, what are the main outcomes (parameters) measured in the clinical trial. 
+<!--Reviewer 2, comment 1: Please, also describe in the abstract the second objective of the study (lines 98-99). The abstract does not state, and, therefore is not clear, what are the main outcomes (parameters) measured in the clinical trial. 
 - Authors reply: The abstract has now been updated with this information. 
 - Revision: 
   - Removed "However, this remains largely unexplored." 
   - Added "This was investigated with total RNA and ribosomal RNA abundances as main outcomes, with relevant transcriptional or translational regulators (c-Myc/UBF/rpS6) as a secondary outcome." 
-- Abstract trenger nå mer jobb, for å kutte ned til akseptert lengde/antall ord. Er det ok med 30 ord for mye?
+- Abstract trenger nå mer jobb, for å kutte ned til akseptert lengde/antall ord. Er det ok med 30 ord for mye?-->
 
 Reviewer 2, comment 2: In the results the data were described in relation to % ou fold of changes. It is important to report the data also in absolute values.
  - Authors reply: Results chapter now updated with absolute values of change from baseline to post in both conditions
    - Glucose revision: Glucose ingestion before and after RT led to increases in plasma glucose levels compared to baseline by 38% immediately before RT (Figure 1B, 0 min: 2.05 ± 0.73 mmol/L), by 31% during RT (Figure 1B, 15 min: 1.75 ± 1.44 mmol/L) and by 32% immediately after RT (Figure 1B, 30 min: 1.62 ± 1.10 mmol/L, all : *p* \< 0.001), with no changes observed in the placebo condition (Figure 1B, 0 min: 0.09 ± 0.3 mmol/L, 15 min: 0.16 ± 0.35 mmol/L, 30 min: 0.18 ± 0.39 mmol/L, *p* \> 0.05). 
    - C-peptide revision: Glucose ingestion before and after RT led to increases in levels of c-peptide compared to baseline, by 95% immediately before (Figure 1C, 0 min: 796 ± 376.0 pmol/L) and 87% after RT (Figure 1C, 30 min: 793 ± 581.0 pmol/L, both *p* \< 0.001), with no changes observed with the placebo condition (Figure 1C, 0 min: 63.7 ± 71.0 pmol/L, 30 min: 53.9 ± 134.0 pmol/L, both *p* \> 0.05).
    - Absolute values for humac added in a table (tab3), reference by "Table 3 shows the mean change in absolute peak torque values per condition and angular velocity." at the end of the strength index results.
-   - western/rna??Prøve å inkludere rådata i figurene?
+   - Baseline strength values removed from tab 1, since a detailed table of humac measurements has been added (table 3).
+   - Mangler å plotte rådata i total RNA, så burde denne kommentaren være besvart. 
 
 
-Reviewer 2, comment 3: There is a lack of information regarding the use of supplements by participants. This aspect is important for characterizing the sample and as stated by the authors on page 3, line 57.
+<!--Reviewer 2, comment 3: There is a lack of information regarding the use of supplements by participants. This aspect is important for characterizing the sample and as stated by the authors on page 3, line 57.
  - Authors comment: The participants were asked not to use any other form of supplements during the course of the study. However, I can see that this is not clearly stated in the methods chapter, and will now be added. 
  - Revision: Page 5, lines 141-143.
-   - "Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications" changed to "Apart from this, participants ingested a self-chosen diet during period II. Further, participants were asked not to use any other supplements such as additional protein and/or creatine, and to register all food/drink consumption in MyFitnessPal or similar applications"
+   - "Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications" changed to "Apart from this, participants ingested a self-chosen diet during period II. Further, participants were asked not to use any other supplements such as additional protein and/or creatine, and to register all food/drink consumption in MyFitnessPal or similar applications"-->
 
 Reviewer 2, comment 4: Figure 3 shows the result for RPS6. However, only in the discussion section there is some description about this protein (lines 377 - 381). I suggest that this be addressed in the introduction for better understanding of the reader.
 
-Reviewer 2, comment 5: Figure 1d, use only the word "post" or "after".
+<!--Reviewer 2, comment 5: Figure 1d, use only the word "post" or "after".
  - Authors answer: Figure 1d updated only to use the word "after" instead of the mix of "after" and "post".
- - Men, er ikke helt sikker på om jeg egentlig vil bruke "after" eller "post" her. Jeg synes "after" leses bedre på denne figuren, men "post" passer bedre i figur 2. Er det uryddig å ha forskjellig på disse to figurene?
+ - Men, er ikke helt sikker på om jeg egentlig vil bruke "after" eller "post" her. Jeg synes "after" leses bedre på denne figuren, men "post" passer bedre i figur 2. Er det uryddig å ha forskjellig på disse to figurene?-->
 
-Reviewer 2, comment 6: In Table 1, provide body fat percentage data, together with the absolute lean mass data (already shown), they become more informative to the reader.
- - Authors answer: Updated figure one with body fat %
+<!--Reviewer 2, comment 6: In Table 1, provide body fat percentage data, together with the absolute lean mass data (already shown), they become more informative to the reader.
+ - Authors answer: Updated figure one with body fat %-->
 
-Reviewer 2, comment 7: Please specify how the "blinded taste test" (described on page 6, line 120) was carried out.
+<!--Reviewer 2, comment 7: Please specify how the "blinded taste test" (described on page 6, line 120) was carried out.
  - Authors answer: Added following description of the blinded taste test (page 5, line 120-121).
-   - "In this blinded taste test, the participants were given two boluses of placebo (75ml) and two boluses of glucose (75ml), consumed in a randomised order. The participants were instructed to finish one bolus, guess the content, and move on to the next bolus."
+   - "In this blinded taste test, the participants were given two boluses of placebo (75ml) and two boluses of glucose (75ml), consumed in a randomised order. The participants were instructed to finish one bolus, guess the content, and move on to the next bolus."-->
    
 
-Reviewer 2, comment 8: Mention more characteristics related to the training of the participants at baseline, such as number of weekly or 14-day RT sessions (which was an inclusion criteria).
- - Authors answer: Sadly, we do not have detailed characteristics on individual training sessions per week prior to enrollment in the study, other than that they did indeed have a weekly resistance training session volume between two and eight sessions per 14 days for the last six months. The authors realise that this leaves room for variation between participants in terms of training status a baseline, however variations such as these should be controlled for by the within-participants analyses.
+<!--Reviewer 2, comment 8: Mention more characteristics related to the training of the participants at baseline, such as number of weekly or 14-day RT sessions (which was an inclusion criteria).
+ - Authors answer: Sadly, we do not have detailed characteristics on individual training sessions per week prior to enrollment in the study, other than that they did indeed have a weekly resistance training session volume between two and eight sessions per 14 days for the last six months. The authors realise that this leaves room for variation between participants in terms of training status a baseline, however variations such as these should be controlled for by the within-participants analyses.-->
 

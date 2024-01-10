@@ -785,7 +785,7 @@ Supplementary material can be found in the readme file of the "ribose-paper" rep
 
 # Tables
 
-**Table 1. Participant characteristics:** Values are means ± SD. 60º sec-1 = 60 degrees per second movement speed (isokinetic), 240º sec-1 = 240 degrees per second movement speed (isokinetic), 0º sec-1 = 0 degrees per second movement speed (isometric).
+**Table 1. Participant characteristics:** Values are means ± SD. 
 
 ```{r baseline table, echo = FALSE}
 
@@ -819,7 +819,7 @@ gendercount <- dxa.dat %>%
 
 # Summarising and prepping dxa data
 dxa.tab <- dxa.dat %>%
-  select(subject, sex, age, height, weight, leanmassg) %>%
+  select(subject, sex, age, height, weight, leanmassg, bodyfat) %>%
   mutate(leanmass = leanmassg/1000) %>%
   group_by(sex) %>%
   summarise(mean.a = mean(age),
@@ -829,19 +829,22 @@ dxa.tab <- dxa.dat %>%
             mean.w = mean(weight),
             sd.w = sd(weight),
             mean.lm = mean(leanmass),
-            sd.lm = sd(leanmass)) %>%
+            sd.lm = sd(leanmass),
+            mean.bf = mean(bodyfat),
+            sd.bf = sd(bodyfat)) %>%
   mutate(age = paste0(sprintf("%.1f", mean.a), " (", sprintf("%.1f",sd.a), ")"),
          height = paste0(sprintf("%.1f",mean.h), " (",sprintf("%.1f",sd.h), ")"),
          weight = paste0(sprintf("%.1f",mean.w), " (", sprintf("%.1f",sd.w), ")"),
-         lm = paste0(sprintf("%.1f",mean.lm), " (", sprintf("%.1f",sd.lm), ")")) %>%
+         lm = paste0(sprintf("%.1f",mean.lm), " (", sprintf("%.1f",sd.lm), ")"),
+         bf = paste0(sprintf("%.1f",mean.bf), " (", sprintf("%.1f",sd.bf), ")")) %>%
   mutate(sex = if_else(sex == "female",
                        "Female",
                        if_else(sex == "male",
                                "Male", sex))) %>%
-  select(sex, age, height, weight, lm) %>%
+  select(sex, age, height, weight, lm, bf) %>%
   pivot_longer(values_to = "mean",
                names_to = "measure",
-               cols = c(age:lm)) 
+               cols = c(age:bf)) 
 
 
 # Gets gender per subject, to mark the subjects with gender in the humac 
@@ -851,55 +854,56 @@ gender <- dxa.dat %>%
   select(subject, sex) 
 
 # Summarising and prepping humac data
-humac.tab <- humac.clean2 %>%
-  full_join(gender) %>%
-  select(subject, sex, time, acute, measure = test, peak.torque) %>%
-  filter(time == "baseline" & acute == "rest") %>%
-  group_by(sex, measure) %>%
-  summarise(mean.pt = mean(peak.torque),
-            sd.pt = sd(peak.torque)) %>%
-  mutate(mean = paste0(sprintf("%.1f",mean.pt), " (", sprintf("%.1f",sd.pt), ")")) %>%
-  select(sex, measure, mean) %>%
-  mutate(sex = if_else(sex == "female",
-                       "Female",
-                       if_else(sex == "male",
-                               "Male", sex))) 
- 
+#humac.tab <- humac.clean2 %>%
+#  full_join(gender) %>%
+#  select(subject, sex, time, acute, measure = test, peak.torque) %>%
+#  filter(time == "baseline" & acute == "rest") %>%
+#  group_by(sex, measure) %>%
+#  summarise(mean.pt = mean(peak.torque),
+#            sd.pt = sd(peak.torque)) %>%
+#  mutate(mean = paste0(sprintf("%.1f",mean.pt), " (", sprintf("%.1f",sd.pt), ")")) %>%
+#  select(sex, measure, mean) %>%
+#  mutate(sex = if_else(sex == "female",
+#                       "Female",
+#                       if_else(sex == "male",
+#                               "Male", sex))) 
+
 
 # Joining the data frames to be used in the flextable
 
 dxa.flex <- dxa.tab %>%
-  full_join(humac.tab) %>%
+  #full_join(humac.tab) %>%
   pivot_wider(values_from = mean,
               names_from = measure) %>%
   full_join(gendercount) %>%
-  select(sex, n, age, height, weight, lm, isok.60, isok.240, isom) %>%
+  select(sex, n, age, height, weight, lm, bf) %>%
   
   ## Make it to flextable
   flextable() %>%
   ## Change headers
-  compose(i = 1, j = c(1, 2, 3, 4, 5, 6, 7, 8, 9), part = "header", 
+  compose(i = 1, j = c(1, 2, 3, 4, 5, 6, 7), part = "header", 
           value = c(as_paragraph("Sex"),
                     as_paragraph("n"), 
                     as_paragraph("Age (yrs)"), 
                     as_paragraph("Stature (cm)"), 
                     as_paragraph("Body mass (kg)"),
                     as_paragraph("Lean mass (kg)"),
-                    as_paragraph("60\U00BA sec", as_sup("-1")), 
-                    as_paragraph("240\U00BA sec", as_sup("-1")), 
-                    as_paragraph("0\U00BA sec", as_sup("-1")))) %>%
-  add_header_row(values = c(" ", "Knee-extension peak torque"), colwidths = c(6, 3))
+                    as_paragraph("Body Fat (%)")))
+                  #  as_paragraph("60\U00BA sec", as_sup("-1")), 
+                   # as_paragraph("240\U00BA sec", as_sup("-1")), 
+                   # as_paragraph("0\U00BA sec", as_sup("-1")))) %>%
+ # add_header_row(values = c(" ", "Knee-extension peak torque"), colwidths = c(7, 3))
 
 
 dxa.flex <- border(dxa.flex, 
-                     i = NULL,
-                     j = NULL,
-                     border = NULL,
-                     border.top = fp_border_default(color = "black"),
-                     border.bottom = fp_border_default(color = "black"),
-                     border.left = fp_border_default(color = "black"),
-                     border.right = fp_border_default(color = "black"),
-                     part = "all") 
+                   i = NULL,
+                   j = NULL,
+                   border = NULL,
+                   border.top = fp_border_default(color = "black"),
+                   border.bottom = fp_border_default(color = "black"),
+                   border.left = fp_border_default(color = "black"),
+                   border.right = fp_border_default(color = "black"),
+                   part = "all") 
 
 dxa.flex
   
@@ -948,7 +952,7 @@ primer.tab
 ```
 
 
-**Table 3. Peak Torque** Mean peak torque per condition and angular velocity measured at the different times during the intervention. Baseline = before exercise, After 2RT = 23 hours after two training sessions, After 4RT = 23 hours after four training sessions, After RT5 = 23 hours after five training sessions, After 6RT#1 = 30min after the sixth training session, After 6RT#2 = 2 hours after the sixth training session, After 6RT#3 = 23 hours after the sixth training session. Values are reported as mean ± SD. * = significant difference between glucose and placebo.
+**Table 3. Peak Torque** Mean peak torque per condition and angular velocity measured at the different times during the intervention. Baseline = before exercise, After 2RT = 23 hours after two training sessions, After 4RT = 23 hours after four training sessions, After RT5 = 23 hours after five training sessions, After 6RT#1 = 30min after the sixth training session, After 6RT#2 = 2 hours after the sixth training session, After 6RT#3 = 23 hours after the sixth training session. 240º sec-1 = 240 degrees per second movement speed (isokinetic), 60º sec-1 = 60 degrees per second movement speed (isokinetic), 0º sec-1 = 0 degrees per second movement speed (isometric). Values are reported as mean ± SD. * = significant difference between glucose and placebo.
 
 ```{r humac table, echo = FALSE}
 
@@ -985,11 +989,11 @@ tabdat <- humac.clean2 |>
                        if_else(supplement == "placebo",
                                "Placebo", supplement))) |>
   mutate(measure = if_else(measure == "isom",
-                           "0\U00BA sec",
+                           "0",
                            if_else(measure == "isok.60",
-                                   "60\U00BA sec",
+                                   "60",
                                    if_else(measure == "isok.240",
-                                           "240\U00BA sec", measure)))) |>
+                                           "240", measure)))) |>
   pivot_wider(names_from = time,
               values_from = mean)
 
@@ -1008,7 +1012,15 @@ humac.flex <- tabdat |>
                     as_paragraph("After 6RT#1"),
                     as_paragraph("After 6RT#2"),
                     as_paragraph("After 6RT#3"))) |>
-  add_body_row(values = c(" ", "Knee-extension peak torque (Nm)"), colwidths = c(2, 7))
+  add_body_row(values = c(" ", "Knee-extension peak torque (Nm)"), colwidths = c(2, 7)) |>
+  compose(i = c(2, 3, 4, 5, 6, 7), j = 2, part = "body",
+          value = c(as_paragraph("240\U00BA sec", as_sup("-1")),
+                    as_paragraph("240\U00BA sec", as_sup("-1")),
+                    as_paragraph("60\U00BA sec", as_sup("-1")),
+                    as_paragraph("60\U00BA sec", as_sup("-1")),
+                    as_paragraph("0\U00BA sec", as_sup("-1")),
+                    as_paragraph("0\U00BA sec", as_sup("-1"))))
+  
 
 humac.flex <- border(humac.flex, 
                      i = NULL,
