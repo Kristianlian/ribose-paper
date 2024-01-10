@@ -51,8 +51,7 @@ Reviewer 2, comment 5: Figure 1d, use only the word "post" or "after".
  - Men, er ikke helt sikker på om jeg egentlig vil bruke "after" eller "post" her. Jeg synes "after" leses bedre på denne figuren, men "post" passer bedre i figur 2. Er det uryddig å ha forskjellig på disse to figurene?
 
 Reviewer 2, comment 6: In Table 1, provide body fat percentage data, together with the absolute lean mass data (already shown), they become more informative to the reader.
- - Må hente ut denne dataen. Tabellen er oppdatert med tilfeldige tall for kroppsfett som "placeholder". Trenger bare å plotte inn rett data i dxa arket.
-
+ - Authors answer: Updated figure one with body fat %
 
 Reviewer 2, comment 7: Please specify how the "blinded taste test" (described on page 6, line 120) was carried out.
  - Authors answer: Added following description of the blinded taste test (page 5, line 120-121).
