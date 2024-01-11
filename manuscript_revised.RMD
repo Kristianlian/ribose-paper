@@ -88,7 +88,7 @@ This study was financed through research funds from the Inland Norway University
 
 ### Author contributions
 
-Data was collected at the sports science lab at the Inland Norway University of Applied Sciences, with all analyses performed on-site, except serum blood analyses, which were performed at Innlandet Hospital Trust. S.E., H.H. and D.H. conceived and designed the study; K.L., S.C.M., D.H. and H.H. performed experiments; K.L. and D.H. interpreted the results; K.L. and D.H. prepared figures; K.L. drafted the manuscript; D.H., H.H. and S.E. edited and revised the manuscript; All authors approved the final version of the manuscript.
+Data was collected at the sports science lab at the Inland Norway University of Applied Sciences, with all analyses performed on-site, except serum blood analyses, which were performed at Innlandet Hospital Trust. D.H., H.H, K.S.M and S.E. conceived and designed the study; D.H., H.H., K.L., K.S.M, and S.C.M. performed experiments; K.L. and D.H. interpreted the results; K.L. and D.H. prepared figures; K.L. drafted the manuscript; D.H., H.H., K.S.M. and S.E. edited and revised the manuscript; All authors approved the final version of the manuscript.
 
 ### Acknowledgements
 
@@ -611,7 +611,7 @@ stat_rrna <- lapply(rrna_analysis_results$rrna_models,
 
 ```
 
-The five-session-RT intervention led to increases in total RNA and rRNA per unit muscle weight both in the glucose and the placebo condition, on average by \~20-27% and \~25-57%, respectively (Figure 2). However, RT with glucose did not induce increased accumulation of total RNA (Figure 2A, mean difference `r total_rna_stats`) or rRNA (Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`) compared to RT with placebo.
+The five-session-RT intervention led to increases in total RNA and rRNA per unit muscle weight both in the glucose and the placebo condition, on average by \~20-27% and \~25-57%, respectively (Figure 2). <!--The mean increase in total RNA was 5409 ± 2436 (263 ± 50 normalized by tissue wet weight) and  4829 ± 2259 (210 ± 121 normalized by tissue wet weight)-->. However, RT with glucose did not induce increased accumulation of total RNA (Figure 2A, mean difference `r total_rna_stats`) or rRNA (Figure 2B; 47S, `r stat_rrna$trg_47s`; 18S, `r stat_rrna$trg_18s`; 28S, `r stat_rrna$trg_28s`; 5.8S, `r stat_rrna$trg_5.8s`; 5S, `r stat_rrna$trg_5s`) compared to RT with placebo.
 
 *Protein*
 

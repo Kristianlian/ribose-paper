@@ -58,6 +58,22 @@ rna_dat2 <- rna_dat %>%
          ln.RNA.weight = log(RNA.weight)) %>%
   print()
 
+## Summarising for absolute values
+# RNA normalized to weight
+rna_dat2 |>
+  select(subject, time, supplement, RNA.weight) |>
+  group_by(supplement, time) |>
+  summarise(mean.rna = mean(RNA.weight),
+            sd.rna = sd(RNA.weight)) |>
+  
+
+# Raw RNA concentration
+rna_dat2 |>
+  select(subject, time, supplement, RNA) |>
+  group_by(supplement, time) |>
+  summarise(mean.rna = mean(RNA),
+            sd.rna = sd(RNA))
+
 ## Save for plotting/stats in UBF-RNA correlation
 saveRDS(rna_dat2, "./data/data-gen/rna/rna.dat.RDS")
 

@@ -81,6 +81,16 @@ qpcr_data2 <- qpcr_data %>%
 ### Save raw data 
 saveRDS(qpcr_data2, "./data/data-gen/rna/qpcr_data2.RDS")
 
+## Summarising absolute values
+abs.sum <- qpcr_data2 |>
+  select(subject, time, target, supplement, nf.w) |>
+  filter(target %in% c("trg_18s", "trg_47s", "trg_5s", "trg_5.8s", "trg_28s")) |>
+  group_by(time, target, supplement) |>
+  summarise(mean.nf = mean(nf.w),
+            sd.nf = sd(nf.w)) |>
+  pivot_wider(names_from = time,
+              values_from = mean.nf)
+  mutate(change = )
 
 
 qpcr_data2 %>%

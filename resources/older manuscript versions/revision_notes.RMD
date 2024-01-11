@@ -62,3 +62,4 @@ Reviewer 2, comment 4: Figure 3 shows the result for RPS6. However, only in the 
 <!--Reviewer 2, comment 8: Mention more characteristics related to the training of the participants at baseline, such as number of weekly or 14-day RT sessions (which was an inclusion criteria).
  - Authors answer: Sadly, we do not have detailed characteristics on individual training sessions per week prior to enrollment in the study, other than that they did indeed have a weekly resistance training session volume between two and eight sessions per 14 days for the last six months. The authors realise that this leaves room for variation between participants in terms of training status a baseline, however variations such as these should be controlled for by the within-participants analyses.-->
 
+<!--Also, added Knut Sindre Mølmen to authors, and author contributions (conception of idea, experiments and edition of manuscript)-->
