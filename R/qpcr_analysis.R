@@ -19,6 +19,7 @@ library(tidyverse)
 library(readxl)
 library(lmerTest)
 library(buildmer)
+library(emmeans)
 
 
 # Load data
@@ -81,16 +82,6 @@ qpcr_data2 <- qpcr_data %>%
 ### Save raw data 
 saveRDS(qpcr_data2, "./data/data-gen/rna/qpcr_data2.RDS")
 
-## Summarising absolute values
-abs.sum <- qpcr_data2 |>
-  select(subject, time, target, supplement, nf.w) |>
-  filter(target %in% c("trg_18s", "trg_47s", "trg_5s", "trg_5.8s", "trg_28s")) |>
-  group_by(time, target, supplement) |>
-  summarise(mean.nf = mean(nf.w),
-            sd.nf = sd(nf.w)) |>
-  pivot_wider(names_from = time,
-              values_from = mean.nf)
-  mutate(change = )
 
 
 qpcr_data2 %>%
@@ -207,77 +198,148 @@ stat_rrna <- lapply(rrna_analysis_results$rrna_models,
 saveRDS(stat_rrna, "./data/data-gen/rna/stat_rrna.RDS")
 
 
+## "Absolute change"
+ qdat <- qpcr_data2 %>%
+   mutate(target = gsub("rRNA", "", target),
+          target = gsub("  ", " ", target),
+          target = paste0("trg_", target)) %>%
+   separate(target, into = c("target", "primer"), sep = " ") %>%
+   
+   # Create a weight-normalized variable
+   mutate(nf.expr = log(expr / nf.w), 
+          nf.w = scale(nf.w),
+          # Technical random effect
+          technical = paste(subject, time, supplement, rep, sep = "_"),
+          biological = paste0("S", sample)) %>%
+   filter(!(target %in% c("trg_MHC1", "trg_MHC2A", "trg_MHC2X"))) %>%
+ 
+   
+   print()
+ 
+ saveRDS(qdat, "./data/data-gen/rna/qclean.RDS")
+ 
+ ## Change data
+ rrna18 <- qdat %>%
+   filter(target == "trg_trg_18s") %>%
+   print()
+ 
+ rrna28 <- qdat %>%
+   filter(target == "trg_trg_28s") %>%
+   print()
+ 
+ rrna5.8 <- qdat %>%
+   filter(target == "trg_trg_5.8s") %>%
+   print()
+ 
+ rrna5 <- qdat %>%
+   filter(target == "trg_trg_5s") %>%
+   print()
+ 
+ rrna47 <- qdat %>%
+   filter(target == "trg_trg_47s") %>%
+   print()
+ 
+ 
+ # Change scores
+ 
+ # 47S
+ change.47 <- rrna47 %>%
+   dplyr::select(subject, time, rep, nf.expr, supplement) %>%
+   group_by(subject, time, supplement) %>%
+   summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
+   pivot_wider(names_from = time,
+               values_from = nf.expr) %>%
+   ungroup() %>%
+   # print()
+   mutate(change = Post-Pre,
+          pre = Pre - mean(Pre, na.rm = TRUE),
+          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
+   group_by(supplement) |>
+   summarise(mean.c = mean(change),
+             sd.c = sd(change)) |>
+   print()
 
-### Old code from here ....
+ # 18S
+ change.18 <- rrna18 %>%
+   dplyr::select(subject, time, rep, nf.expr, supplement) %>%
+   group_by(subject, time, supplement) %>%
+   summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
+   pivot_wider(names_from = time,
+               values_from = nf.expr) %>%
+   ungroup() %>%
+   # print()
+   mutate(change = Post-Pre,
+          pre = Pre - mean(Pre, na.rm = TRUE),
+          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
+   group_by(supplement) |>
+   summarise(mean.c = mean(change),
+             sd.c = sd(change)) |>
+   print()
 
-# 
-# 
-# 
-# qdat <- qpcr_data2 %>%
-#   mutate(target = gsub("rRNA", "", target),
-#          target = gsub("  ", " ", target),
-#          target = paste0("trg_", target)) %>%
-#   separate(target, into = c("target", "primer"), sep = " ") %>%
-#   
-#   # Create a weight-normalized variable
-#   mutate(nf.expr = log(expr / nf.w), 
-#          nf.w = scale(nf.w),
-#          # Technical random effect
-#          technical = paste(subject, time, supplement, rep, sep = "_"),
-#          biological = paste0("S", sample)) %>%
-#   filter(!(target %in% c("trg_MHC1", "trg_MHC2A", "trg_MHC2X"))) %>%
-# 
-#   
-#   print()
-# 
-# saveRDS(qdat, "./data/data-gen/rna/qclean.RDS")
-# 
-# ## Change data
-# rrna18 <- qdat %>%
-#   filter(target == "trg_18s") %>%
-#   print()
-# 
-# rrna28 <- qdat %>%
-#   filter(target == "trg_28s") %>%
-#   print()
-# 
-# rrna5.8 <- qdat %>%
-#   filter(target == "trg_5.8s") %>%
-#   print()
-# 
-# rrna5 <- qdat %>%
-#   filter(target == "trg_5s") %>%
-#   print()
-# 
-# rrna47 <- qdat %>%
-#   filter(target == "trg_47s") %>%
-#   print()
-# 
-# 
-# # Change scores
-# change.18 <- rrna18 %>%
-#   dplyr::select(subject, time, rep, nf.expr, supplement) %>%
-#   group_by(subject, time, supplement) %>%
-#   summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
-#   pivot_wider(names_from = time,
-#               values_from = nf.expr) %>%
-#   ungroup() %>%
-#   # print()
-#   mutate(change = Post-Pre,
-#          pre = Pre - mean(Pre, na.rm = TRUE),
-#          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
-#   print()
-# 
+ 
+ 
+ # 28S
+ change.28 <- rrna28 %>%
+   dplyr::select(subject, time, rep, nf.expr, supplement) %>%
+   group_by(subject, time, supplement) %>%
+   summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
+   pivot_wider(names_from = time,
+               values_from = nf.expr) %>%
+   ungroup() %>%
+   # print()
+   mutate(change = Post-Pre,
+          pre = Pre - mean(Pre, na.rm = TRUE),
+          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
+   group_by(supplement) |>
+   summarise(mean.c = mean(change),
+             sd.c = sd(change)) |>
+   print()
+ 
+ # 5.8S
+ change.58 <- rrna5.8 %>%
+   dplyr::select(subject, time, rep, nf.expr, supplement) %>%
+   group_by(subject, time, supplement) %>%
+   summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
+   pivot_wider(names_from = time,
+               values_from = nf.expr) %>%
+   ungroup() %>%
+   # print()
+   mutate(change = Post-Pre,
+          pre = Pre - mean(Pre, na.rm = TRUE),
+          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
+   group_by(supplement) |>
+   summarise(mean.c = mean(change),
+             sd.c = sd(change)) |>
+   print()
+ 
+ # 5S
+ change.5 <- rrna5 %>%
+   dplyr::select(subject, time, rep, nf.expr, supplement) %>%
+   group_by(subject, time, supplement) %>%
+   summarise(nf.expr = mean(nf.expr, na.rm = TRUE)) %>%
+   pivot_wider(names_from = time,
+               values_from = nf.expr) %>%
+   ungroup() %>%
+   # print()
+   mutate(change = Post-Pre,
+          pre = Pre - mean(Pre, na.rm = TRUE),
+          supplement = factor(supplement, levels = c("PLACEBO", "GLUCOSE"))) %>%
+   group_by(supplement) |>
+   summarise(mean.c = mean(change),
+             sd.c = sd(change)) |>
+   print()
+
+ ### Old code from here ....
 # # Create model: 
 # # Needs to have an intercept per participant (mixed model)
 # # Control for pre values.
 # 
-# m1 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
-#                      data = change.18)
+ m1 <- lmerTest::lmer(change ~ pre + supplement + (1|subject), 
+                      data = change.18)
 # 
 # plot(m1)
 # 
-# summary(m1)
+ summary(m1)
 # 
 # 
 # 
