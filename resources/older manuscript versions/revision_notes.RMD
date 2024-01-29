@@ -2,69 +2,109 @@
 title: "Untitled"
 format: docx
 editor: visual
+bibliography: resources/ribose-paper.bib
 ---
 
-### Revision
+Dear Editor, Michalis G. Noklaidis, and reviewers
 
-Reviewer 1, comment 1: 25,000 dilution for primary seems quite diluted. Is the dilution is correct? Page 9, line 257-258 (line 211 in quarto) 
-- Authors reply: By mistake, only the dilution volumes for the secondary antibodies were included in the original description. This section is now updated with dilution volumes of both primary and secondary antibodies. 
-- Revision: 
-   - Original draft: Antibodies were diluted in blocking buffer to concentrations corresponding to 1:25 000 (UBF, rpS6) and 1:5000 (c-Myc).
-   - Revision: Antibodies were diluted in blocking buffer to concentrations corresponding to 1:500 (UBF and rpS6, primary), 1:2000 (c-Myc, primary), 1:5000 (c-Myc, secondary) and 1:25 000 (UBF, rpS6, secondary).
+We are grateful for all the constructive comments on our manuscript. We have done our best to direct all comments and suggestions in the revised manuscript. Attached you will find a clean version of the revised manuscript and a version that highlights (in red, with "track changes") all changes made during the revision process. We also provide a point-by-point response explaining how we have adressed each comment. Please let us know if something is still unclear.
 
-Reviewer 1, comment 2: Most of those antibodies have been discontinued by the commercial provided (Santa Cruz). Did the authors try to validate these antibodies? 
-- Authors reply: We did several rounds of antibody testing with these specific primers before analysing the muscle tissue from the present study. We compared the blots from said test runs to reviews on the providers own web page as a form of validation. 
-- Primary antibodies are available at: 
-- UBF F9: https://www.scbt.com/p/ubf-antibody-f-9 
-- rpS6 C-8: https://www.scbt.com/p/ribosomal-protein-s6-antibody-c-8 
-- c-Myc 9E10: https://www.thermofisher.com/antibody/product/c-Myc-Antibody-clone-9E10-Monoclonal/MA1-980?imageId=1024462 
-- Finner ikke eksakte matcher for sekundære, må sjekke navnene på laben. Finner allikevel ikke noen info om at de primære antistoffene er avviklet.
+On behalf of the authors, 
 
-Reviewer 1, comment 3:Given that whey protein was also given to the participants following the resistance exercise session, could the increase insulin from whey protein ingestion already be enough to evoke the anabolic effects related to ribosome biogenesis? Did the authors measure plasma insulin levels? It would be interesting to this story to check insulin levels. 
-- Authors reply: We did expect protein ingestion to possible impact plasma insulin levels, hence the participants waited for 2hrs from ingesting protein before exercising, thus "washing out" the potential effect of protein on plasma insulin levels. Further, 30 minutes before exercise there was no significant change in c-peptide levels, indicating no significant change in plasma insulin at this time. What occured between protein ingestion and the 30 min pre exericise mark, and if anything, this impacted ribosome biogenesis prior to glucose ingestion and exercise we cannot say for certain. 
-- We decided to measure plasma c-peptide rather than insulin. Indeed this provides an indirect measure as opposed to directly measuring plasma insulin, however, c-peptide stays in the blood longer than insulin, making c-peptide easier to accurately measure over several time points [@leighton2017practical]. Further, c-peptide is widely used as an insulin secretion measure, and should provide insight into changes in plasma insulin levels [@leighton2017practical]. 
-- Er det noe argument for at ikke-signifikante endringer i plasma glukose 30 min etter protein inntak også underbygger lite endring i plasma insulin? Altså, dersom det hadde vært en stor utskillelse i plasma insulin, ville ikke dette ha påvirket plasma glukose?
+Kristian Lian
 
-Reviewer 2, comment 1: Please, also describe in the abstract the second objective of the study (lines 98-99). The abstract does not state, and, therefore is not clear, what are the main outcomes (parameters) measured in the clinical trial. 
-- Authors reply: The abstract has now been updated with this information. 
-- Revision: 
+(The part above is written in the email, copy and cut it from here.) 
+
+## Revision comments and answers
+
+
+#### Reviewer 1
+
+"Lian et al. investigated the effects of glucose ingestion on the ribosome biogenesis responses post resistance exercise. This is a very interesting research question, which was well performed by this research group. I overall enjoyed reading this well-written manuscript and have very little to suggest. Please see my comments below."
+
+**Authors reply:** Thank you very much, we are glad the reviewer enjoyed the read and found our research question interesting. 
+
+
+*Comment 1: 25,000 dilution for primary seems quite diluted. Is the dilution is correct? Page 9, line 257-258.*
+
+**Authors reply:** Thank you for bringing this to our attention. By mistake, only the dilution volumes for the secondary antibodies were included in the original description. This section is now updated with dilution volumes of both primary and secondary antibodies. 
+Original draft: Antibodies were diluted in blocking buffer to concentrations corresponding to 1:25 000 (UBF, rpS6) and 1:5000 (c-Myc).
+Revision: Antibodies were diluted in blocking buffer to concentrations corresponding to 1:500 (UBF and rpS6, primary), 1:2000 (c-Myc, primary), 1:5000 (c-Myc, secondary) and 1:25 000 (UBF and rpS6, secondary). Added on page 9, line 293.
+
+
+*Comment 2: Most of those antibodies have been discontinued by the commercial provided (Santa Cruz). Did the authors try to validate these antibodies?*
+
+**Authors reply:** Thank you for this input. We did several runs of antibody testing with these specific antibodies before analysing the muscle tissue from the present study. We compared the blots from our test runs to expected molecular sizes a provided by the manufacturer as a form of validation. Additionally, no secondary bands were detected. Unfortunately, we are not in possession of any knock-out tissue for a complete validation. We believe all of the primary antibodies are still provided by the vendor:
+- UBF: https://www.scbt.com/p/ubf-antibody-f-9 
+- rpS6: https://www.scbt.com/p/ribosomal-protein-s6-antibody-c-8 
+- c-Myc: https://www.thermofisher.com/antibody/product/c-Myc-Antibody-clone-9E10-Monoclonal/MA1-980?imageId=1024462 
+
+
+*Comment 3: Given that whey protein was also given to the participants following the resistance exercise session, could the increase insulin from whey protein ingestion already be enough to evoke the anabolic effects related to ribosome biogenesis? Did the authors measure plasma insulin levels? It would be interesting to this story to check insulin levels.*
+
+**Authors reply:** Thank you for bringing up this subject. We did assume tat protein ingestiuon cold impact plasma insulin levels. Therefore, the participants waited for 2hrs from ingesting the protein supplement before starting the training sessions, thus "washing out" the potential effect of protein on plasma insulin levels before the training session. However, as noted by the reviewer, the participants did not wait for 2hrs after the sessions to ingest the second/last protein supplement. In the glucose condition sessions, plasa c-peptide levels were significantly higher at onset of training (Figure 1C, 0min) and at the end of training (Figure 1C, 30min) compared to placebo, and returned to baseline values 2hrs after training (Figure 1C, 120min). So, based on these data, glucose ingestion did significantly increase plasma c-peptide compared to placebo during exercise, with no measured effect of protein ingestion on plasma c-peptid levels from 2hrs pre until 2hrs post exercise. However, we cannot exclude that there were peaks/fluctuations in plasma c-peptide as a response to ingesting protein that we did not measure in this time frame, especially after exercise with a 2 hour-long period without measurements. One could arguer that if the protein ingestion *per se* stimulated a large insulin secretion, this would trigger increased glucose secretion from the liver to the bloodstream as a response to the insulin, to stabilise the plasma glucose levels. Our 30min post-protein ingestion measurement of plasma glucose showed no such changes at this time. Nevertheless, without having measured plasma c-peptide/insulin levels more frequently following the training sessions, we have no way of knowing what truly occurred in this time frame. 
+
+We decided to measure plasma c-peptide rather than insulin. Indeed, this provides indirect measure as opposed to direclty measuring plasma insulin. However, c-peptide stays in the blood for a longer time than insulin, making c-peptide easier to accurately measure over several time points [@leighton2017practical]. Further, c-peptide is widely used as an insulin secretion measure, and is demonstrated to provide insight into changes in plasma insulin levels [@leighton2017practical].
+
+
+#### Reviewer 2
+
+"This manuscript is an original article that performed double-blinded placebo-controlled crossover trial with the main purpose to evaluate if the glucose supplementation before and after five RT sessions over 12 days will potentiate RT-associated accumulation of markers of ribosomal abundance following five RT sessions in healthy moderately trained young adults.
+The article is well written and the clinical trial well designed. The study presents novelty. Although, this clinical trial has important limitations: not reaching the calculated sample; intramuscular glycogen and circulating insulin levels were not performed."
+
+**Authors reply:** Thanks for these kind words. We are glad the reviewer appreciates the manuscript.
+
+
+*Comment 1: Please, also describe in the abstract the second objective of the study (lines 98-99). The abstract does not state, and, therefore is not clear, what are the main outcomes (parameters) measured in the clinical trial.* 
+
+**Authors reply:** Thank you for pointing this out, the abstract has now been updated with this information.
   - Removed "However, this remains largely unexplored." 
-  - Added "This was investigated with total RNA and ribosomal RNA abundances as main outcomes, with relevant transcriptional or translational regulators (c-Myc/UBF/rpS6) as a secondary outcome." 
-- Abstract trenger nå mer jobb, for å kutte ned til akseptert lengde/antall ord. Er det ok med 30 ord for mye?
-
-Reviewer 2, comment 2: In the results the data were described in relation to % ou fold of changes. It is important to report the data also in absolute values.
- - Authors reply: Results chapter now updated with absolute values of change from baseline to post in both conditions
-   - Glucose results revision: Glucose ingestion before and after RT led to increases in plasma glucose levels compared to baseline by 38% immediately before RT (Figure 1B, 0 min: 2.05 ± 0.73 mmol/L), by 31% during RT (Figure 1B, 15 min: 1.75 ± 1.44 mmol/L) and by 32% immediately after RT (Figure 1B, 30 min: 1.62 ± 1.10 mmol/L, all : *p* \< 0.001), with no changes observed in the placebo condition (Figure 1B, 0 min: 0.09 ± 0.3 mmol/L, 15 min: 0.16 ± 0.35 mmol/L, 30 min: 0.18 ± 0.39 mmol/L, *p* \> 0.05). 
-   - C-peptide results revision: Glucose ingestion before and after RT led to increases in levels of c-peptide compared to baseline, by 95% immediately before (Figure 1C, 0 min: 796 ± 376.0 pmol/L) and 87% after RT (Figure 1C, 30 min: 793 ± 581.0 pmol/L, both *p* \< 0.001), with no changes observed with the placebo condition (Figure 1C, 0 min: 63.7 ± 71.0 pmol/L, 30 min: 53.9 ± 134.0 pmol/L, both *p* \> 0.05).
-   - Absolute values for humac added in a table (tab3), reference by "Table 3 shows the mean change in absolute peak torque values per condition and angular velocity." at the end of the strength index results.
-   - Baseline strength values removed from tab 1, since a detailed table of humac measurements has been added (table 3).
-   - Total total RNA and rRNA revision: Addition of: (glucose: 263 ± 50 mg/ng-1, placebo: 210 ± 121 mg/ng-1), and; (47S; 0.253 ± 1.27 and 0.576 ± 0.677, 18S; 0.336 ± 0.460 and 0.271 ± 0.470, 28S; 0.314 ± 0.504 and 0.311 ± 0.582, 5.8S; 0.388 ± 0.576 and 0.322 ± 0.520, 5S; 0.305 ± 0.608 and 0.292 ± 0.432, arbitrary units for glucose and placebo respectively)
+  - Added "This was investigated with total RNA and ribosomal RNA abundances as main outcomes, with relevant transcriptional or translational regulators (c-Myc/UBF/rpS6) as a secondary outcome." On page 1, line 14-16
+The abstract is now approximately 35 words over the limit of 250 words to accommodate these changes, we hope that this does not cause any inconvenience. If necessary, we will adjust this too. 
 
 
+*Comment 2: In the results the data were described in relation to % ou fold of changes. It is important to report the data also in absolute values.*
 
-Reviewer 2, comment 3: There is a lack of information regarding the use of supplements by participants. This aspect is important for characterizing the sample and as stated by the authors on page 3, line 57.
- - Authors reply: The participants were asked not to use any other form of supplements during the course of the study. However, I can see that this is not clearly stated in the methods chapter, and will now be added. 
- - Revision: Page 5, lines 141-143.
-   - "Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications" changed to "Apart from this, participants ingested a self-chosen diet during period II. Further, participants were asked not to use any other supplements such as additional protein and/or creatine, and to register all food/drink consumption in MyFitnessPal or similar applications"
+**Authors reply:** Thank you for your valuable input. The results are now updated with absolute values of change from baselin to post in both conditions:
 
-Reviewer 2, comment 4: Figure 3 shows the result for RPS6. However, only in the discussion section there is some description about this protein (lines 377 - 381). I suggest that this be addressed in the introduction for better understanding of the reader.
- - Authors reply: Added the following;
-   - Introduction: "In addition, mTORC1 regulation of ribosomal gene transcription is dependent on ribosomal protein S6 kinase beta-1 (S6K1) [@hannan2003mtor] with its target substrate ribosomal protein S6 (rpS6) also increasing during early phase RT in humans [@hammarstrom_ribosome_2022]"
-   - Denne føler jeg muligens er litt svak, men slet litt med å finne en god måte å bake inn rpS6 på.
+Glucose results revision: Glucose ingestion before and after RT led to increases in plasma glucose levels compared to baseline by 38% immediately before RT (Figure 1B, 0 min: 2.05 ± 0.73 mmol/L), by 31% during RT (Figure 1B, 15 min: 1.75 ± 1.44 mmol/L) and by 32% immediately after RT (Figure 1B, 30 min: 1.62 ± 1.10 mmol/L, all : p < 0.001), with no changes being observed in the placebo condition (Figure 1B, 0 min: 0.09 ± 0.3 mmol/L, 15 min: 0.16 ± 0.35 mmol/L, 30 min: 0.18 ± 0.39 mmol/L, p > 0.05). Added on page 11, line 335
 
-<Reviewer 2, comment 5: Figure 1d, use only the word "post" or "after".
- - Authors reply: Figure 1d updated only to use the word "after" instead of the mix of "after" and "post".
- - Men, er ikke helt sikker på om jeg egentlig vil bruke "after" eller "post" her. Jeg synes "after" leses bedre på denne figuren, men "post" passer bedre i figur 2. Er det uryddig å ha forskjellig på disse to figurene?
+C-peptide results revision: Glucose ingestion before and after RT led to increases in levels of c-peptide compared to baseline, by 95% immediately before (Figure 1C, 0 min: 796 ± 376.0 pmol/L) and 87% after RT (Figure 1C, 30 min: 793 ± 581.0 pmol/L, both p < 0.001), with no changes observed with the placebo condition (Figure 1C, 0 min: 63.7 ± 71.0 pmol/L, 30 min: 53.9 ± 134.0 pmol/L, both p > 0.05). Addded on page 11 line 347    
 
-Reviewer 2, comment 6: In Table 1, provide body fat percentage data, together with the absolute lean mass data (already shown), they become more informative to the reader.
- - Authors reply: Updated table 1 with body fat %
+Absolute values for knee extension torque are added to Table 3, referenced by "Table 3 shows the mean change in absolute peak torque per condition and angular velocity." on page 12 line 367. Baseline muscle strength values are now removed from table 1, since the detailed table of knee extension torque measurements are added (Table 3).
 
-Reviewer 2, comment 7: Please specify how the "blinded taste test" (described on page 6, line 120) was carried out.
- - Authors reply: Added following description of the blinded taste test:
-   - "In this blinded taste test, the participants were given two boluses of placebo (75ml) and two boluses of glucose (75ml), consumed in a randomised order. The participants were instructed to finish one bolus, guess the content, and move on to the next bolus."
+Revision of total RNA and rRNA: (glucose: 263 ± 50 ng/mg-1 , placebo: 210 ± 121 ng/mg-1) added on page 12, line 371, and; (47S; 0.253 ± 1.27 and 0.576 ± 0.677, 18S; 0.336 ± 0.460 and 0.271 ± 0.470, 28S; 0.314 ± 0.504 and 0.311 ± 0.582, 5.8S; 0.388 ± 0.576 and 0.322 ± 0.520, 5S; 0.305 ± 0.608 and 0.292 ± 0.432, arbitrary units for glucose and placebo respectively) added on page 12 line 374.
+
+
+*Comment 3: There is a lack of information regarding the use of supplements by participants. This aspect is important for characterizing the sample and as stated by the authors on page 3, line 57.*
+
+*Authors reply:* Thank you for this important remark. The participants were asked not to use any other form of supplements during the course of the study. However, the authors can see that this was not clearly stated in the methods chapter, but this has been clarified in the revised manuscript. "Apart from this, participants ingested a self-chosen diet during period II, registered in MyFitnessPal or similar applications" has been changed to "Apart from this, participants ingested a self-chosen diet during period II. Further, participants were asked not to use any other supplements such as additional protein and/or creatine, and to register all food/drink consumption in MyFitnessPal or similar applications." Page 6, line 175.
+
+
+*Comment 4: Figure 3 shows the result for RPS6. However, only in the discussion section there is some description about this protein (lines 377 - 381). I suggest that this be addressed in the introduction for better understanding of the reader.*
+
+**Authors reply:** Thank you for pointing this out. The following has been added about rpS6 in the introduction: "Furthermore, Nakada et al. (Nakada, Ogasawara, Kawada, Maekawa and Ishii, 2016) found a correlation between rRNA content and rpS6 content in their synergist ablation model on rats." Page 4, line 114.
+
+
+*Comment 5: Figure 1d, use only the word "post" or "after".*
+
+**Authors reply:** Thank you for bringing this to our attention, Figure 1D is now updated with only "post" instead of the mix of "after" and "post".
+
+
+*Comment 6: In Table 1, provide body fat percentage data, together with the absolute lean mass data (already shown), they become more informative to the reader.*
+
+**Authors reply:** Thank you for that suggestion, Table one is now updated with body fat %.
+
+
+*Comment 7: Please specify how the "blinded taste test" (described on page 6, line 120) was carried out.*
+**Authors reply:** Thank you for this valuable input. We have added the following description of the blinded taste test:
+   - "In this blinded taste test, the participants were given two glasses of glucose mix (75ml per) and two glasses of the placebo mix (75ml per), consumed in a randomised order per participant. The participants were instructed to finish one bolus, note their guess for its content, and move on to the next glass. On average, the participants had a score of 2 points (2.08 ± 1.24) out of 4 possible. " Page 5-6, line 151
    
 
-Reviewer 2, comment 8: Mention more characteristics related to the training of the participants at baseline, such as number of weekly or 14-day RT sessions (which was an inclusion criteria).
- - Authors reply: Sadly, we do not have detailed characteristics on individual training sessions per week prior to enrollment in the study, other than that they did indeed have a weekly resistance training session volume between two and eight sessions per 14 days for the last six months. The authors realise that this leaves room for variation between participants in terms of training status at baseline, however variations such as these should be controlled for by the within-participants analyses.
+*Comment 8: Mention more characteristics related to the training of the participants at baseline, such as number of weekly or 14-day RT sessions (which was an inclusion criteria).*
 
-Other changes: Added Knut Sindre Mølmen to authors, and author contributions (conception of idea, experiments and edition of manuscript)
+**Authors reply:** Thank you for bringing this up. Sadly, we do not have detailed characteristics on individual training sessions per week prior to enrollment in the study, other than that they did indeed have a weekly resistance training session volume between two and eight sessions per 14 days for the last six months. The authors realise that this leaves room for variation between participants in terms of training status at baseline, however variations such as these should be controlled for by the within-participants analyses. This is now addressed in "Limitations and strengths" Page 16, line 511.
+
+
+
+**Additional changes to the manuscript:* Knut Sindre Mølmen has been added to the author list. He contributed with *conception of idea, performed experiments and edition of manuscript* and was accidentally omitted from the list of authors in the original submission. We have also taken steps to improve the language and flow of the manuscript at multiple points, as highlighted in red and with "track changes". Lastly, we added suggestions for where tables and figures may be placed. 
