@@ -64,7 +64,7 @@ cpep.fig <- cpep.change %>%
   scale_x_continuous(limits = c(0, 300), breaks = c(0, 90, 120, 150, 270),
                      expand = expansion(0), labels = c("change.1" = "-120 min", "change.90" = "-30 min", "change.120" = "0 min", 
                                                        "change.150" = "30 min", "change.270" = "120 min")) +
-  labs(x = "", y = "Plasma c-peptide levels <br>(pmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
+  labs(x = "", y = "Serum c-peptide levels <br>(pmol &times; L<sup>-1</sup> change)", fill = "Supplement") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
         axis.title.y = element_markdown(size = 7),
         legend.title = element_text(size = 7),
